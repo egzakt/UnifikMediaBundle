@@ -1,0 +1,9 @@
+Egzakt\MediaBundle\Entity\Image:
+    type: entity
+    table: null
+    fields:
+        width:
+            type: integer
+        height:
+            type: integer
+    lifecycleCallbacks: {  }

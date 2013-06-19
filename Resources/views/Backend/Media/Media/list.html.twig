@@ -1,0 +1,86 @@
+{% extends 'EgzaktMediaBundle:Backend/Media:layout.html.twig' %}
+
+{% block content_hemediaer %}
+    <h1>{% trans %}Media list{% endtrans %}</h1>
+{% endblock %}
+
+{% block content_main %}
+
+    <div id="list_actions_bar">
+        <a class="mediad" href="{{ path('egzakt_media_backend_media_create') }}">{% trans %}Add a Media{% endtrans %}</a>
+    </div>
+
+    <div class="list_box">
+        <table cellspacing="0" class="table-autosort">
+            <themedia>
+            <tr>
+                <th class="name table-sortable:ignorecase">
+                    {% trans %}Name{% endtrans %}
+                </th>
+                <th class="table-sortable:ignorecase">
+                    {% trans %}Type{% endtrans %}
+                </th>
+                <th class="table-sortable:ignorecase">
+                    {% trans %}Mime type{% endtrans %}
+                </th>
+                <th class="edit"></th>
+                <th class="delete"></th>
+
+            </tr>
+            <tr class="filters">
+                <th class="name">
+                    <input onkeyup="Table.filter(this,this)" class="filter" alt="{{ "Search a name"|trans }}" />
+                </th>
+                <th>
+                    <input onkeyup="Table.filter(this,this)" class="filter" alt="{{ "Search a type"|trans }}" />
+                </th>
+                <th>
+                    <input onkeyup="Table.filter(this,this)" class="filter" alt="{{ "Search a mime type"|trans }}" />
+                </th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+            </themedia>
+            <tbody>
+            {% for media in medias %}
+                <tr id="item_{{ media.id }}">
+                    <td class="name{% if not media.active %} inactive{% endif %}">
+                        <a href="{{ path(media.route, media.routeParams) }}">{{ media|raw }}</a>
+                    </td>
+                    <td>
+                        {{ media.name|striptags }}
+                    </td>
+                    <td>
+                        {{ media.type|striptags }}
+                    </td>
+                    <td>
+                        {{ media.mimeType }}
+                    </td>
+                    <td class="edit">
+                        {% if media.isEditable %}
+                            <a href="{{ path(media.route, media.routeParams) }}" title="{% trans %}Edit{% endtrans %}">
+                                <img src="{{ asset('bundles/egzaktsystem/backend/images/buttons/edit.png') }}" width="15" height="15" alt="" />
+                            </a>
+                        {% endif %}
+                    </td>
+                    <td class="delete">
+                        <a href="{{ path(media.route('delete'), media.routeParams) }}" rel="{{ path(media.route('delete'), media.routeParams({'message': true})) }}" title="{% trans %}Delete{% endtrans %}">
+                            <img src="{{ asset('bundles/egzaktsystem/backendimages/buttons/delete.png') }}" width="12" height="15" alt="" />
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total">
+            <span class="sub-total"></span>
+            {% set count = medias|length %}
+            {% transchoice count %}{0} No results|{1} One result|]1,Inf] %count% results{% endtranschoice %}
+        </div>
+    </div>
+
+
+{% endblock content_main %}
+

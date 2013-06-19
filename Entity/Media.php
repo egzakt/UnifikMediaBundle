@@ -1,0 +1,332 @@
+<?php
+
+namespace Egzakt\MediaBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Egzakt\SystemBundle\Lib\BaseEntity;
+
+/**
+ * Media
+ */
+class Media extends BaseEntity
+{
+    /**
+     * @var integer
+     */
+    private $id;
+
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var string
+     */
+    private $type;
+
+	/**
+	 * @var \Symfony\Component\HttpFoundation\File\UploadedFile
+	 */
+	private $media;
+
+	private $mediaPath;
+
+    /**
+     * @var \DateTime
+     */
+    private $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    private $updatedAt;
+
+    /**
+     * @var string
+     */
+    private $description;
+
+    /**
+     * @var string
+     */
+    private $title;
+
+    /**
+     * @var string
+     */
+    private $mimeType;
+
+    /**
+     * @var string
+     */
+    private $displayName;
+
+
+	public function __construct()
+	{
+		//The default type is media
+		$this->type = "media";
+	}
+
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+		if(false == $this->id)
+			return "New media";
+		if($this->name)
+			return $this->name;
+		return '';
+	}
+
+	public function getRouteBackend($action = 'edit')
+	{
+		return 'egzakt_media_backend_media_' . $action;
+	}
+
+	/**
+	 * Get Backend route params
+	 *
+	 * @param array $params Array of params to get
+	 *
+	 * @return array
+	 */
+	public function getRouteBackendParams($params = array())
+	{
+		$defaults = array(
+			'id' => $this->id ? $this->id : 0
+		);
+
+		$params = array_merge($defaults, $params);
+
+		return $params;
+	}
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set name
+     *
+     * @param string $name
+     * @return Media
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    
+        return $this;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string 
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return Media
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+
+    /**
+     * Get path
+     *
+     * @return string 
+     */
+    public function getMediaPath()
+    {
+        return $this->mediaPath;
+    }
+
+	public function setMediaPath($path)
+	{
+		$this->mediaPath = $path;
+	}
+
+	/**
+	 * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+	 */
+	public function getMediaFile()
+	{
+		return $this->media;
+	}
+
+	/**
+	 * @param \Symfony\Component\HttpFoundation\File\UploadedFile
+	 */
+	public function setMediaFile($file)
+	{
+		$this->media = $file;
+	}
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return Media
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return Media
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * Set description
+     *
+     * @param string $description
+     * @return Media
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    
+        return $this;
+    }
+
+    /**
+     * Get description
+     *
+     * @return string 
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Media
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set mimeType
+     *
+     * @param string $mimeType
+     * @return Media
+     */
+    public function setMimeType($mimeType)
+    {
+        $this->mimeType = $mimeType;
+    
+        return $this;
+    }
+
+    /**
+     * Get mimeType
+     *
+     * @return string 
+     */
+    public function getMimeType()
+    {
+        return $this->mimeType;
+    }
+
+    /**
+     * Set displayName
+     *
+     * @param string $displayName
+     * @return Media
+     */
+    public function setDisplayName($displayName)
+    {
+        $this->displayName = $displayName;
+    
+        return $this;
+    }
+
+    /**
+     * Get displayName
+     *
+     * @return string 
+     */
+    public function getDisplayName()
+    {
+        return $this->displayName;
+    }
+}

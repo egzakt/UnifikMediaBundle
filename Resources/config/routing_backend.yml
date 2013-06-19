@@ -1,0 +1,17 @@
+egzakt_media_backend_media:
+    pattern:  /
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:index" }
+
+egzakt_media_backend_media_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:edit", id: 0 }
+
+egzakt_media_backend_media_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }
+
+egzakt_media_backend_media_create:
+    pattern:  /create
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:create" }
+
+

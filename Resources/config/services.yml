@@ -1,0 +1,7 @@
+parameters:
+#    egzakt_media.example.class: Egzakt\MediaBundle\Example
+
+services:
+#    egzakt_media.example:
+#        class: %egzakt_media.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

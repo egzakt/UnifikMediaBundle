@@ -1,0 +1,55 @@
+Egzakt\MediaBundle\Entity\Media:
+    type: entity
+    table: null
+    inheritanceType: SINGLE_TABLE
+    repositoryClass: Egzakt\MediaBundle\Entity\MediaRepository
+    gedmo:
+            uploadable:
+                allowOverwrite: false
+                appendNumber: true
+                path: 'uploads/medias'
+                filenameGenerator: ALPHANUMERIC
+    discriminatorColumn:
+        name: type
+        type: string
+        length: 255
+    discriminatorMap:
+        media: Media
+        image: Image
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        name:
+            type: string
+            length: 255
+        mediaPath:
+            type: string
+            length: 255
+            gedmo:
+                  - uploadableFilePath
+        createdAt:
+            type: datetime
+            gedmo:
+                timestampable:
+                  on: create
+        updatedAt:
+            type: datetime
+            gedmo:
+                timestampable:
+                  on: update
+        description:
+            type: text
+            nullable: true
+        title:
+            type: string
+            length: 255
+            nullable: true
+        mimeType:
+            type: string
+            length: 255
+            gedmo:
+                  - uploadableFileMimeType
+    lifecycleCallbacks: {  }
