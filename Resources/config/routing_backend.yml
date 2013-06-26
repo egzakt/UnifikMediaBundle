@@ -18,12 +18,8 @@ egzakt_media_backend_media_create:
     pattern:  /create
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:create" }
 
-egzakt_media_backend_media_pixlr_open:
-    pattern: /{id}/pixlr/open
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:openPixlr" }
-
-egzakt_media_backend_media_pixlr_edit:
-    pattern: /{id}/pixlr/edit
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:editPixrl" }
+egzakt_media_backend_media_image_edit:
+    pattern: /{id}/image/edit
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:editImage" }
 
 

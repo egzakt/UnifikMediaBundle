@@ -23,6 +23,15 @@
 
         <div id="fields_box">
             <table class="fields" cellspacing="0">
+                {{ form_row(form.name) }}
+                {{ form_row(form.mediaFile) }}
+                <tr>
+                    <th></th>
+                    <td>
+                        <img id='image' src='{{ asset(media.mediaPath) }}'/>
+                        <p><input type='image' src='http://images.aviary.com/images/edit-photo.png' value='Edit photo' onclick="return launchEditor('image', '{{ asset(media.mediaPath) }}');" /></p>
+                    </td>
+                </tr>
                 {{ form_rest(form) }}
 
                 {% if media.id %}
@@ -61,7 +70,7 @@
             appendTo: '',
             onSave: function(imageID, newURL) {
                 var img = $('#'+imageID);
-                $.get('{{ url(media.routeBackend('pixlr_edit'), media.routeBackendParams) }}', {
+                $.get('{{ url(media.routeBackend('image_edit'), media.routeBackendParams) }}', {
                     image: newURL
                 }, function(data){
                     img.fadeOut();
@@ -82,9 +91,4 @@
     </script>
 
     <div id='injection_site'></div>
-
-    <img id='image1' src='{{ asset(media.mediaPath) }}'/>
-
-    <!-- Add an edit button, passing the HTML id of the image and the public URL of the image -->
-    <p><input type='image' src='http://images.aviary.com/images/edit-photo.png' value='Edit photo' onclick="return launchEditor('image1', '{{ asset(media.mediaPath) }}');" /></p>
 {% endblock content_main %}

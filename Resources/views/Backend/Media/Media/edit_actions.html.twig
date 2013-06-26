@@ -11,12 +11,6 @@
             <span>|</span>
         </li>
         <li>
-            <a href="{% if pixlr_route is defined %}{{ pixrl_route }}{% else %}{{ path( entity.getRouteBackend('pixlr_open'), entity.getRouteBackendParams() ) }}{% endif %}">
-                {% trans %}Edit with pixrl{% endtrans %}
-            </a>
-            <span>|</span>
-        </li>
-        <li>
             <a href="{% if duplicate_route is defined %}{{ duplicate_route }}{% else %}{{ path( entity.getRouteBackend('duplicate'), entity.getRouteBackendParams())  }}{% endif %}">{% trans %}Duplicate{% endtrans %}</a>
         </li>
     </ul>
