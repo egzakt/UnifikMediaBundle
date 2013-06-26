@@ -8,6 +8,7 @@ use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\MediaBundle\Form\ImageType;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -80,7 +81,9 @@ class ImageController extends BaseController
 		$this->getEm()->persist($image);
 		$this->getEm()->flush();
 
-		return $this->redirect($this->generateUrl($image->getRouteBackend(), $image->getRouteBackendParams()));
+		return new JsonResponse(json_encode(array(
+			"src" => $this->container->get('templating.helper.assets')->getUrl($image->getMediaPath()),
+		)));
 	}
 
 }

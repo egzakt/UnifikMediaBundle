@@ -52,10 +52,7 @@
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
-    <!-- Load Feather code -->
     <script type="text/javascript" src="http://feather.aviary.com/js/feather.js"></script>
-
-    <!-- Instantiate Feather -->
     <script type='text/javascript'>
         var featherEditor = new Aviary.Feather({
             apiKey: 'i3kui99ayvje8cix',
@@ -63,8 +60,14 @@
             tools: 'enhance,frames,effects,stickers,crop,resize,warmth,orientation,brightness,focus,warmth,contrast,saturation,sharpness,splash,text,whiten,draw,redeye,blemish',
             appendTo: '',
             onSave: function(imageID, newURL) {
-                var img = document.getElementById(imageID);
-                img.src = newURL;
+                var img = $('#'+imageID);
+                $.get('{{ url(media.routeBackend('pixlr_edit'), media.routeBackendParams) }}', {
+                    image: newURL
+                }, function(data){
+                    img.fadeOut();
+                    img.attr('src', img.attr('src')+"?"+new Date().getTime());
+                    img.fadeIn();
+                });
             },
             onError: function(errorObj) {
                 alert(errorObj.message);
