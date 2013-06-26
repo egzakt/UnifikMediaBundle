@@ -15,10 +15,10 @@
 
     <form novalidate="novalidate" action="{{ path(media.route, media.routeParams) }}" method="post" {{ form_enctype(form) }}>
 
-        {% include 'EgzaktSystemBundle:Backend/Core:edit_actions.html.twig' with {
-        'entity': media,
-        'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
-        'cancel_route': path('egzakt_media_backend_media'),
+        {% include 'EgzaktMediaBundle:Backend/Media/Media:edit_actions.html.twig' with {
+            'entity': media,
+            'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
+            'cancel_route': path('egzakt_media_backend_media'),
         } %}
 
         <div id="fields_box">
@@ -37,10 +37,6 @@
                 {% endif %}
             </table>
         </div>
-
-        {% if isImage %}
-            <a href="{{ path('egzakt_media_backend_media_pixlr_open', media.routeParams) }}" id="edit-pixlr">Éditer avec pixlr</a>
-        {% endif %}
 
         {% include 'EgzaktSystemBundle:Backend/Core:edit_actions.html.twig' with {
         'entity': media,

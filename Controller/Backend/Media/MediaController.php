@@ -5,6 +5,7 @@ namespace Egzakt\MediaBundle\Controller\Backend\Media;
 use Egzakt\MediaBundle\Entity\Image;
 use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\MediaBundle\Form\ImageType;
+use Egzakt\MediaBundle\Lib\MediaFileInfo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -107,8 +108,11 @@ class MediaController extends BaseController
 			if($form->isValid()){
 				$this->getEm()->persist($media);
 
-				$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-				$uploadableManager->markEntityToUpload($media, $media->getMediaFile());
+				//Update the file only if a new one has been uploaded
+				if($media->getMediaFile()){
+					$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
+					$uploadableManager->markEntityToUpload($media, $media->getMediaFile());
+				}
 
 				$this->getEm()->flush();
 
@@ -128,6 +132,25 @@ class MediaController extends BaseController
 			'isImage' => $media instanceof Image,
 		));
     }
+
+	public function duplicateAction($id)
+	{
+		/** @var Media $media */
+		$media = $this->mediaRepository->find($id);
+		if (!$media) {
+			throw $this->createNotFoundException('Unable to find Media entity.');
+		}
+
+		$newMedia = clone($media);
+		$newMedia->setName($media->getName() . ' - copy');
+
+		$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
+		$uploadableManager->markEntityToUpload($newMedia, new MediaFileInfo($this->get('kernel')->getRootDir().'/../web'.$media->getMediaPath()));
+		$this->getEm()->persist($newMedia);
+		$this->getEm()->flush();
+
+		return $this->redirect($this->generateUrl($newMedia->getRouteBackend(), $newMedia->getRouteBackendParams()));
+	}
 
 	public function deleteAction($id)
 	{

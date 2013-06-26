@@ -11,10 +11,6 @@ class ImageType extends MediaType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
 		parent::buildForm($builder, $options);
-        $builder
-            ->add('width')
-            ->add('height')
-        ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
