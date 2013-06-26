@@ -47,7 +47,7 @@ class ImageController extends BaseController
 
 		$parameters = array(
 			'referrer' => "Egzakt Media Bundle",
-			'image' => 'http://www.free-hdwallpapers.com/wallpapers/abstract/168433.jpg',//$this->getRequest()->getUriForPath($image->getMediaPath()),
+			'image' => 'med:med@'.$this->getRequest()->getUriForPath($image->getMediaPath()),
 			'exit' => $this->generateUrl($image->getRouteBackend('edit'), $image->getRouteBackendParams(), UrlGenerator::ABSOLUTE_URL),
 			'title' => $image->getName(),
 			'method' => "GET",
