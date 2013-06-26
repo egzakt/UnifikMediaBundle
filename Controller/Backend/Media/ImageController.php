@@ -48,10 +48,10 @@ class ImageController extends BaseController
 		$parameters = array(
 			'referrer' => "Egzakt Media Bundle",
 			'image' => 'http://staging.egz-med.p.egzakt.com/'.$image->getMediaPath(),
-			'exit' => $this->generateUrl($image->getRouteBackend('edit'), $image->getRouteBackendParams(), UrlGenerator::ABSOLUTE_URL),
+			'exit' => 'http://staging.egz-med.p.egzakt.com/'.$image->getRouteBackend('edit'), $image->getRouteBackendParams(),
 			'title' => $image->getName(),
 			'method' => "GET",
-			'target' => $this->generateUrl($image->getRouteBackend('pixlr_edit'), $image->getRouteBackendParams(), UrlGenerator::ABSOLUTE_URL),
+			'target' => 'http://staging.egz-med.p.egzakt.com/'.$this->generateUrl($image->getRouteBackend('pixlr_edit'), $image->getRouteBackendParams()),
 		);
 
 		$query = array();
