@@ -47,7 +47,7 @@ class ImageController extends BaseController
 
 		$parameters = array(
 			'referrer' => "Egzakt Media Bundle",
-			'image' => 'med:med@'.$this->getRequest()->getUriForPath($image->getMediaPath()),
+			'image' => 'http://staging.egz-med.p.egzakt.com/'.$image->getMediaPath(),
 			'exit' => $this->generateUrl($image->getRouteBackend('edit'), $image->getRouteBackendParams(), UrlGenerator::ABSOLUTE_URL),
 			'title' => $image->getName(),
 			'method' => "GET",
