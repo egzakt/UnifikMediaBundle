@@ -1,0 +1,33 @@
+{
+    "name": "egzakt/media-bundle",
+    "type": "symfony-bundle",
+    "description": "The media bundle of the symfony-egzakt distribution",
+    "keywords": ["egzakt", "media", "cms"],
+    "homepage": "https://github.com/egzakt/symfony-egzakt",
+    "license": "MIT",
+    "authors": [
+				{
+					"name": "Yanick Ouellet",
+					"email": "yanickouellet555@gmail.com"
+				},
+        {
+            "name": "Hubert Perron",
+            "email": "hubert.perron@gmail.com"
+        },
+        {
+            "name": "Jean-François Côté",
+            "email": "tioiscote@gmail.com"
+        },
+        {
+            "name": "Émilie Marchand",
+            "email": "emilie.marchand@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/symfony": "2.3.*"
+    },
+    "autoload": {
+        "psr-0": { "Egzakt\\SystemBundle": "" }
+    },
+    "target-dir": "Egzakt/MediaBundle"
+}
