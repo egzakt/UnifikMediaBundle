@@ -4,6 +4,7 @@ namespace Egzakt\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Egzakt\SystemBundle\Lib\BaseEntity;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Media
@@ -13,54 +14,54 @@ class Media extends BaseEntity
     /**
      * @var integer
      */
-    private $id;
+    protected  $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
 	/**
 	 * @var \Symfony\Component\HttpFoundation\File\UploadedFile
 	 */
-	private $media;
+	protected $media;
 
-	private $mediaPath;
-
-    /**
-     * @var \DateTime
-     */
-    private $createdAt;
+	protected $mediaPath;
 
     /**
      * @var \DateTime
      */
-    private $updatedAt;
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    protected $updatedAt;
 
     /**
      * @var string
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      */
-    private $mimeType;
+    protected $mimeType;
 
     /**
      * @var string
      */
-    private $displayName;
+    protected $displayName;
 
 
 	public function __construct()
@@ -168,7 +169,7 @@ class Media extends BaseEntity
      */
     public function getMediaPath()
     {
-        return $this->mediaPath;
+        return '/'.$this->mediaPath;
     }
 
 	public function setMediaPath($path)
@@ -329,4 +330,5 @@ class Media extends BaseEntity
     {
         return $this->displayName;
     }
+
 }

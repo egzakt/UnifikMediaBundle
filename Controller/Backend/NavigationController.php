@@ -29,7 +29,7 @@ class NavigationController extends BaseController
 
 	public function globalModuleBarAction($masterRoute)
 	{
-		$selected = (0 === strpos($masterRoute, 'egzakt_system_backend_user'));
+		$selected = (0 === strpos($masterRoute, 'egzakt_media_backend_media'));
 		return $this->render('EgzaktMediaBundle:Backend/Navigation:global_bundle_bar.html.twig', array(
 			'selected' => $selected,
 		));

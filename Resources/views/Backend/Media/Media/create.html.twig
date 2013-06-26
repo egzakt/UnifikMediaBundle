@@ -1,22 +1,21 @@
-{% extends 'EgzaktAdBundle:Backend/Ad:layout.html.twig' %}
+{% extends 'EgzaktMediaBundle:Backend/Media:layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/egzaktmedia/backend/css/jquery.plupload.queue.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/egzaktmedia/backend/css/jquery.ui.plupload.css') }}" />
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/egzaktmedia/backend/css/media.css') }}" />
+{% endblock %}
 
 {% block content_hemediaer %}
     <h1>{% trans %}Add medias{% endtrans %}</h1>
 {% endblock %}
 
 {% block content_main  %}
-
-    {% stylesheets
-    '@EgzaktMediaBundle/Resources/public/backend/css/*'
-    %}
-    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
-    {% endstylesheets %}
-
     <div>
+        <div id="uploader-message"></div>
         <form>
             <div id="uploader">
-
-
             </div>
         </form>
 
@@ -24,18 +23,14 @@
 
     <script>
         $().ready((function() {
-            $("#uploader").plupload({
+           $("#uploader").plupload({
                 // General settings
-                runtimes : 'gears,flash,silverlight,browserplus,html5',
-                url : 'upload.php',
+                runtimes : 'html5,gears,flash,silverlight',
+                url : '{{ url('egzakt_media_backend_media_create') }}',
                 max_file_size : '10mb',
                 chunk_size : '1mb',
                 unique_names : true,
 
-                // Resize images on clientside if we can
-                resize : {width : 320, height : 240, quality : 90},
-
-                // Specify what files to browse for
                 filters : [
                     {title : "Image files", extensions : "jpg,gif,png"},
                     {title : "Zip files", extensions : "zip"}
@@ -48,13 +43,25 @@
                 silverlight_xap_url : '/plupload/js/plupload.silverlight.xap'
             });
 
-            // Client side form validation
+            var uploader = $('#uploader').plupload('getUploader');
+
+            uploader.bind('Error', function(up, error){
+                $('.plupload_header_text').html(error.message);
+            });
+
+            uploader.bind('FileUploaded', function(up, file, data){
+                var response = $.parseJSON(data.response);
+                if(response.error){
+                    up.trigger('error', response);
+                }
+                $('.plupload_header_text').html(response.message);
+                file.name = '<a href="' + response.url + '">' + file.name  + "</a>";
+            });
+
             $('form').submit(function(e) {
                 var uploader = $('#uploader').plupload('getUploader');
 
-                // Files in queue upload them first
                 if (uploader.files.length > 0) {
-                    // When all files are uploaded submit form
                     uploader.bind('StateChanged', function() {
                         if (uploader.files.length === (uploader.total.uploaded + uploader.total.failed)) {
                             $('form')[0].submit();
@@ -76,6 +83,5 @@
         '@EgzaktMediaBundle/Resources/public/backend/js/plupload/jquery.plupload.queue/jquery.plupload.queue.js'
     %}
     <script src="{{ asset_url }}"></script>
-    <script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
     {% endjavascripts %}
 {% endblock %}

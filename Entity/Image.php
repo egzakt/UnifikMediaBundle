@@ -3,17 +3,13 @@
 namespace Egzakt\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Image
  */
 class Image extends Media
 {
-    /**
-     * @var integer
-     */
-    private $id;
-
     /**
      * @var integer
      */

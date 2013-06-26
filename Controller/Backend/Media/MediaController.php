@@ -2,12 +2,12 @@
 
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
+use Egzakt\MediaBundle\Entity\Image;
 use Egzakt\MediaBundle\Entity\Media;
-use Gedmo\Uploadable\FileInfo\FileInfoArray;
+use Egzakt\MediaBundle\Form\ImageType;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 use Egzakt\MediaBundle\Form\MediaType;
 use Egzakt\SystemBundle\Lib\Backend\BaseController;
@@ -47,8 +47,31 @@ class MediaController extends BaseController
         ));
     }
 
-	public function createAction()
+	public function createAction(Request $request)
 	{
+		if("POST" == $request->getMethod()){
+			$file = $request->files->get('file');
+
+			if(!$file instanceof UploadedFile || !$file->isValid()){
+				return new Response(json_encode(array(
+					"error" => array(
+						"message" => "Error",
+					),
+				)));
+			}
+			$media = $this->createMediaFromFile($file);
+			$this->getEm()->persist($media);
+
+			$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
+			$uploadableManager->markEntityToUpload($media, $media->getMediaFile());
+
+			$this->getEm()->flush();
+
+			return new Response(json_encode(array(
+				'url' => $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
+				"message" => "File uploaded",
+			)));
+		}
 		return $this->render('EgzaktMediaBundle:Backend/Media/Media:create.html.twig');
 	}
 
@@ -68,7 +91,14 @@ class MediaController extends BaseController
 			$media->setContainer($this->container);
 		}
 
-		$form = $this->createForm(new MediaType(), $media);
+		$formType = null;
+
+		if($media instanceof Image)
+			$formType = new ImageType();
+		else
+			$formType = new MediaType();
+
+		$form = $this->createForm($formType, $media);
 
 		if("POST" == $request->getMethod()){
 
@@ -95,7 +125,53 @@ class MediaController extends BaseController
 		return $this->render('EgzaktMediaBundle:Backend/Media/Media:edit.html.twig', array(
 			'form' => $form->createView(),
 			'media' => $media,
+			'isImage' => $media instanceof Image,
 		));
     }
+
+	public function deleteAction($id)
+	{
+		$media = $this->mediaRepository->find($id);
+
+		if (!$media) {
+			throw $this->createNotFoundException('Unable to find Media entity.');
+		}
+
+		if ($this->get('request')->get('message')) {
+			$template = $this->renderView('EgzaktSystemBundle:Backend/Core:delete_message.html.twig', array(
+				'entity' => $media,
+			));
+
+			return new Response(json_encode(array(
+				'template' => $template,
+				'isDeletable' => $media->isDeletable()
+			)));
+		}
+
+		$this->getEm()->remove($media);
+		$this->getEm()->flush();
+
+		$this->get('egzakt_system.router_invalidator')->invalidate();
+
+		return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+	}
+
+	private function createMediaFromFile(UploadedFile $file)
+	{
+		$media = null;
+		switch($file->getMimeType()){
+			case 'image/jpeg':
+			case 'image/png':
+			case 'image/gif':
+				$media = new Image();
+				break;
+			default:
+				$media = new Media();
+		}
+		$media->setMediaFile($file);
+		$media->setName($file->getClientOriginalName());
+
+		return $media;
+	}
 
 }

@@ -38,6 +38,10 @@
             </table>
         </div>
 
+        {% if isImage %}
+            <a href="{{ path('egzakt_media_backend_media_pixlr_open', media.routeParams) }}" id="edit-pixlr">Éditer avec pixlr</a>
+        {% endif %}
+
         {% include 'EgzaktSystemBundle:Backend/Core:edit_actions.html.twig' with {
         'entity': media,
         'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
