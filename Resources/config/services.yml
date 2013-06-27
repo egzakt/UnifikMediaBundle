@@ -1,7 +1,32 @@
 parameters:
-#    egzakt_media.example.class: Egzakt\MediaBundle\Example
+    egzakt_media.parser.class: Egzakt\MediaBundle\Lib\ExternalMediaParser
+
+    egzakt_media.youtube_parser.class: Egzakt\MediaBundle\Lib\YoutubeVideoParser
+    egzakt_media.vimeo_parser.class: Egzakt\MediaBundle\Lib\VimeoVideoParser
+
+    egzakt_media.parser_extension.class: Egzakt\MediaBundle\Extensions\ExternalMediaParserExtension
 
 services:
-#    egzakt_media.example:
-#        class: %egzakt_media.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+
+    # Media Parser
+    egzakt_media.parser:
+        class: %egzakt_media.parser.class%
+
+    # Youtube Media Parser
+    egzakt_media.media_parser.youtube_parser:
+        class: %egzakt_media.youtube_parser.class%
+        tags:
+            - { name: egzakt_media.parser }
+
+    # Vimeo Media Parser
+    egzakt_media.media_parser.vimeo_parser:
+        class: %egzakt_media.vimeo_parser.class%
+        tags:
+            - { name: egzakt_media.parser }
+
+    # Twig Media Parser Extension
+    egzakt_media.parser_extension:
+        class: %egzakt_media.parser_extension.class%
+        arguments: [@egzakt_media.parser]
+        tags:
+            - { name: twig.extension }

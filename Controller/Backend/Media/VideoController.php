@@ -8,6 +8,7 @@ use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\MediaBundle\Entity\Video;
 use Egzakt\MediaBundle\Form\ImageType;
 use Egzakt\MediaBundle\Form\VideoType;
+use Egzakt\MediaBundle\Lib\MediaFileInfo;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -45,10 +46,21 @@ class VideoController extends BaseController
 		if("POST" !== $request->getMethod()){
 			throw new Exception('The request method must be post.');
 		}
+
 		$video = new Video();
+
 		$video->setUrl($request->get('video_url'));
 		$video->setName($request->get('video_url'));
 		$video->setMimeType('video/x-flv');
+
+		$mediaParser = $this->get('egzakt_media.parser');
+		$parser = $mediaParser->getParser($video->getUrl());
+		$tempFile = '/tmp/'.$parser->getId().'.jpg';
+		file_put_contents($tempFile, file_get_contents($parser->getThumbnailUrl()));
+
+		$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
+		$uploadableManager->markEntityToUpload($video, new MediaFileInfo($tempFile));
+
 		$this->getEm()->persist($video);
 		$this->getEm()->flush();
 
@@ -87,12 +99,14 @@ class VideoController extends BaseController
 			}
 		}
 
-		$video_id = explode("v=", $media->getUrl())[1];
+		$mediaParser = $this->get('egzakt_media.parser');
+		$parser = $mediaParser->getParser($media->getUrl());
 
 		return $this->render('EgzaktMediaBundle:Backend/Media/Video:edit.html.twig', array(
 			'form' => $form->createView(),
 			'media' => $media,
-			'video_id' => $video_id,
+			'video_id' => $parser->getId(),
+			'image_path' => $media->getMediaPath(),
 		));
 	}
 

@@ -28,6 +28,12 @@
             <table class="fields" cellspacing="0">
                 {{ form_row(form.name) }}
                 {{ form_row(form.mediaFile) }}
+                <tr>
+                    <th></th>
+                    <td>
+                        <img src="{{ image_path | imagine_filter('media_thumb') }}"
+                    </td>
+                </tr>
                 {{ form_rest(form) }}
 
                 <tr>
