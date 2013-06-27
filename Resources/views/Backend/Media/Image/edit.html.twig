@@ -1,0 +1,97 @@
+{% extends 'EgzaktMediaBundle:Backend/Media:layout.html.twig' %}
+{% form_theme form 'EgzaktSystemBundle:Backend/Core:edit_fields.html.twig' %}
+
+{% block content_hemediaer %}
+    <h1>{{ media.i18nTitle|trans|raw }}</h1>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+    '@EgzaktMediaBundle/Resources/public/backend/css/*'
+    %}
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content_main %}
+
+    <form novalidate="novalidate" action="{{ path(media.route, media.routeParams) }}" method="post" {{ form_enctype(form) }}>
+
+        {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
+            'entity': media,
+            'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
+            'cancel_route': path('egzakt_media_backend_media'),
+        } %}
+
+        <div id="fields_box">
+            <table class="fields" cellspacing="0">
+                {{ form_row(form.name) }}
+                {{ form_row(form.mediaFile) }}
+                <tr>
+                    <th></th>
+                    <td>
+                        <img id='image' src='{{ asset(media.mediaPath) }}'/>
+                        <p><input type='image' src='http://images.aviary.com/images/edit-photo.png' value='Edit photo' onclick="return launchEditor('image', '{{ asset(media.mediaPath) }}');" /></p>
+                    </td>
+                </tr>
+                {{ form_rest(form) }}
+
+                {% if media.id %}
+                    <tr>
+                        <th>
+                            {% trans %}Last update {% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ media.updatedAt|date }}
+                        </td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+
+        {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
+        'entity': media,
+        'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
+        'cancel_route': path('egzakt_media_backend_media'),
+        } %}
+
+    </form>
+
+    {% javascripts
+    '@EgzaktMediaBundle/Resources/public/backend/js/*'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script type="text/javascript" src="http://feather.aviary.com/js/feather.js"></script>
+    <script type='text/javascript'>
+        var featherEditor = new Aviary.Feather({
+            apiKey: 'i3kui99ayvje8cix',
+            apiVersion: 2,
+            tools: 'enhance,frames,effects,stickers,crop,resize,warmth,orientation,brightness,focus,warmth,contrast,saturation,sharpness,splash,text,whiten,draw,redeye,blemish',
+            appendTo: '',
+            onSave: function(imageID, newURL) {
+                var img = $('#'+imageID);
+                $.get('{{ url(media.routeBackend('image_edit'), media.routeBackendParams) }}', {
+                    image: newURL
+                }, function(data){
+                    img.fadeOut();
+                    img.attr('src', img.attr('src')+"?"+new Date().getTime());
+                    img.fadeIn();
+                });
+            },
+            onError: function(errorObj) {
+                alert(errorObj.message);
+            }
+        });
+        function launchEditor(id, src) {
+            featherEditor.launch({
+                image: id
+            });
+            return false;
+        }
+    </script>
+
+    <div id='injection_site'></div>
+{% endblock content_main %}

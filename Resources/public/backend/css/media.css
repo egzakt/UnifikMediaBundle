@@ -13,3 +13,7 @@
 .plupload_filelist_footer td.plupload_file_name{
 	width: 100%;
 }
+
+#video-list li{
+	display: none;
+}

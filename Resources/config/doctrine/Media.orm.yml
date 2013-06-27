@@ -16,6 +16,7 @@ Egzakt\MediaBundle\Entity\Media:
     discriminatorMap:
         media: Media
         image: Image
+        video: Video
     fields:
         id:
             type: integer
@@ -30,6 +31,7 @@ Egzakt\MediaBundle\Entity\Media:
             length: 255
             gedmo:
                   - uploadableFilePath
+            nullable: true
         createdAt:
             type: datetime
             gedmo:

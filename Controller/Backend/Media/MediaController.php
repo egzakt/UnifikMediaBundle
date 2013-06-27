@@ -4,6 +4,7 @@ namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
 use Egzakt\MediaBundle\Entity\Image;
 use Egzakt\MediaBundle\Entity\Media;
+use Egzakt\MediaBundle\Entity\Video;
 use Egzakt\MediaBundle\Form\ImageType;
 use Egzakt\MediaBundle\Lib\MediaFileInfo;
 use Symfony\Component\Config\Definition\Exception\Exception;
@@ -87,6 +88,12 @@ class MediaController extends BaseController
 
 		if($media instanceof Image)
 			return $this->forward('EgzaktMediaBundle:Backend/Media/Image:edit', array(
+				'media' => $media,
+				'request' => $request,
+			));
+
+		if($media instanceof Video)
+			return $this->forward('EgzaktMediaBundle:Backend/Media/Video:edit', array(
 				'media' => $media,
 				'request' => $request,
 			));

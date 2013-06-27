@@ -17,6 +17,12 @@
         <form>
             <div id="uploader">
             </div>
+            <div id="videos">
+                <ul id="video-list"></ul>
+                <input type="text" id="video-input" name="video-input"/>
+                <label for="video-input"><a id="add-video">Add a video</a></label>
+                <p id="video-error"></p>
+            </div>
         </form>
 
     </div>
@@ -73,6 +79,24 @@
                     alert('You must at least upload one file.');
 
                 return false;
+            });
+
+            $('#add-video').click(function(e){
+                e.preventDefault();
+                var input = $('#video-input');
+
+                $.post('{{ url('egzakt_media_backend_media_create_video') }}', {
+                    video_url: input.val()
+                }, function(data){
+                    data = $.parseJSON(data);
+                    var link = "<li>" +
+                                   "<a href='" + data.path + "'>" + data.name + "</a>"
+                                "</li>";
+                    link = $(link);
+                    $('#video-list').append(link);
+                    link.fadeIn();
+                });
+                input.val('');
             });
         }));
     </script>

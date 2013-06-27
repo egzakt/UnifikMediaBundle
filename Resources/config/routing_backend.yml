@@ -1,5 +1,5 @@
 egzakt_media_backend_media:
-    pattern:  /{type}
+    pattern:  /type/{type}
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:index", type: media }
 
 egzakt_media_backend_media_edit:
@@ -13,6 +13,10 @@ egzakt_media_backend_media_duplicate:
 egzakt_media_backend_media_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }
+
+egzakt_media_backend_media_create_video:
+    pattern:  /create/video
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Video:create" }
 
 egzakt_media_backend_media_create:
     pattern:  /create
