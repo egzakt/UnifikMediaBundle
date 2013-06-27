@@ -18,7 +18,7 @@
 
     <form novalidate="novalidate" action="{{ path(media.route, media.routeParams) }}" method="post" {{ form_enctype(form) }}>
 
-        {% include 'EgzaktMediaBundle:Backend/Media/Media:edit_actions.html.twig' with {
+        {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
             'entity': media,
             'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
             'cancel_route': path('egzakt_media_backend_media'),
@@ -28,13 +28,6 @@
             <table class="fields" cellspacing="0">
                 {{ form_row(form.name) }}
                 {{ form_row(form.mediaFile) }}
-                <tr>
-                    <th></th>
-                    <td>
-                        <img id='image' src='{{ asset(media.mediaPath) }}'/>
-                        <p><input type='image' src='http://images.aviary.com/images/edit-photo.png' value='Edit photo' onclick="return launchEditor('image', '{{ asset(media.mediaPath) }}');" /></p>
-                    </td>
-                </tr>
                 {{ form_rest(form) }}
 
                 {% if media.id %}
@@ -50,7 +43,7 @@
             </table>
         </div>
 
-        {% include 'EgzaktSystemBundle:Backend/Core:edit_actions.html.twig' with {
+        {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
         'entity': media,
         'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
         'cancel_route': path('egzakt_media_backend_media'),
@@ -63,35 +56,4 @@
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
-
-    <script type="text/javascript" src="http://feather.aviary.com/js/feather.js"></script>
-    <script type='text/javascript'>
-        var featherEditor = new Aviary.Feather({
-            apiKey: 'i3kui99ayvje8cix',
-            apiVersion: 2,
-            tools: 'enhance,frames,effects,stickers,crop,resize,warmth,orientation,brightness,focus,warmth,contrast,saturation,sharpness,splash,text,whiten,draw,redeye,blemish',
-            appendTo: '',
-            onSave: function(imageID, newURL) {
-                var img = $('#'+imageID);
-                $.get('{{ url(media.routeBackend('image_edit'), media.routeBackendParams) }}', {
-                    image: newURL
-                }, function(data){
-                    img.fadeOut();
-                    img.attr('src', img.attr('src')+"?"+new Date().getTime());
-                    img.fadeIn();
-                });
-            },
-            onError: function(errorObj) {
-                alert(errorObj.message);
-            }
-        });
-        function launchEditor(id, src) {
-            featherEditor.launch({
-                image: id
-            });
-            return false;
-        }
-    </script>
-
-    <div id='injection_site'></div>
 {% endblock content_main %}

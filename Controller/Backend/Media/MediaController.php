@@ -6,6 +6,8 @@ use Egzakt\MediaBundle\Entity\Image;
 use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\MediaBundle\Form\ImageType;
 use Egzakt\MediaBundle\Lib\MediaFileInfo;
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\EventDispatcher\Tests\TestEventSubscriberWithMultipleListeners;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +23,7 @@ use Egzakt\SystemBundle\Lib\Backend\BaseController;
 class MediaController extends BaseController
 {
     /**
-     * @var adRepository
+     * @var mediaRepository
      */
     protected $mediaRepository;
 
@@ -40,9 +42,9 @@ class MediaController extends BaseController
      *
      * @return \Symfony\Bundle\FrameworkBundle\Controller\Response
      */
-    public function indexAction()
+    public function indexAction($type)
     {
-		$medias = $this->mediaRepository->findAll();
+		$medias = $this->mediaRepository->findByType($type);
         return $this->render('EgzaktMediaBundle:Backend/Media/Media:list.html.twig', array(
 			'medias' => $medias,
         ));
@@ -76,30 +78,35 @@ class MediaController extends BaseController
 		return $this->render('EgzaktMediaBundle:Backend/Media/Media:create.html.twig');
 	}
 
-    /**
-     * Displays a form to edit an existing ad entity.
-     *
-     * @param integer $id The ad ID
-     *
-     * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse|\Symfony\Bundle\FrameworkBundle\Controller\Response
-     */
-    public function editAction($id, Request $request)
-    {
+	public function editAction($id, Request $request)
+	{
 		$media = $this->mediaRepository->find($id);
-
 		if(!$media){
-			$media = new Media();
-			$media->setContainer($this->container);
+			throw new Exception('Unanble to find the media');
 		}
 
-		$formType = null;
-
 		if($media instanceof Image)
-			$formType = new ImageType();
-		else
-			$formType = new MediaType();
+			return $this->forward('EgzaktMediaBundle:Backend/Media/Image:edit', array(
+				'media' => $media,
+				'request' => $request,
+			));
 
-		$form = $this->createForm($formType, $media);
+		return $this->forward('EgzaktMediaBundle:Backend/Media/Media:editGeneric', array(
+			'media' => $media,
+			'request' => $request,
+		));
+	}
+
+	/**
+	 * Displays a form to edit an existing ad entity.
+	 *
+	 * @param integer $id The ad ID
+	 *
+	 * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse|\Symfony\Bundle\FrameworkBundle\Controller\Response
+	 */
+	public function editGenericAction(Media $media, Request $request)
+	{
+		$form = $this->createForm(new MediaType(), $media);
 
 		if("POST" == $request->getMethod()){
 
@@ -131,7 +138,7 @@ class MediaController extends BaseController
 			'media' => $media,
 			'isImage' => $media instanceof Image,
 		));
-    }
+	}
 
 	public function duplicateAction($id)
 	{

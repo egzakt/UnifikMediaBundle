@@ -1,6 +1,6 @@
 egzakt_media_backend_media:
-    pattern:  /
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:index" }
+    pattern:  /{type}
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:index", type: media }
 
 egzakt_media_backend_media_edit:
     pattern:  /{id}/edit
@@ -20,6 +20,6 @@ egzakt_media_backend_media_create:
 
 egzakt_media_backend_media_image_edit:
     pattern: /{id}/image/edit
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:editImage" }
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:updateImage" }
 
 

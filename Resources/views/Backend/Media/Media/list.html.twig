@@ -6,10 +6,7 @@
 
 {% block content_main %}
 
-    <div id="list_actions_bar">
-        <a class="add" href="{{ path('egzakt_media_backend_media_create') }}">{% trans %}Add a Media{% endtrans %}</a>
-        <a class="add" href="{{ path('egzakt_media_backend_media_create') }}">{% trans %}Add a Media{% endtrans %}</a>
-    </div>
+    {% include 'EgzaktMediaBundle:Backend/Media:list_actions.html.twig' %}
 
     <div class="list_box">
         <table cellspacing="0" class="table-autosort">

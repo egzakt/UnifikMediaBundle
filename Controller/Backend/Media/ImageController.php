@@ -35,10 +35,53 @@ class ImageController extends BaseController
     public function init()
     {
         parent::init();
-		$this->mediaRepository = $this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Media');
+		$this->mediaRepository = $this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Image');
     }
 
-	public function editImageAction($id, Request $request)
+	/**
+	 * Displays a form to edit an existing ad entity.
+	 *
+	 * @param integer $id The ad ID
+	 *
+	 * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse|\Symfony\Bundle\FrameworkBundle\Controller\Response
+	 */
+	public function editAction(Media $media, Request $request)
+	{
+		$form = $this->createForm(new ImageType(), $media);
+
+		if("POST" == $request->getMethod()){
+
+			$form->submit($request);
+
+			if($form->isValid()){
+				$this->getEm()->persist($media);
+
+				//Update the file only if a new one has been uploaded
+				if($media->getMediaFile()){
+					$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
+					$uploadableManager->markEntityToUpload($media, $media->getMediaFile());
+				}
+
+				$this->getEm()->flush();
+
+				$this->get('egzakt_system.router_invalidator')->invalidate();
+
+				if ($request->request->has('save')) {
+					return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+				}
+
+				return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
+			}
+		}
+
+		return $this->render('EgzaktMediaBundle:Backend/Media/Image:edit.html.twig', array(
+			'form' => $form->createView(),
+			'media' => $media,
+			'isImage' => $media instanceof Image,
+		));
+	}
+
+	public function updateImageAction($id, Request $request)
 	{
 		/** @var Image $image */
 		$image = $this->mediaRepository->find($id);
