@@ -53,13 +53,7 @@ class VideoController extends BaseController
 		$video->setName($request->get('video_url'));
 		$video->setMimeType('video/x-flv');
 
-		$mediaParser = $this->get('egzakt_media.parser');
-		$parser = $mediaParser->getParser($video->getUrl());
-		$tempFile = '/tmp/'.$parser->getId().'.jpg';
-		file_put_contents($tempFile, file_get_contents($parser->getThumbnailUrl()));
-
-		$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-		$uploadableManager->markEntityToUpload($video, new MediaFileInfo($tempFile));
+		$this->updateThumbnail($video);
 
 		$this->getEm()->persist($video);
 		$this->getEm()->flush();
@@ -76,6 +70,7 @@ class VideoController extends BaseController
 
 		if("POST" == $request->getMethod()){
 
+            $oldUrl = $media->getUrl();
 			$form->submit($request);
 
 			if($form->isValid()){
@@ -85,14 +80,16 @@ class VideoController extends BaseController
 				if($media->getMediaFile()){
 					$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
 					$uploadableManager->markEntityToUpload($media, $media->getMediaFile());
-				}
+				}else if($oldUrl !== $media->getUrl()){
+                    $this->updateThumbnail($media);
+                }
 
 				$this->getEm()->flush();
 
 				$this->get('egzakt_system.router_invalidator')->invalidate();
 
 				if ($request->request->has('save')) {
-					return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+					return $this->redirect($this->generateUrl('egzakt_media_backend_media', array('type' => 'video')));
 				}
 
 				return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
@@ -105,9 +102,19 @@ class VideoController extends BaseController
 		return $this->render('EgzaktMediaBundle:Backend/Media/Video:edit.html.twig', array(
 			'form' => $form->createView(),
 			'media' => $media,
-			'video_id' => $parser->getId(),
-			'image_path' => $media->getMediaPath(),
+			'video_id' => $parser->getId()
 		));
 	}
+
+    public function updateThumbnail(Video $video)
+    {
+        $mediaParser = $this->get('egzakt_media.parser');
+        $parser = $mediaParser->getParser($video->getUrl());
+        $tempFile = '/tmp/'.$parser->getId().'.jpg';
+        file_put_contents($tempFile, file_get_contents($parser->getThumbnailUrl()));
+
+        $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
+        $uploadableManager->markEntityToUpload($video, new MediaFileInfo($tempFile));
+    }
 
 }

@@ -81,21 +81,4 @@ class ImageController extends BaseController
 		));
 	}
 
-	public function updateImageAction($id, Request $request)
-	{
-		/** @var Image $image */
-		$image = $this->mediaRepository->find($id);
-		if(!$image){
-			return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
-		}
-
-		$path = $this->get('kernel')->getRootDir().'/../web'.$image->getMediaPath();
-		file_put_contents($path, file_get_contents($request->get('image')));
-
-		$this->getEm()->persist($image);
-		$this->getEm()->flush();
-
-		return new JsonResponse(json_encode(array()));
-	}
-
 }

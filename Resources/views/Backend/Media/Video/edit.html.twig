@@ -28,12 +28,9 @@
             <table class="fields" cellspacing="0">
                 {{ form_row(form.name) }}
                 {{ form_row(form.mediaFile) }}
-                <tr>
-                    <th></th>
-                    <td>
-                        <img src="{{ image_path | imagine_filter('media_thumb') }}"
-                    </td>
-                </tr>
+                {% include 'EgzaktMediaBundle:Backend/Media:edit_image_aviary.html.twig' with {
+                    'media': media,
+                } %}
                 {{ form_rest(form) }}
 
                 <tr>
@@ -82,15 +79,8 @@
             player = new YT.Player('player', {
                 height: '390',
                 width: '640',
-                videoId: '{{ video_id }}',
-                events: {
-                    'onReady': onPlayerReady
-                }
+                videoId: '{{ video_id }}'
             });
-        }
-
-        function onPlayerReady(event) {
-            event.target.playVideo();
         }
     </script>
 {% endblock content_main %}

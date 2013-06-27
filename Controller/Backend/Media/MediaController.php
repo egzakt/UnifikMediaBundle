@@ -10,6 +10,7 @@ use Egzakt\MediaBundle\Lib\MediaFileInfo;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\EventDispatcher\Tests\TestEventSubscriberWithMultipleListeners;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -192,6 +193,23 @@ class MediaController extends BaseController
 
 		return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
 	}
+
+    public function updateImageAction($id, Request $request)
+    {
+        /** @var Media $image */
+        $image = $this->mediaRepository->find($id);
+        if(!$image){
+            return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+        }
+
+        $path = $this->get('kernel')->getRootDir().'/../web'.$image->getMediaPath();
+        file_put_contents($path, file_get_contents($request->get('image')));
+
+        $this->getEm()->persist($image);
+        $this->getEm()->flush();
+
+        return new JsonResponse(json_encode(array()));
+    }
 
 	private function createMediaFromFile(UploadedFile $file)
 	{
