@@ -1,0 +1,96 @@
+{% extends 'EgzaktMediaBundle:Backend/Media:layout.html.twig' %}
+{% form_theme form 'EgzaktSystemBundle:Backend/Core:edit_fields.html.twig' %}
+
+{% block content_hemediaer %}
+    <h1>{{ media.i18nTitle|trans|raw }}</h1>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {% stylesheets
+    '@EgzaktMediaBundle/Resources/public/backend/css/*'
+    %}
+    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content_main %}
+
+    <form novalidate="novalidate" action="{{ path(media.route, media.routeParams) }}" method="post" {{ form_enctype(form) }}>
+
+        {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
+            'entity': media,
+            'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
+            'cancel_route': path('egzakt_media_backend_media'),
+        } %}
+
+        <div id="fields_box">
+            <table class="fields" cellspacing="0">
+                {{ form_row(form.name) }}
+                {{ form_row(form.mediaFile) }}
+                <tr>
+                    <th></th>
+                    <td>
+                        <img src="{{ image_path | imagine_filter('media_thumb') }}"
+                    </td>
+                </tr>
+                {{ form_rest(form) }}
+
+                <tr>
+                    <th></th>
+                    <td>
+                        <div id="player"></div>
+                    </td>
+                </tr>
+
+                {% if media.id %}
+                    <tr>
+                        <th>
+                            {% trans %}Last update {% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ media.updatedAt|date }}
+                        </td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+
+        {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
+        'entity': media,
+        'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
+        'cancel_route': path('egzakt_media_backend_media'),
+        } %}
+
+    </form>
+
+    {% javascripts
+    '@EgzaktMediaBundle/Resources/public/backend/js/*'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+
+    <script>
+        var tag = document.createElement('script');
+
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+       var player;
+       function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '390',
+                width: '640',
+                videoId: '{{ video_id }}',
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            event.target.playVideo();
+        }
+    </script>
+{% endblock content_main %}
