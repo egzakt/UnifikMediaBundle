@@ -33,7 +33,7 @@
             <tbody>
             {% for media in medias %}
                 <tr id="item_{{ media.id }}">
-                    <td class="name{% if not media.active %} inactive{% endif %}">
+                    <td class="name">
                         <a href="{{ path(media.route, media.routeParams) }}">{{ media|raw }}</a>
                     </td>
                     <td>{{ media.updatedat|date('Y-m-d') }}</td>

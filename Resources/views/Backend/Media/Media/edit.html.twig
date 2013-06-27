@@ -5,13 +5,16 @@
     <h1>{{ media.i18nTitle|trans|raw }}</h1>
 {% endblock %}
 
-{% block content_main %}
-
+{% block stylesheets %}
+    {{ parent() }}
     {% stylesheets
     '@EgzaktMediaBundle/Resources/public/backend/css/*'
     %}
     <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
     {% endstylesheets %}
+{% endblock %}
+
+{% block content_main %}
 
     <form novalidate="novalidate" action="{{ path(media.route, media.routeParams) }}" method="post" {{ form_enctype(form) }}>
 
