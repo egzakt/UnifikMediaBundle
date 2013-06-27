@@ -35,10 +35,10 @@
                     <td class="name">
                         <a href="{{ path(media.route, media.routeParams) }}">{{ media|raw }}</a>
                     </td>
+                    <td>{{ media.updatedat|date('Y-m-d') }}</td>
                     <td>
                         <img src="{{ media.mediaPath | imagine_filter('media_thumb') }}"
                     </td>
-                    <td>{{ media.updatedat|date('Y-m-d') }}</td>
                     <td class="edit">
                         {% if media.isEditable %}
                             <a href="{{ path(media.route, media.routeParams) }}" title="{% trans %}Edit{% endtrans %}">

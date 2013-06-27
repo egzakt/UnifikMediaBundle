@@ -12,9 +12,7 @@ class VideoType extends MediaType
     {
 		parent::buildForm($builder, $options);
 
-		$builder->add('width')
-				->add('height')
-				->add('url');
+		$builder->add('url');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
