@@ -14,6 +14,7 @@
             <tr>
                 <th class="name table-sortable:ignorecase">{% trans %}Name{% endtrans %}</th>
                 <th class="table-sortable:date">{% trans %}Last updated{% endtrans %}</th>
+                <th>{% trans %}Thumbnail{% endtrans %}</th>
                 <th class="edit"></th>
                 <th class="delete"></th>
 
@@ -22,6 +23,7 @@
                 <th class="name">
                     <input onkeyup="Table.filter(this,this)" class="filter" alt="{{ "Search a name"|trans }}" />
                 </th>
+                <th>&nbsp</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
                 <th>&nbsp;</th>
@@ -32,6 +34,9 @@
                 <tr id="item_{{ media.id }}">
                     <td class="name">
                         <a href="{{ path(media.route, media.routeParams) }}">{{ media|raw }}</a>
+                    </td>
+                    <td>
+                        <img src="{{ media.mediaPath | imagine_filter('media_thumb') }}"
                     </td>
                     <td>{{ media.updatedat|date('Y-m-d') }}</td>
                     <td class="edit">
