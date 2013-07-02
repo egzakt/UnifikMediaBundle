@@ -72,7 +72,7 @@ class MediaController extends BaseController
 
 			$this->getEm()->flush();
 
-			return new Response(json_encode(array(
+			return new JsonResponse(json_encode(array(
 				'url' => $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
 				"message" => "File uploaded",
 			)));
