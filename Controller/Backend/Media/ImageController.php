@@ -35,7 +35,7 @@ class ImageController extends BaseController
     public function init()
     {
         parent::init();
-		$this->mediaRepository = $this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Image');
+		$this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Image');
     }
 
 	/**
