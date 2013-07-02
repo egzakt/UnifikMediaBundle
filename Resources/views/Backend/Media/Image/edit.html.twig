@@ -21,7 +21,7 @@
         {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
             'entity': media,
             'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
-            'cancel_route': path('egzakt_media_backend_media'),
+            'cancel_route': path('egzakt_media_backend_media', {type: media.type}),
         } %}
 
         <div id="fields_box">
@@ -49,7 +49,7 @@
         {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
         'entity': media,
         'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
-        'cancel_route': path('egzakt_media_backend_media'),
+        'cancel_route': path('egzakt_media_backend_media', {type: media.type}),
         } %}
 
     </form>

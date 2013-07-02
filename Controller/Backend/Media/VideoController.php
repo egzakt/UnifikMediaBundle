@@ -41,6 +41,15 @@ class VideoController extends BaseController
 		$this->mediaRepository = $this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Video');
     }
 
+
+    public function indexAction()
+    {
+        $medias = $this->mediaRepository->findAll();
+        return $this->render('EgzaktMediaBundle:Backend/Media/Video:list.html.twig', array(
+            'medias' => $medias,
+        ));
+    }
+
 	public function createAction(Request $request)
 	{
 		if("POST" !== $request->getMethod()){

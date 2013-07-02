@@ -38,6 +38,14 @@ class ImageController extends BaseController
 		$this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Image');
     }
 
+    public function indexAction()
+    {
+        $medias = $this->mediaRepository->findAll();
+        return $this->render('EgzaktMediaBundle:Backend/Media/Image:list.html.twig', array(
+            'medias' => $medias,
+        ));
+    }
+
 	/**
 	 * Displays a form to edit an existing ad entity.
 	 *

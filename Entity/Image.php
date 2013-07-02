@@ -76,4 +76,12 @@ class Image extends Media
     {
         return $this->height;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getType()
+    {
+        return 'image';
+    }
 }

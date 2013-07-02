@@ -1,3 +1,11 @@
+egzakt_media_backend_image:
+    pattern:  /type/image
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:index" }
+
+egzakt_media_backend_video:
+    pattern:  /type/video
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Video:index" }
+
 egzakt_media_backend_media:
     pattern:  /type/{type}
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:index", type: image }
@@ -5,6 +13,10 @@ egzakt_media_backend_media:
 egzakt_media_backend_media_edit:
     pattern:  /{id}/edit
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:edit", id: 0 }
+
+egzakt_media_backend_media_ajax_preview:
+    pattern:  /{id}/preview
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:mediaPreview" }
 
 egzakt_media_backend_media_duplicate:
     pattern:  /{id}/duplicate

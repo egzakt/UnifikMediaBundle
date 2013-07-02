@@ -96,5 +96,13 @@ class Video extends Media
 		return $this->url;
 	}
 
+    /**
+     * @inheritdoc
+     */
+    public function getType()
+    {
+        return 'video';
+    }
+
 
 }

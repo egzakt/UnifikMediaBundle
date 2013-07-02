@@ -21,25 +21,27 @@
         {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
             'entity': media,
             'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
-            'cancel_route': path('egzakt_media_backend_media'),
+            'cancel_route': path('egzakt_media_backend_media', {type: media.type}),
         } %}
 
         <div id="fields_box">
             <table class="fields" cellspacing="0">
                 {{ form_row(form.name) }}
                 {{ form_row(form.mediaFile) }}
+                {{ form_row(form.url) }}
                 {% include 'EgzaktMediaBundle:Backend/Media:edit_image_aviary.html.twig' with {
                     'media': media,
                 } %}
-                {{ form_rest(form) }}
-
                 <tr>
                     <th></th>
                     <td>
                         <iframe src="{{ video_url }}" width="640" height="390" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
                     </td>
                 </tr>
-
+                {% include 'EgzaktSystemBundle:Backend/Core:collapsable_fields.html.twig' with {
+                'link_name': 'Parameters',
+                'fields': [form_row(form.description), form_row(form.title)]
+                } %}
                 {% if media.id %}
                     <tr>
                         <th>
@@ -56,7 +58,7 @@
         {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
         'entity': media,
         'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
-        'cancel_route': path('egzakt_media_backend_media'),
+        'cancel_route': path('egzakt_media_backend_media', {type: media.type}),
         } %}
 
     </form>
@@ -67,20 +69,4 @@
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
 
-    <script>
-        var tag = document.createElement('script');
-
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-       var player;
-       function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '390',
-                width: '640',
-                videoId: '{{ video_id }}'
-            });
-        }
-    </script>
 {% endblock content_main %}

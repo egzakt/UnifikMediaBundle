@@ -37,10 +37,9 @@
                     </td>
                     <td>{{ media.updatedat|date('Y-m-d') }}</td>
                     <td>
-                        <a class="image-thumbnail" href="{{ path(media.route('ajax_preview'), media.routeParams) }}">
+                        <a class="image-thumbnail iframe" href="{{ media_embed_url(media.url) }}">
                             <img src="{{ media.mediaPath | imagine_filter('media_thumb') }}">
                         </a>
-
                     </td>
                     <td class="edit">
                         {% if media.isEditable %}

@@ -169,6 +169,7 @@ class MediaController extends BaseController
 
 	public function deleteAction($id)
 	{
+        /** @var Media $media */
 		$media = $this->mediaRepository->find($id);
 
 		if (!$media) {
@@ -191,7 +192,7 @@ class MediaController extends BaseController
 
 		$this->get('egzakt_system.router_invalidator')->invalidate();
 
-		return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+		return $this->redirect($this->generateUrl('egzakt_media_backend_media', array('type' => $media->getType())));
 	}
 
     public function updateImageAction($id, Request $request)

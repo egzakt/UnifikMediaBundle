@@ -158,7 +158,7 @@ class Media extends BaseEntity
      */
     public function getType()
     {
-        return $this->type;
+        return 'media';
     }
 
 
