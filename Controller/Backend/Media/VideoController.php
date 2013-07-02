@@ -102,7 +102,8 @@ class VideoController extends BaseController
 		return $this->render('EgzaktMediaBundle:Backend/Media/Video:edit.html.twig', array(
 			'form' => $form->createView(),
 			'media' => $media,
-			'video_id' => $parser->getId()
+			'video_id' => $parser->getId(),
+            'video_url' => $parser->getEmbedUrl(),
 		));
 	}
 
