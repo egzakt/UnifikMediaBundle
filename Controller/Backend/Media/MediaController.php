@@ -208,6 +208,12 @@ class MediaController extends BaseController
         $this->getEm()->persist($image);
         $this->getEm()->flush();
 
+        $cacheManager = $this->container->get('liip_imagine.cache.manager');
+
+        foreach ($this->container->getParameter('liip_imagine.filter_sets') as $filter => $value ) {
+            $cacheManager->remove($image->getMediaPath(), $filter);
+        }
+
         return new JsonResponse(json_encode(array()));
     }
 
