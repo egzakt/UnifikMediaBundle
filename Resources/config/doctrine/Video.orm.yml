@@ -2,10 +2,6 @@ Egzakt\MediaBundle\Entity\Video:
     type: entity
     table: null
     fields:
-        width:
-            type: integer
-        height:
-            type: integer
         url:
             type: string
             length: 255

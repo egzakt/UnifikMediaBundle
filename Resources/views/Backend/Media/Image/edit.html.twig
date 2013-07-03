@@ -20,8 +20,8 @@
 
         {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
             'entity': media,
-            'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
-            'cancel_route': path('egzakt_media_backend_media', {type: media.type}),
+            'delete_route': path(media.route('delete'), media.routeParams),
+            'cancel_route': path(media.route('list')),
         } %}
 
         <div id="fields_box">
@@ -29,7 +29,7 @@
                 {{ form_row(form.name) }}
                 {{ form_row(form.mediaFile) }}
                 {% include 'EgzaktMediaBundle:Backend/Media:edit_image_aviary.html.twig' with {
-                'media': media,
+                    'media': media,
                 } %}
                 {{ form_rest(form) }}
 
@@ -48,8 +48,8 @@
 
         {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
         'entity': media,
-        'delete_route': path('egzakt_media_backend_media_delete', media.routeParams),
-        'cancel_route': path('egzakt_media_backend_media', {type: media.type}),
+        'delete_route': path(media.route('delete'), media.routeParams),
+        'cancel_route': path(media.route('list')),
         } %}
 
     </form>

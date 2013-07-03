@@ -4,41 +4,68 @@ namespace Egzakt\MediaBundle\Lib;
 use Gedmo\Uploadable\FileInfo\FileInfoInterface;
 use Symfony\Component\HttpFoundation\File\File;
 
+/**
+ * Class MediaFileInfo
+ */
 class MediaFileInfo implements FileInfoInterface
 {
-	protected $file;
+    /**
+     * @var \Symfony\Component\HttpFoundation\File\File
+     */
+    protected $file;
 
-	public function __construct($path)
+    /**
+     * @param $path
+     */
+    public function __construct($path)
 	{
 		$this->file = new File($path);
 	}
 
-	public function getTmpName()
+    /**
+     * @return string
+     */
+    public function getTmpName()
 	{
 		return $this->file->getPathname();
 	}
 
-	public function getName()
+    /**
+     * @return string
+     */
+    public function getName()
 	{
 		return $this->file->getFilename();
 	}
 
-	public function getSize()
+    /**
+     * @return int
+     */
+    public function getSize()
 	{
 		return $this->file->getSize();
 	}
 
-	public function getType()
+    /**
+     * @return null|string
+     */
+    public function getType()
 	{
 		return $this->file->getMimeType();
 	}
 
-	public function getError()
+    /**
+     * @return int
+     */
+    public function getError()
 	{
 		return 0;
 	}
 
-	public function isUploadedFile()
+    /**
+     * @return bool
+     */
+    public function isUploadedFile()
 	{
 		return false;
 	}

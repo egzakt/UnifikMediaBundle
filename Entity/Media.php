@@ -84,6 +84,8 @@ class Media extends BaseEntity
 
 	public function getRouteBackend($action = 'edit')
 	{
+        if ('list' === $action)
+            return 'egzakt_media_backend_media';
 		return 'egzakt_media_backend_media_' . $action;
 	}
 
@@ -165,10 +167,15 @@ class Media extends BaseEntity
     /**
      * Get path
      *
-     * @return string 
+     * @param bool $absolute
+     * @return string
      */
-    public function getMediaPath()
+    public function getMediaPath($absolute = false)
     {
+        if ($absolute) {
+            return $this->container->get('kernel')->getRootDir().'/../web/'.$this->mediaPath;
+        }
+
         return '/'.$this->mediaPath;
     }
 

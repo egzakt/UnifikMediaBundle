@@ -17,3 +17,11 @@
 #video-list li{
 	display: none;
 }
+
+#list_actions_bar ul{
+    margin-bottom: 5px;
+}
+
+#list_actions_bar ul li{
+    display: inline-block;
+}

@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Egzakt\SystemBundle\Lib\Backend\BaseController;
 
 /**
- * User Controller
+ * Navigation Controller
  */
 class NavigationController extends BaseController
 {
@@ -18,16 +18,7 @@ class NavigationController extends BaseController
      *
      * @return Response
      */
-    public function sectionModuleBarAction($masterRoute)
-    {
-        $selected = (0 === strpos($masterRoute, 'egzakt_media_backend_media'));
-
-        return $this->render('EgzaktMediaBundle:Backend/Navigation:section_module_bar.html.twig', array(
-            'selected' => $selected
-        ));
-    }
-
-	public function globalModuleBarAction($masterRoute)
+   	public function globalModuleBarAction($masterRoute)
 	{
 		$selected = (0 === strpos($masterRoute, 'egzakt_media_backend_media'));
 		return $this->render('EgzaktMediaBundle:Backend/Navigation:global_bundle_bar.html.twig', array(

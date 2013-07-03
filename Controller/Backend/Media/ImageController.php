@@ -17,7 +17,7 @@ use Egzakt\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
- * ad Controller
+ * Image controller
  *
  * @throws \Symfony\Bundle\FrameworkBundle\Controller\NotFoundHttpException
  *
@@ -25,7 +25,7 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 class ImageController extends BaseController
 {
     /**
-     * @var adRepository
+     * @var ImageRepository
      */
     protected $mediaRepository;
 
@@ -38,6 +38,11 @@ class ImageController extends BaseController
 		$this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Image');
     }
 
+    /**
+     * Display image list
+     *
+     * @return Response
+     */
     public function indexAction()
     {
         $medias = $this->mediaRepository->findAll();
@@ -46,26 +51,32 @@ class ImageController extends BaseController
         ));
     }
 
-	/**
-	 * Displays a form to edit an existing ad entity.
-	 *
-	 * @param integer $id The ad ID
-	 *
-	 * @return \Symfony\Bundle\FrameworkBundle\Controller\RedirectResponse|\Symfony\Bundle\FrameworkBundle\Controller\Response
-	 */
-	public function editAction(Media $media, Request $request)
+    /**
+     * Displays a form to edit an existing image entity.
+     *
+     * @param $id
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function editAction($id, Request $request)
 	{
+        $media = $this->mediaRepository->find($id);
+        if (!$media) {
+            throw $this->createNotFoundException('Unable to find the media');
+        }
+
 		$form = $this->createForm(new ImageType(), $media);
 
-		if("POST" == $request->getMethod()){
+		if ("POST" == $request->getMethod()) {
 
 			$form->submit($request);
 
-			if($form->isValid()){
+			if ($form->isValid()) {
 				$this->getEm()->persist($media);
 
 				//Update the file only if a new one has been uploaded
-				if($media->getMediaFile()){
+				if ($media->getMediaFile()) {
 					$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
 					$uploadableManager->markEntityToUpload($media, $media->getMediaFile());
 				}
@@ -75,7 +86,7 @@ class ImageController extends BaseController
 				$this->get('egzakt_system.router_invalidator')->invalidate();
 
 				if ($request->request->has('save')) {
-					return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+					return $this->redirect($this->generateUrl('egzakt_media_backend_image'));
 				}
 
 				return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
@@ -85,7 +96,6 @@ class ImageController extends BaseController
 		return $this->render('EgzaktMediaBundle:Backend/Media/Image:edit.html.twig', array(
 			'form' => $form->createView(),
 			'media' => $media,
-			'isImage' => $media instanceof Image,
 		));
 	}
 

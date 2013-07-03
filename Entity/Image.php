@@ -84,4 +84,11 @@ class Image extends Media
     {
         return 'image';
     }
+
+    public function getRouteBackend($action = 'edit')
+    {
+        if ('list' === $action)
+            return 'egzakt_media_backend_image';
+        return 'egzakt_media_backend_image_' . $action;
+    }
 }

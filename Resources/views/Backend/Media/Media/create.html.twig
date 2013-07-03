@@ -4,7 +4,6 @@
     {{ parent() }}
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/egzaktmedia/backend/css/jquery.plupload.queue.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('bundles/egzaktmedia/backend/css/jquery.ui.plupload.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/egzaktmedia/backend/css/media.css') }}" />
 {% endblock %}
 
 {% block content_hemediaer %}
@@ -85,7 +84,7 @@
                 e.preventDefault();
                 var input = $('#video-input');
 
-                $.post('{{ url('egzakt_media_backend_media_create_video') }}', {
+                $.post('{{ url('egzakt_media_backend_video_create') }}', {
                     video_url: input.val()
                 }, function(data){
                     data = $.parseJSON(data);

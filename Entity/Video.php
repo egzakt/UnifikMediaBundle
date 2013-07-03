@@ -104,5 +104,12 @@ class Video extends Media
         return 'video';
     }
 
+    public function getRouteBackend($action = 'edit')
+    {
+        if ('list' === $action)
+            return 'egzakt_media_backend_video';
+        return 'egzakt_media_backend_video_' . $action;
+    }
+
 
 }

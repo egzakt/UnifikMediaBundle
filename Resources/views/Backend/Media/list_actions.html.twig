@@ -1,6 +1,10 @@
 <div id="list_actions_bar">
-    <a class="add" href="{{ path('egzakt_media_backend_media_create') }}">{% trans %}Add medias{% endtrans %}</a>
-    <a class="add" href="{{ path('egzakt_media_backend_media', {type: 'image'}) }}">{% trans %}Images{% endtrans %}</a>
-    <a class="add" href="{{ path('egzakt_media_backend_media', {type: 'video'}) }}">{% trans %}Videos{% endtrans %}</a>
-    <a class="add" href="{{ path('egzakt_media_backend_media', {type: 'media'}) }}">{% trans %}Others{% endtrans %}</a>
+    <ul>
+        <a class="add" href="{{ path('egzakt_media_backend_media_create') }}">{% trans %}Add medias{% endtrans %}</a>
+    </ul>
+    <ul>
+        <li><a href="{{ path('egzakt_media_backend_image') }}">{% trans %}Images{% endtrans %}</a></li>
+        <li><a href="{{ path('egzakt_media_backend_video') }}">{% trans %}Videos{% endtrans %}</a></li>
+        <li><a href="{{ path('egzakt_media_backend_media') }}">{% trans %}Others{% endtrans %}</a></li>
+    </ul>
 </div>
