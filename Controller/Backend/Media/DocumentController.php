@@ -2,10 +2,13 @@
 
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
+use Doctrine\DBAL\Platforms\Keywords\ReservedKeywordsValidator;
 use Doctrine\Tests\ORM\Functional\CompositePrimaryKeyTest;
+use Egzakt\MediaBundle\Entity\Document;
 use Egzakt\MediaBundle\Entity\Image;
 use Egzakt\MediaBundle\Entity\Media;
-use Egzakt\MediaBundle\Form\ImageType;
+use Egzakt\MediaBundle\Form\DocumentType;
+use Egzakt\MediaBundle\Lib\MediaFileInfo;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,15 +20,15 @@ use Egzakt\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
- * Image controller
+ * Document controller
  *
  * @throws \Symfony\Bundle\FrameworkBundle\Controller\NotFoundHttpException
  *
  */
-class ImageController extends BaseController
+class DocumentController extends BaseController
 {
     /**
-     * @var ImageRepository
+     * @var DocumentRepository
      */
     protected $mediaRepository;
 
@@ -35,32 +38,43 @@ class ImageController extends BaseController
     public function init()
     {
         parent::init();
-		$this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Image');
+		$this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Document');
     }
 
     /**
-     * Display image list
+     * Display document list
      *
      * @return Response
      */
     public function indexAction()
     {
         $medias = $this->mediaRepository->findAll();
-        return $this->render('EgzaktMediaBundle:Backend/Media/Image:list.html.twig', array(
+        return $this->render('EgzaktMediaBundle:Backend/Media/Document:list.html.twig', array(
             'medias' => $medias,
         ));
     }
 
     public function createAction(UploadedFile $file)
     {
-        $media = new Image();
+        /** @var Image $image */
+        $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
+
+        $media = new Document();
+        $media->setContainer($this->container);
         $media->setMediaFile($file);
-		$media->setName($file->getClientOriginalName());
+        $media->setName($file->getClientOriginalName());
 
         $this->getEm()->persist($media);
 
-        $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
         $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
+
+        $image = new Image();
+        $image->setName("Preview - ".$file->getClientOriginalName());
+
+        $this->getEm()->persist($image);
+        $uploadableManager->markEntityToUpload($image, new MediaFileInfo($this->createPdfPreview($file->getPathname())));
+
+        $media->setThumbnail($image);
 
         $this->getEm()->flush();
 
@@ -71,7 +85,7 @@ class ImageController extends BaseController
     }
 
     /**
-     * Displays a form to edit an existing image entity.
+     * Displays a form to edit an existing document entity.
      *
      * @param $id
      * @param Request $request
@@ -80,12 +94,13 @@ class ImageController extends BaseController
      */
     public function editAction($id, Request $request)
 	{
+        /** @var Document $media */
         $media = $this->mediaRepository->find($id);
         if (!$media) {
             throw $this->createNotFoundException('Unable to find the media');
         }
 
-		$form = $this->createForm(new ImageType(), $media);
+		$form = $this->createForm(new DocumentType(), $media);
 
 		if ("POST" == $request->getMethod()) {
 
@@ -94,28 +109,45 @@ class ImageController extends BaseController
 			if ($form->isValid()) {
 				$this->getEm()->persist($media);
 
+                $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
 				//Update the file only if a new one has been uploaded
 				if ($media->getMediaFile()) {
-					$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
 					$uploadableManager->markEntityToUpload($media, $media->getMediaFile());
 				}
+
+                if ($media->getDocumentFile()) {
+                    $uploadableManager->markEntityToUpload($media, $media->getDocumentFile());
+                }
 
 				$this->getEm()->flush();
 
 				$this->get('egzakt_system.router_invalidator')->invalidate();
 
 				if ($request->request->has('save')) {
-					return $this->redirect($this->generateUrl('egzakt_media_backend_image'));
+					return $this->redirect($this->generateUrl('egzakt_media_backend_document'));
 				}
 
 				return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
 			}
 		}
 
-		return $this->render('EgzaktMediaBundle:Backend/Media/Image:edit.html.twig', array(
+		return $this->render('EgzaktMediaBundle:Backend/Media/Document:edit.html.twig', array(
 			'form' => $form->createView(),
 			'media' => $media,
 		));
 	}
+
+    private function createPdfPreview($path)
+    {
+        if (shell_exec("which convert")) {
+            $target = $path.'.jpg';
+            $command = sprintf("convert %s[0] %s", $path, $target);
+            if (!shell_exec($command)) {
+                return $target;
+            }
+        }
+
+        return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/pdf-icon.jpg';
+    }
 
 }

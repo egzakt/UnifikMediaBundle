@@ -165,7 +165,7 @@ class Media extends BaseEntity
 
 
     /**
-     * Get path
+     * Get meidaPath
      *
      * @param bool $absolute
      * @return string

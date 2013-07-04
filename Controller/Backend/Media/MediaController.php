@@ -2,6 +2,7 @@
 
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
+use Egzakt\MediaBundle\Entity\Document;
 use Egzakt\MediaBundle\Entity\Image;
 use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\MediaBundle\Lib\MediaFileInfo;
@@ -66,18 +67,20 @@ class MediaController extends BaseController
 				)));
 			}
 
-			$media = $this->createMediaFromFile($file);
-			$this->getEm()->persist($media);
+            switch ($file->getMimeType()) {
+                case 'image/jpeg':
+                case 'image/png':
+                case 'image/gif':
+                    $controller = "EgzaktMediaBundle:Backend/Media/Image:create";
+                    break;
+                default:
+                    $controller = "EgzaktMediaBundle:Backend/Media/Document:create";
+            }
 
-			$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-			$uploadableManager->markEntityToUpload($media, $media->getMediaFile());
+            return $this->forward($controller, array(
+                'file' => $file,
+            ));
 
-			$this->getEm()->flush();
-
-			return new JsonResponse(json_encode(array(
-				'url' => $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
-				"message" => "File uploaded",
-			)));
 		}
 		return $this->render('EgzaktMediaBundle:Backend/Media/Media:create.html.twig');
 	}
@@ -217,30 +220,5 @@ class MediaController extends BaseController
 
         return new JsonResponse(json_encode(array()));
     }
-
-    /**
-     * Create a media based on its mime type
-     *
-     * @param UploadedFile $file
-     * @return Image|Media
-     */
-    private function createMediaFromFile(UploadedFile $file)
-	{
-		$media = null;
-		switch ($file->getMimeType()) {
-			case 'image/jpeg':
-			case 'image/png':
-			case 'image/gif':
-				$media = new Image();
-				break;
-			default:
-				$media = new Media();
-		}
-
-		$media->setMediaFile($file);
-		$media->setName($file->getClientOriginalName());
-
-		return $media;
-	}
 
 }

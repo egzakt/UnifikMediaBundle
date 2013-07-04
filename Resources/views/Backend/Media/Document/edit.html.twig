@@ -27,13 +27,14 @@
         <div id="fields_box">
             <table class="fields" cellspacing="0">
                 {{ form_row(form.name) }}
+                {{ form_row(form.thumbnail) }}
                 {{ form_row(form.mediaFile) }}
                 {% include 'EgzaktMediaBundle:Backend/Media:edit_image_aviary.html.twig' with {
-                    'media': media,
+                    'media': media.thumbnail,
                 } %}
                 {% include 'EgzaktSystemBundle:Backend/Core:collapsable_fields.html.twig' with {
-                'link_name': 'Parameters',
-                'fields': [form_row(form.description), form_row(form.title)]
+                    'link_name': 'Parameters',
+                    'fields': [form_row(form.description), form_row(form.title)]
                 } %}
                 {{ form_rest(form) }}
 

@@ -36,11 +36,6 @@
                 chunk_size : '1mb',
                 unique_names : true,
 
-                filters : [
-                    {title : "Image files", extensions : "jpg,gif,png"},
-                    {title : "Zip files", extensions : "zip"}
-                ],
-
                 // Flash settings
                 flash_swf_url : '/plupload/js/plupload.flash.swf',
 
@@ -55,7 +50,7 @@
             });
 
             uploader.bind('FileUploaded', function(up, file, data){
-                var response = $.parseJSON(data.response);
+                var response = $.parseJSON($.parseJSON(data.response));
                 if(response.error){
                     up.trigger('error', response);
                 }

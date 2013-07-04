@@ -17,6 +17,7 @@ Egzakt\MediaBundle\Entity\Media:
         media: Media
         image: Image
         video: Video
+        document: Document
     fields:
         id:
             type: integer
