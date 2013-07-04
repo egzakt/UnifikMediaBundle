@@ -3,62 +3,109 @@
 namespace Egzakt\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Egzakt\SystemBundle\Lib\BaseEntity;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Media
  */
-class Media
+class Media extends BaseEntity
 {
     /**
      * @var integer
      */
-    private $id;
+    protected  $id;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var string
      */
-    private $type;
+    protected $type;
 
-    /**
-     * @var string
-     */
-    private $path;
+	/**
+	 * @var \Symfony\Component\HttpFoundation\File\UploadedFile
+	 */
+	protected $media;
+
+	protected $mediaPath;
 
     /**
      * @var \DateTime
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var \DateTime
      */
-    private $updatedAt;
+    protected $updatedAt;
 
     /**
      * @var string
      */
-    private $description;
+    protected $description;
 
     /**
      * @var string
      */
-    private $title;
+    protected $title;
 
     /**
      * @var string
      */
-    private $mimeType;
+    protected $mimeType;
 
     /**
      * @var string
      */
-    private $displayName;
+    protected $displayName;
 
+
+	public function __construct()
+	{
+		//The default type is media
+		$this->type = "media";
+	}
+
+	/**
+	 * @return string
+	 */
+	public function __toString()
+	{
+		if(false == $this->id)
+			return "New media";
+		if($this->name)
+			return $this->name;
+		return '';
+	}
+
+	public function getRouteBackend($action = 'edit')
+	{
+        if ('list' === $action)
+            return 'egzakt_media_backend_media';
+		return 'egzakt_media_backend_media_' . $action;
+	}
+
+	/**
+	 * Get Backend route params
+	 *
+	 * @param array $params Array of params to get
+	 *
+	 * @return array
+	 */
+	public function getRouteBackendParams($params = array())
+	{
+		$defaults = array(
+			'id' => $this->id ? $this->id : 0
+		);
+
+		$params = array_merge($defaults, $params);
+
+		return $params;
+	}
 
     /**
      * Get id
@@ -113,31 +160,45 @@ class Media
      */
     public function getType()
     {
-        return $this->type;
+        return 'media';
     }
 
-    /**
-     * Set path
-     *
-     * @param string $path
-     * @return Media
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    
-        return $this;
-    }
 
     /**
-     * Get path
+     * Get meidaPath
      *
-     * @return string 
+     * @param bool $absolute
+     * @return string
      */
-    public function getPath()
+    public function getMediaPath($absolute = false)
     {
-        return $this->path;
+        if ($absolute) {
+            return $this->container->get('kernel')->getRootDir().'/../web/'.$this->mediaPath;
+        }
+
+        return '/'.$this->mediaPath;
     }
+
+	public function setMediaPath($path)
+	{
+		$this->mediaPath = $path;
+	}
+
+	/**
+	 * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+	 */
+	public function getMediaFile()
+	{
+		return $this->media;
+	}
+
+	/**
+	 * @param \Symfony\Component\HttpFoundation\File\UploadedFile
+	 */
+	public function setMediaFile($file)
+	{
+		$this->media = $file;
+	}
 
     /**
      * Set createdAt
@@ -276,4 +337,5 @@ class Media
     {
         return $this->displayName;
     }
+
 }

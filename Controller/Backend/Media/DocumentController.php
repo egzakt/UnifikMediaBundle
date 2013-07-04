@@ -2,20 +2,15 @@
 
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
-use Doctrine\DBAL\Platforms\Keywords\ReservedKeywordsValidator;
-use Doctrine\Tests\ORM\Functional\CompositePrimaryKeyTest;
 use Egzakt\MediaBundle\Entity\Document;
 use Egzakt\MediaBundle\Entity\Image;
-use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\MediaBundle\Form\DocumentType;
 use Egzakt\MediaBundle\Lib\MediaFileInfo;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use Egzakt\MediaBundle\Form\MediaType;
 use Egzakt\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
@@ -48,12 +43,18 @@ class DocumentController extends BaseController
      */
     public function indexAction()
     {
-        $medias = $this->mediaRepository->findAll();
+        $medias = $this->mediaRepository->findByHidden(false);
         return $this->render('EgzaktMediaBundle:Backend/Media/Document:list.html.twig', array(
             'medias' => $medias,
         ));
     }
 
+    /**
+     * Create a document media
+     *
+     * @param UploadedFile $file
+     * @return JsonResponse
+     */
     public function createAction(UploadedFile $file)
     {
         /** @var Image $image */
@@ -65,14 +66,15 @@ class DocumentController extends BaseController
         $media->setName($file->getClientOriginalName());
 
         $this->getEm()->persist($media);
-
         $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
 
+        //Generate the thumbnail
         $image = new Image();
         $image->setName("Preview - ".$file->getClientOriginalName());
+        $image->setHidden(true);
 
         $this->getEm()->persist($image);
-        $uploadableManager->markEntityToUpload($image, new MediaFileInfo($this->createPdfPreview($file->getPathname())));
+        $uploadableManager->markEntityToUpload($image, new MediaFileInfo($this->getThumbnailPath($file)));
 
         $media->setThumbnail($image);
 
@@ -133,6 +135,32 @@ class DocumentController extends BaseController
 		));
 	}
 
+    /**
+     * Get the path of the thumbnail icon depending of the content
+     *
+     * @param UploadedFile $file
+     * @return string
+     */
+    private function getThumbnailPath(UploadedFile $file)
+    {
+        switch ($file->getMimeType()) {
+            case 'application/pdf':
+                return $this->createPdfPreview($file->getPathname());
+            case 'application/msword':
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png';
+            case 'application/vnd.oasis.opendocument.text':
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/writer-icon.jpg';
+            default:
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/file-icon.png';
+        }
+    }
+
+    /**
+     * Generate a pdf preview if "convert" is present on the host system
+     *
+     * @param $path
+     * @return string
+     */
     private function createPdfPreview($path)
     {
         if (shell_exec("which convert")) {
@@ -143,7 +171,7 @@ class DocumentController extends BaseController
             }
         }
 
-        return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/pdf-icon.jpg';
+        return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/pdf-icon.png';
     }
 
 }

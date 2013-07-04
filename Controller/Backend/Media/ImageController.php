@@ -45,7 +45,7 @@ class ImageController extends BaseController
      */
     public function indexAction()
     {
-        $medias = $this->mediaRepository->findAll();
+        $medias = $this->mediaRepository->findByHidden(false);
         return $this->render('EgzaktMediaBundle:Backend/Media/Image:list.html.twig', array(
             'medias' => $medias,
         ));

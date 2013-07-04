@@ -55,4 +55,6 @@ Egzakt\MediaBundle\Entity\Media:
             length: 255
             gedmo:
                   - uploadableFileMimeType
+        hidden:
+            type: boolean
     lifecycleCallbacks: {  }

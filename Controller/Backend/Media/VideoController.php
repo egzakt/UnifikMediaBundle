@@ -43,7 +43,7 @@ class VideoController extends BaseController
      */
     public function indexAction()
     {
-        $medias = $this->mediaRepository->findAll();
+        $medias = $this->mediaRepository->findByHidden(false);
         return $this->render('EgzaktMediaBundle:Backend/Media/Video:list.html.twig', array(
             'medias' => $medias,
         ));
@@ -75,7 +75,6 @@ class VideoController extends BaseController
 
 		$video->setUrl($request->get('video_url'));
 		$video->setName($request->get('video_url'));
-		$video->setMimeType('video/x-flv');
 
 		$this->updateThumbnail($video);
 

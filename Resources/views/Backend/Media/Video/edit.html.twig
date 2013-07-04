@@ -26,6 +26,7 @@
 
         <div id="fields_box">
             <table class="fields" cellspacing="0">
+                {{ form_errors(form) }}
                 {{ form_row(form.name) }}
                 {{ form_row(form.mediaFile) }}
                 {{ form_row(form.url) }}
@@ -42,6 +43,7 @@
                 'link_name': 'Parameters',
                 'fields': [form_row(form.description), form_row(form.title)]
                 } %}
+                {{ form_rest(form) }}
                 {% if media.id %}
                     <tr>
                         <th>

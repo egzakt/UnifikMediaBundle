@@ -63,11 +63,17 @@ class Media extends BaseEntity
      */
     protected $displayName;
 
+    /**
+     * @var boolean
+     */
+    protected  $hidden;
+
 
 	public function __construct()
 	{
 		//The default type is media
 		$this->type = "media";
+        $this->hidden = false;
 	}
 
 	/**
@@ -338,4 +344,26 @@ class Media extends BaseEntity
         return $this->displayName;
     }
 
+    /**
+     * Set hidden
+     *
+     * @param boolean $hidden
+     * @return Media
+     */
+    public function setHidden($hidden)
+    {
+        $this->hidden = $hidden;
+    
+        return $this;
+    }
+
+    /**
+     * Get hidden
+     *
+     * @return boolean 
+     */
+    public function getHidden()
+    {
+        return $this->hidden;
+    }
 }
