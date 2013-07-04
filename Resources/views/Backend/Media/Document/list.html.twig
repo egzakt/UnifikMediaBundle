@@ -37,9 +37,11 @@
                     </td>
                     <td>{{ media.updatedat|date('Y-m-d') }}</td>
                     <td>
+                        {% if media.thumbnail %}
                         <a class="image-thumbnail" href="{{ asset(media.thumbnail.mediaPath) }}">
                             <img src="{{ media.thumbnail.mediaPath | imagine_filter('media_thumb') }}">
                         </a>
+                        {% endif %}
                     </td>
                     <td class="edit">
                         {% if media.isEditable %}

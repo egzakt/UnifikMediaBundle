@@ -29,9 +29,11 @@
                 {{ form_row(form.name) }}
                 {{ form_row(form.thumbnail) }}
                 {{ form_row(form.mediaFile) }}
-                {% include 'EgzaktMediaBundle:Backend/Media:edit_image_aviary.html.twig' with {
-                    'media': media.thumbnail,
-                } %}
+                {% if media.thumbnail %}
+                    {% include 'EgzaktMediaBundle:Backend/Media:edit_image_aviary.html.twig' with {
+                        'media': media.thumbnail,
+                    } %}
+                {% endif %}
                 {% include 'EgzaktSystemBundle:Backend/Core:collapsable_fields.html.twig' with {
                     'link_name': 'Parameters',
                     'fields': [form_row(form.description), form_row(form.title)]

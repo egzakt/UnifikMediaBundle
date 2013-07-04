@@ -115,10 +115,6 @@ class DocumentController extends BaseController
 					$uploadableManager->markEntityToUpload($media, $media->getMediaFile());
 				}
 
-                if ($media->getDocumentFile()) {
-                    $uploadableManager->markEntityToUpload($media, $media->getDocumentFile());
-                }
-
 				$this->getEm()->flush();
 
 				$this->get('egzakt_system.router_invalidator')->invalidate();
