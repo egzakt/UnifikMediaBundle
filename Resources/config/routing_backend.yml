@@ -1,4 +1,8 @@
 #List
+egzakt_media_backend_media_list_ajax:
+    pattern:  /media/select/{type}
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:listAjax", type: 'all' }
+
 egzakt_media_backend_image:
     pattern:  /image
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:index" }

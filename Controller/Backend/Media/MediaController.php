@@ -49,6 +49,17 @@ class MediaController extends BaseController
         ));
     }
 
+    public function listAjaxAction($type)
+    {
+        if ("all" == $type)
+            $medias = $this->mediaRepository->findByHidden(false);
+        else
+            $medias = $this->mediaRepository->findByType($type);
+        return $this->render('EgzaktMediaBundle:Backend/Media/Media:list_ajax.html.twig', array(
+            'medias' => $medias,
+        ));
+    }
+
     /**
      * Create a media and guess the type with the mime type
      * @param Request $request

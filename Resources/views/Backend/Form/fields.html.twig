@@ -1,0 +1,17 @@
+{% block media_select_widget %}
+    {{ block('choice_widget') }}
+    {% if media %}
+        <img id="test" src="{{ media.thumbnailUrl | imagine_filter('media_thumb') }}">
+    {% endif %}
+    <a id="select-media" href="{{ path('egzakt_media_backend_media_list_ajax', { type: type }) }}">Sélectionner un média</a>
+
+    <script>
+        $().ready(function(){
+            $('#select-media').fancybox({
+                autoDimensions: false,
+                width: '80%',
+                height: '80%'
+            });
+        });
+    </script>
+{% endblock %}

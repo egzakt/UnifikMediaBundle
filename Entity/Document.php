@@ -70,4 +70,9 @@ class Document extends Media
     {
         return $this->thumbnail;
     }
+
+    public function getThumbnailUrl()
+    {
+        return $this->thumbnail->getMediaPath();
+    }
 }

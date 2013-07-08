@@ -113,6 +113,11 @@ class Media extends BaseEntity
 		return $params;
 	}
 
+    public function getThumbnailUrl()
+    {
+        return $this->getMediaPath();
+    }
+
     /**
      * Get id
      *

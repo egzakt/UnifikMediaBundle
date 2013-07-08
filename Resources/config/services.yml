@@ -6,6 +6,8 @@ parameters:
 
     egzakt_media.parser_extension.class: Egzakt\MediaBundle\Extensions\ExternalMediaParserExtension
 
+    egzakt_media.form.type.media_select.class: Egzakt\MediaBundle\Form\MediaSelectType
+
 services:
 
     # Media Parser
@@ -30,3 +32,8 @@ services:
         arguments: [@egzakt_media.parser]
         tags:
             - { name: twig.extension }
+
+    egzakt_system.form.type.advanced_entity:
+            class: %egzakt_media.form.type.media_select.class%
+            tags:
+              - { name: form.type, alias: media_select }
