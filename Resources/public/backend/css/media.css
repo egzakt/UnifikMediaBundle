@@ -25,11 +25,3 @@
 #list_actions_bar ul li, #media-filters li{
     display: inline-block;
 }
-
-.media{
-    display: none;
-}
-
-.media.media-image{
-    display: table-row;
-}

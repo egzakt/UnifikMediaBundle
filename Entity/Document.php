@@ -71,6 +71,10 @@ class Document extends Media
         return $this->thumbnail;
     }
 
+    /**
+     * Get the thumbnail url
+     * @return string
+     */
     public function getThumbnailUrl()
     {
         return $this->thumbnail->getMediaPath();

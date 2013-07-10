@@ -33,7 +33,7 @@ services:
         tags:
             - { name: twig.extension }
 
-    egzakt_system.form.type.advanced_entity:
+    egzakt_system.form.type.media_select:
             class: %egzakt_media.form.type.media_select.class%
             tags:
               - { name: form.type, alias: media_select }

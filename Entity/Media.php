@@ -31,7 +31,10 @@ class Media extends BaseEntity
 	 */
 	protected $media;
 
-	protected $mediaPath;
+    /**
+     * @var string
+     */
+    protected $mediaPath;
 
     /**
      * @var \DateTime
@@ -64,9 +67,11 @@ class Media extends BaseEntity
     protected $displayName;
 
     /**
+     * Internal field used to hide the media from the list in certain case
      * @var boolean
      */
     protected  $hidden;
+
 
 
 	public function __construct()
@@ -88,7 +93,12 @@ class Media extends BaseEntity
 		return '';
 	}
 
-	public function getRouteBackend($action = 'edit')
+    /**
+     * Get the backend route
+     * @param string $action
+     * @return string
+     */
+    public function getRouteBackend($action = 'edit')
 	{
         if ('list' === $action)
             return 'egzakt_media_backend_media';
@@ -113,6 +123,11 @@ class Media extends BaseEntity
 		return $params;
 	}
 
+    /**
+     * Get the url used to serve the thumbnail
+     * Some child class may have to overwrite it
+     * @return string
+     */
     public function getThumbnailUrl()
     {
         return $this->getMediaPath();
@@ -165,7 +180,8 @@ class Media extends BaseEntity
     }
 
     /**
-     * Get type
+     * Get the media type
+     * It needs to be hardcoded becauseDoctrine does not allow to get the discriminator field
      *
      * @return string 
      */
@@ -176,7 +192,7 @@ class Media extends BaseEntity
 
 
     /**
-     * Get meidaPath
+     * Get mediaPath
      *
      * @param bool $absolute
      * @return string
@@ -190,12 +206,17 @@ class Media extends BaseEntity
         return '/'.$this->mediaPath;
     }
 
-	public function setMediaPath($path)
+    /**
+     * Set the media path
+     * @param $path
+     */
+    public function setMediaPath($path)
 	{
 		$this->mediaPath = $path;
 	}
 
 	/**
+     * Get the media file
 	 * @return \Symfony\Component\HttpFoundation\File\UploadedFile
 	 */
 	public function getMediaFile()
@@ -204,6 +225,7 @@ class Media extends BaseEntity
 	}
 
 	/**
+     * Set the media file
 	 * @param \Symfony\Component\HttpFoundation\File\UploadedFile
 	 */
 	public function setMediaFile($file)

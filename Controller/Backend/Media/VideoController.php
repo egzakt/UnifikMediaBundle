@@ -64,11 +64,11 @@ class VideoController extends BaseController
 
         $mediaParser = $this->get('egzakt_media.parser');
         if (!$mediaParser->getParser($request->get('video_url'))) {
-            return new JsonResponse(json_encode(array(
+            return new JsonResponse(array(
                 'error' => array(
                   'message' => 'Unable to parse the video url',
                 ),
-            )));
+            ));
         }
 
 		$video = new Video();
@@ -81,10 +81,14 @@ class VideoController extends BaseController
 		$this->getEm()->persist($video);
 		$this->getEm()->flush();
 
-		return new JsonResponse(json_encode(array(
-			"path" => $this->generateUrl($video->getRouteBackend(), $video->getRouteBackendParams()),
-			"name" => $video->getName(),
-		)));
+        $cacheManager = $this->container->get('liip_imagine.cache.manager');
+
+        return new JsonResponse(array(
+            'url' => $this->generateUrl($video->getRouteBackend(), $video->getRouteBackendParams()),
+            'id' => $video->getId(),
+            'thumbnailUrl' => $cacheManager->getBrowserPath($video->getThumbnailUrl(), 'media_thumb'),
+            "message" => "File uploaded",
+        ));
 	}
 
     /**

@@ -57,7 +57,6 @@ class DocumentController extends BaseController
      */
     public function createAction(UploadedFile $file)
     {
-        /** @var Image $image */
         $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
 
         $media = new Document();
@@ -80,10 +79,14 @@ class DocumentController extends BaseController
 
         $this->getEm()->flush();
 
-        return new JsonResponse(json_encode(array(
+        $cacheManager = $this->container->get('liip_imagine.cache.manager');
+
+        return new JsonResponse(array(
             'url' => $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
+            'id' => $media->getId(),
+            'thumbnailUrl' => $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb'),
             "message" => "File uploaded",
-        )));
+        ));
     }
 
     /**

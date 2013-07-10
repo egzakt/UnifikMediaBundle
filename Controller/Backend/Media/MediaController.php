@@ -49,14 +49,22 @@ class MediaController extends BaseController
         ));
     }
 
+    /**
+     * Ajax version of the list action. Used to select a media to insert in another entity
+     *
+     * @param $type
+     * @return Response
+     */
     public function listAjaxAction($type)
     {
         if ("all" == $type)
             $medias = $this->mediaRepository->findByHidden(false);
         else
             $medias = $this->mediaRepository->findByType($type);
+
         return $this->render('EgzaktMediaBundle:Backend/Media/Media:list_ajax.html.twig', array(
             'medias' => $medias,
+            'type' => $type,
         ));
     }
 
@@ -71,11 +79,11 @@ class MediaController extends BaseController
 			$file = $request->files->get('file');
 
 			if (!$file instanceof UploadedFile || !$file->isValid()) {
-				return new JsonResponse(json_encode(array(
+				return new JsonResponse(array(
 					"error" => array(
 						"message" => "Unable to upload the file",
 					),
-				)));
+				));
 			}
 
             switch ($file->getMimeType()) {
@@ -95,6 +103,15 @@ class MediaController extends BaseController
 		}
 		return $this->render('EgzaktMediaBundle:Backend/Media/Media:create.html.twig');
 	}
+
+    /**
+     * Ajax version of the create action,
+     * @return Response
+     */
+    public function createAjaxAction()
+    {
+        return $this->render('EgzaktMediaBundle:Backend/Media/Media:create_ajax.html.twig');
+    }
 
     /**
      * Displays a form to edit an existing ad entity
@@ -189,10 +206,10 @@ class MediaController extends BaseController
 				'entity' => $media,
 			));
 
-			return new Response(json_encode(array(
+			return new JsonResponse(array(
 				'template' => $template,
 				'isDeletable' => $media->isDeletable()
-			)));
+			));
 		}
 
 		$this->getEm()->remove($media);
@@ -229,7 +246,7 @@ class MediaController extends BaseController
             $cacheManager->remove($image->getMediaPath(), $filter);
         }
 
-        return new JsonResponse(json_encode(array()));
+        return new JsonResponse(array());
     }
 
 }

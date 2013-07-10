@@ -64,10 +64,14 @@ class ImageController extends BaseController
 
         $this->getEm()->flush();
 
-        return new JsonResponse(json_encode(array(
+        $cacheManager = $this->container->get('liip_imagine.cache.manager');
+
+        return new JsonResponse(array(
             'url' => $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
+            'id' => $media->getId(),
+            'thumbnailUrl' => $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb'),
             "message" => "File uploaded",
-        )));
+        ));
     }
 
     /**

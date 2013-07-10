@@ -71,6 +71,10 @@ egzakt_media_backend_document_delete:
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }
 
 #Create
+egzakt_media_backend_media_create_ajax:
+    pattern:  /create/ajax
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:createAjax" }
+
 egzakt_media_backend_video_create:
     pattern:  /create/video
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Video:create" }

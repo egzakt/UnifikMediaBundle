@@ -5,11 +5,13 @@
 {% endblock %}
 
 {% block content_main %}
-    <ul id="media-filters">
-        <li><a class="media-filter"><input type="hidden" value="image">Images</a></li>
-        <li><a class="media-filter"><input type="hidden" value="video">Videos</a></li>
-        <li><a class="media-filter"><input type="hidden" value="document">Documents</a></li>
-    </ul>
+    {% if 'all' == type %}
+        <ul id="media-filters">
+            <li><a class="media-filter"><input type="hidden" value="image">Images</a></li>
+            <li><a class="media-filter"><input type="hidden" value="video">Videos</a></li>
+            <li><a class="media-filter"><input type="hidden" value="document">Documents</a></li>
+        </ul>
+    {% endif %}
     <div class="list_box">
         <table cellspacing="0" class="table-autosort">
             <thead>
@@ -46,23 +48,26 @@
 
     <script>
         $().ready(function(){
-            $('.media-link').click(function(e){
+            $('.media-link, .media img').click(function(e){
                 e.preventDefault();
                 var row = $(this).parent().parent();
                 var id = row.find('input[type=hidden]').val();
                 var src = row.find('img').attr('src');
 
-                var parent = $('#select-media').parent();
-                parent.children('select').val(id);
-                parent.children('img').attr('src', src);
+                $('#input-media').val(id);
+                $('#image-media').attr('src', src);
                 $.fancybox.close();
             });
 
+            {% if 'all' == type %}
+            $('.media').hide();
+            $('.media-image').show();
             $('.media-filter').click(function(e){
                 e.preventDefault();
                 var type = $(this).find('input').val();
                 $('.media').fadeOut().delay(400).parent().find('.media-'+type).fadeIn();
             });
+            {% endif %}
         });
     </script>
 
