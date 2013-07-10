@@ -54,8 +54,9 @@
                 var id = row.find('input[type=hidden]').val();
                 var src = row.find('img').attr('src');
 
-                $('#input-media').val(id);
-                $('#image-media').attr('src', src);
+                var parent = $.fancybox.triggeringElement.parent();
+                parent.find('.input-media').val(id);
+                parent.find('.image-media').attr('src', src);
                 $.fancybox.close();
             });
 

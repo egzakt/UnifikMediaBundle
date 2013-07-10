@@ -61,8 +61,10 @@
             });
 
             uploader.bind('UploadComplete', function(up, files){
-                $('#input-media').val(files[0].id);
-                $('#image-media').attr('src', files[0].thumbnailUrl);
+                var parent = $.fancybox.triggeringElement.parent;
+
+                parent.find('.input-media').val(files[0].id);
+                parent.find('.image-media').attr('src', files[0].thumbnailUrl);
 
                 $.fancybox.close();
             });

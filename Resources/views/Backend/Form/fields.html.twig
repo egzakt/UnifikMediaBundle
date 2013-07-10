@@ -1,23 +1,16 @@
 {% block media_select_widget %}
-    <input id="input-media" type="hidden" {{ block('widget_attributes') }} {% if media %}value="{{ media.id }}"{% endif %} />
-    <a id="select-media" href="{{ path('egzakt_media_backend_media_list_ajax', { type: type }) }}">
-        <img id="image-media" src="{% if media %}{{ media.thumbnailUrl | imagine_filter('media_thumb') }}{% endif %}">
+    <input class="input-media" type="hidden" {{ block('widget_attributes') }} {% if media %}value="{{ media.id }}"{% endif %} />
+    <a class="select-media" href="{{ path('egzakt_media_backend_media_list_ajax', { type: type }) }}">
+        <img class="image-media" src="{% if media %}{{ media.thumbnailUrl | imagine_filter('media_thumb') }}{% endif %}">
         {% trans %}Select a media{% endtrans %}
     </a>
-    <a id="create-media" href="{{ path('egzakt_media_backend_media_create_ajax') }}">{% trans %}Upload a new media{% endtrans %}</a>
+    <a class="create-media" href="{{ path('egzakt_media_backend_media_create_ajax') }}">{% trans %}Upload a new media{% endtrans %}</a>
+
     <script>
-        $().ready(function(){
-            $('#select-media').fancybox({
-                autoDimensions: false,
-                width: '80%',
-                height: '80%'
-            });
-            $('#create-media').fancybox({
-                autoDimensions: false,
-                width: '60%',
-                height: '60%',
-                scrolling: 'no'
-            })
-        });
+        if ('undefined' === typeof egzaktMediaScript){
+            egzaktMediaScript = $('<script>');
+            egzaktMediaScript.attr('src', '{{ asset('bundles/egzaktmedia/backend/js/media_select.js') }}')
+            $('body').append(egzaktMediaScript);
+        }
     </script>
 {% endblock %}
