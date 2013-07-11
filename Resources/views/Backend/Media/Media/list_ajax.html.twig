@@ -12,65 +12,33 @@
             <li><a class="media-filter"><input type="hidden" value="document">Documents</a></li>
         </ul>
     {% endif %}
-    <div class="list_box">
-        <table cellspacing="0" class="table-autosort">
-            <thead>
-            <tr>
-                <th class="name table-sortable:ignorecase">{% trans %}Name{% endtrans %}</th>
-                <th class="table-sortable:date">{% trans %}Last updated{% endtrans %}</th>
-                <th>{% trans %}Thumbnail{% endtrans %}</th>
-
-            </tr>
-            <tr class="filters">
-                <th class="name">
-                    <input onkeyup="Table.filter(this,this)" class="filter" alt="{{ "Search a name"|trans }}" />
-                </th>
-                <th>&nbsp</th>
-                <th>&nbsp;</th>
-            </tr>
-            </thead>
-            <tbody>
+    <div id="media-list">
+        <div class="list_box">
             {% for media in medias %}
-                <tr id="item_{{ media.id }}" class="media media-{{ media.type }}">
-                    <td class="name">
-                        <input type="hidden" value="{{ media.id }}">
-                        <a class="media-link" href="{{ path(media.route, media.routeParams) }}">{{ media|raw }}</a>
-                    </td>
-                    <td>{{ media.updatedat|date('Y-m-d') }}</td>
-                    <td>
-                        <img src="{{ media.thumbnailUrl | imagine_filter('media_thumb') }}">
-                    </td>
-                </tr>
+                <div id="item_{{ media.id }}" class="media media-{{ media.type }}">
+                    <input type="hidden" name="id" value="{{ media.id }}">
+                    <input type="hidden" name="name" value="{{ media.name }}">
+                    <input type="hidden" name="type" value="{{ media.type }}">
+                    <input type="hidden" name="edit-link" value="{{ path(media.route, media.routeParams) }}">
+                    <img src="{{ media.thumbnailUrl | imagine_filter('media_thumb') }}" title="{{ media.name }}">
+                </div>
             {% endfor %}
-            </tbody>
-        </table>
+        </div>
     </div>
 
-    <script>
-        $().ready(function(){
-            $('.media-link, .media img').click(function(e){
-                e.preventDefault();
-                var row = $(this).parent().parent();
-                var id = row.find('input[type=hidden]').val();
-                var src = row.find('img').attr('src');
+    <div id="media-details">
+        <div id="media-details-inner">
+            <input type="hidden" name="selected-id">
+            <h4></h4>
+            <img>
+            <div>
+                <a id="edit-media-link">Edit</a>
+            </div>
+            <a id="insert-media">Insert</a>
+        </div>
+    </div>
 
-                var parent = $.fancybox.triggeringElement.parent();
-                parent.find('.input-media').val(id);
-                parent.find('.image-media').attr('src', src);
-                $.fancybox.close();
-            });
-
-            {% if 'all' == type %}
-            $('.media').hide();
-            $('.media-image').show();
-            $('.media-filter').click(function(e){
-                e.preventDefault();
-                var type = $(this).find('input').val();
-                $('.media').fadeOut().delay(400).parent().find('.media-'+type).fadeIn();
-            });
-            {% endif %}
-        });
-    </script>
+    <script src="{{ asset('bundles/egzaktmedia/backend/js/media_list.js') }}"></script>
 
 {% endblock content_main %}
 

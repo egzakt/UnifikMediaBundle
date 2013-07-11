@@ -1,6 +1,6 @@
 {% block media_select_widget %}
     <input class="input-media" type="hidden" {{ block('widget_attributes') }} {% if media %}value="{{ media.id }}"{% endif %} />
-    <a class="select-media" href="{{ path('egzakt_media_backend_media_list_ajax', { type: type }) }}">
+    <a class="select-media">
         <img class="image-media" src="{% if media %}{{ media.thumbnailUrl | imagine_filter('media_thumb') }}{% endif %}">
         {% trans %}Select a media{% endtrans %}
     </a>
@@ -8,9 +8,21 @@
 
     <script>
         if ('undefined' === typeof egzaktMediaScript){
+            mediaTemplateUrl = '{{ asset('bundles/egzaktmedia/backend/js/templates/media.twig') }}';
+            listAjaxUrl = '{{ path('egzakt_media_backend_media_list_ajax') }}';
+
             egzaktMediaScript = $('<script>');
-            egzaktMediaScript.attr('src', '{{ asset('bundles/egzaktmedia/backend/js/media_select.js') }}')
+            egzaktMediaScript.attr('src', '{{ asset('bundles/egzaktmedia/backend/js/media_select.js') }}');
+
+            egzaktMediaStyle = $('<link rel="stylesheet">');
+            egzaktMediaStyle.attr('href', '{{ asset('bundles/egzaktmedia/backend/css/media.css') }}');
+
+            twigjs = $('<script>');
+            twigjs.attr('src', '{{ asset('bundles/egzaktmedia/backend/js/twig.js') }}');
+
+            $('body').append(twigjs);
             $('body').append(egzaktMediaScript);
+            $('head').append(egzaktMediaStyle);
         }
     </script>
 {% endblock %}

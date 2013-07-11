@@ -6,6 +6,7 @@ use Egzakt\MediaBundle\Entity\Document;
 use Egzakt\MediaBundle\Entity\Image;
 use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\MediaBundle\Lib\MediaFileInfo;
+use MyProject\Proxies\__CG__\OtherProject\Proxies\__CG__\stdClass;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -62,9 +63,23 @@ class MediaController extends BaseController
         else
             $medias = $this->mediaRepository->findByType($type);
 
-        return $this->render('EgzaktMediaBundle:Backend/Media/Media:list_ajax.html.twig', array(
-            'medias' => $medias,
-            'type' => $type,
+        $mediasOutput = array();
+
+        $cacheManager = $this->container->get('liip_imagine.cache.manager');
+
+        /* @var $media Media */
+        foreach ($medias as $media) {
+            $current = new \stdClass();
+            $current->name = $media->getName();
+            $current->id = $media->getId();
+            $current->type = $media->getType();
+            $current->path = $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb');
+            $current->editLink = $this->generateUrl( $media->getRouteBackend(), $media->getRouteBackendParams() );
+            $mediasOutput[] = $current;
+        }
+
+        return new JsonResponse(array(
+            'medias' => $mediasOutput,
         ));
     }
 

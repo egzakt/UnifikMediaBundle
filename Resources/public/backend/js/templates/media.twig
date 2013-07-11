@@ -1,0 +1,39 @@
+<div id="media-wrapper">
+    <div id="media-list">
+        <div class="list_box">
+            {% set i = 0 %}
+            {% for media in medias %}
+                <div id="item_{{ media.id }}" class="media media-{{ media.type }}">
+                    <input type="hidden" name="id" value="{{ i }}">
+                    <img src="{{ media.path }}" title="{{ media.name }}">
+                </div>
+                {% set i = i + 1 %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div id="media-details">
+        <div id="media-details-inner">
+            <input type="hidden" name="selected-id">
+            <h4></h4>
+            <img>
+            <div>
+                <a id="edit-media-link">Edit</a>
+            </div>
+            <a id="insert-media">Insert</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('.media').hide();
+    $('.media-image').css('display', 'inline-block');
+    $('.media-filter').click(function(e){
+        e.preventDefault();
+        var type = $(this).find('input').val();
+        $('.media').fadeOut().delay(600).parent().find('.media-'+type).css({
+            opacity: 0,
+            display:'inline-block'
+        }).animate({opacity: 1}, 1000);
+    });
+</script>

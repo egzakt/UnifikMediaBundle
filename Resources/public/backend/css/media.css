@@ -25,3 +25,35 @@
 #list_actions_bar ul li, #media-filters li{
     display: inline-block;
 }
+
+.media{
+    display: inline-block;
+    margin: 10px;
+    border: 5px solid #fff;
+}
+
+.media-selected{
+    border: 5px solid green;
+}
+
+#media-list{
+    width: 75%;
+    height: 600px;
+    overflow: auto;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+    vertical-align: top;
+}
+
+#media-details{
+    width: 20%;
+    min-height: 300px;
+    display: inline-block;
+    border: 1px solid #000000;
+}
+
+#media-details-inner{
+    padding: 10px 20px;
+    display: none;
+}
