@@ -32,7 +32,7 @@ class MediaSelectType extends AbstractType
         }
 
         $view->vars['media'] = $media;
-        $view->vars['type'] = $options['type'];
+        $view->vars['types'] = $options['types'];
     }
 
     /**
@@ -45,7 +45,7 @@ class MediaSelectType extends AbstractType
         $resolver->setDefaults(array(
            'class' => 'Egzakt\MediaBundle\Entity\Media',
            'media_method' => null,
-           'type' => array('image', 'video', 'document'),
+           'types' => array('image', 'video', 'document'),
         ));
     }
 

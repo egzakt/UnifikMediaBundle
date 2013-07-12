@@ -1,6 +1,6 @@
 {% block media_select_widget %}
     <input class="input-media" type="hidden" {{ block('widget_attributes') }} {% if media %}value="{{ media.id }}"{% endif %} />
-    <a class="select-media" data-media-type="{{ type | json_encode() }}">
+    <a class="select-media" data-media-type="{{ types | json_encode() }}">
         <img class="image-media" src="{% if media %}{{ media.thumbnailUrl | imagine_filter('media_thumb') }}{% endif %}">
         {% trans %}Select a media{% endtrans %}
     </a>
