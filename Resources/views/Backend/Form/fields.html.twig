@@ -17,14 +17,8 @@
             twigjs = $('<script>');
             twigjs.attr('src', '{{ asset('bundles/egzaktmedia/backend/js/twig.js') }}');
 
-            fosjs = $('<script>');
-            fosjs.attr('src', '{{ asset('bundles/fosjsrouting/js/router.js') }}');
-            fosjscallback = $('<script>');
-            fosjscallback.attr('src', '{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}');
 
             $('body').append(twigjs);
-            $('body').append(fosjs);
-            $('body').append(fosjscallback);
             $('body').append(egzaktMediaScript);
             $('head').append(egzaktMediaStyle);
 

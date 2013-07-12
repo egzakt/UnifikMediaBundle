@@ -22,23 +22,34 @@
         });
 
         $('.select-media').click(function(){
-            $.mediaManager.triggeringElement = $(this);
-
-            if (!listContent.medias) {
-                $.post( Routing.generate('egzakt_media_backend_media_list_ajax'), null, function(response){
-                    listContent.medias = response.medias;
-                    $.mediaManager.show();
-                });
-            } else {
-                $.mediaManager.show();
-            }
-
+            $.mediaManager.load($(this));
         });
     };
 
+    $.mediaManager.loadCk = function (editor) {
+        $.mediaManager.isCk = true;
+        $.mediaManager.load(editor);
+    }
+
+    $.mediaManager.load = function (trigerringElement) {
+        $.mediaManager.triggeringElement = trigerringElement;
+
+        if (!listContent.medias) {
+            $.post( Routing.generate('egzakt_media_backend_media_list_ajax'), null, function(response){
+                listContent.medias = response.medias;
+                $.mediaManager.show();
+            });
+        } else {
+            $.mediaManager.show();
+        }
+    }
+
     $.mediaManager.show = function() {
-        listContent.mediaType = $.mediaManager.triggeringElement.data('media-type');
-        console.log(listContent.mediaType);
+        if ($.mediaManager.isCk)
+            listContent.mediaType = ['image', 'video', 'document'];
+        else
+            listContent.mediaType = $.mediaManager.triggeringElement.data('media-type');
+
         $.fancybox({
             content: $.mediaManager.template.render(listContent),
             autoDimensions: false,
@@ -69,10 +80,20 @@
     };
 
     $.mediaManager.insert = function() {
+        if ($.mediaManager.isCk){
+            $.mediaManager.insertCk();
+            return;
+        }
         var parent = $.mediaManager.triggeringElement.parent();
 
         parent.find('.input-media').val(selectedMedia.id);
         parent.find('.image-media').attr('src', selectedMedia.path);
+        $.fancybox.close();
+    };
+
+    $.mediaManager.insertCk = function() {
+        console.log(CKEDITOR.plugins.get('egzaktmediamanager'));
+        CKEDITOR.plugins.get('egzaktmediamanager').insertMedia($.mediaManager.triggeringElement, selectedMedia);
         $.fancybox.close();
     };
 }(jQuery));
