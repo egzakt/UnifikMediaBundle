@@ -1,39 +1,34 @@
-$().ready(function(){
-    $.mediaManager.init();
-});
-
 (function($){
-    $.mediaManager = function () {
+    var listContent = {}, selectedMedia, settings;
 
-    };
-
-    $.mediaManager.init = function() {
+    $.mediaManager = function ( options ) {
         $('.create-media').fancybox({
             autoDimensions: false,
             width: '60%',
             height: '60%',
-            scrolling: 'no'
+            scrolling: 'no',
+            href: Routing.generate('egzakt_media_backend_media_create_ajax')
         });
 
         $.mediaManager.template = twig({
             id: "media",
-            href: mediaTemplateUrl,
+            href: '/bundles/egzaktmedia/backend/js/templates/media.twig',
             async: false
         });
 
         $('.create-media').click(function(){
             $.mediaManager.triggeringElement = $(this);
-            $.mediaManager.medias = false;
+            listContent.medias = false;
         });
 
-        $('.select-media').click(function(e){
+        $('.select-media').click(function(){
             $.mediaManager.triggeringElement = $(this);
 
-            if (!$.mediaManager.medias) {
-                $.post( listAjaxUrl, null, function(response){
-                    $.mediaManager.medias = response;
+            if (!listContent.medias) {
+                $.post( Routing.generate('egzakt_media_backend_media_list_ajax'), null, function(response){
+                    listContent.medias = response.medias;
                     $.mediaManager.show();
-                } );
+                });
             } else {
                 $.mediaManager.show();
             }
@@ -42,8 +37,10 @@ $().ready(function(){
     };
 
     $.mediaManager.show = function() {
+        listContent.mediaType = $.mediaManager.triggeringElement.data('media-type');
+        console.log(listContent.mediaType);
         $.fancybox({
-            content: $.mediaManager.template.render($.mediaManager.medias),
+            content: $.mediaManager.template.render(listContent),
             autoDimensions: false,
             width: '90%',
             height: 600
@@ -58,8 +55,7 @@ $().ready(function(){
             $('.media-selected').removeClass('media-selected');
             div.addClass('media-selected');
 
-            $.mediaManager.selected = div.find('input[name=id]').val();
-            var selectedMedia = $.mediaManager.medias.medias[$.mediaManager.selected];
+            selectedMedia = listContent.medias[div.data('media-manager-id')];
             divDetails.find('h4').html(selectedMedia.name);
             divDetails.find('a#edit-media-link').attr('href', selectedMedia.editLink);
             divDetails.find('img').attr('src', selectedMedia.path);
@@ -74,7 +70,6 @@ $().ready(function(){
 
     $.mediaManager.insert = function() {
         var parent = $.mediaManager.triggeringElement.parent();
-        var selectedMedia = $.mediaManager.medias.medias[$.mediaManager.selected];
 
         parent.find('.input-media').val(selectedMedia.id);
         parent.find('.image-media').attr('src', selectedMedia.path);

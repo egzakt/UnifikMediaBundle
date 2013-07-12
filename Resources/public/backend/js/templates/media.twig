@@ -1,12 +1,21 @@
+{% if 'all' == mediaType %}
+<ul id="media-filters">
+    <li><a class="media-filter"><input type="hidden" value="image">Images</a></li>
+    <li><a class="media-filter"><input type="hidden" value="video">Videos</a></li>
+    <li><a class="media-filter"><input type="hidden" value="document">Documents</a></li>
+</ul>
+{% endif %}
+
 <div id="media-wrapper">
     <div id="media-list">
         <div class="list_box">
             {% set i = 0 %}
             {% for media in medias %}
-                <div id="item_{{ media.id }}" class="media media-{{ media.type }}">
-                    <input type="hidden" name="id" value="{{ i }}">
+                {% if 'all' == mediaType or mediaType == media.type %}
+                <div id="item_{{ media.id }}" class="media media-{{ media.type }}" data-media-manager-id="{{ i }}">
                     <img src="{{ media.path }}" title="{{ media.name }}">
                 </div>
+                {% endif %}
                 {% set i = i + 1 %}
             {% endfor %}
         </div>
@@ -25,6 +34,7 @@
     </div>
 </div>
 
+{% if 'all' == mediaType %}
 <script>
     $('.media').hide();
     $('.media-image').css('display', 'inline-block');
@@ -37,3 +47,4 @@
         }).animate({opacity: 1}, 1000);
     });
 </script>
+{% endif %}

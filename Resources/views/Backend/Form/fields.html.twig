@@ -1,16 +1,13 @@
 {% block media_select_widget %}
     <input class="input-media" type="hidden" {{ block('widget_attributes') }} {% if media %}value="{{ media.id }}"{% endif %} />
-    <a class="select-media">
+    <a class="select-media" data-media-type="{{ type }}">
         <img class="image-media" src="{% if media %}{{ media.thumbnailUrl | imagine_filter('media_thumb') }}{% endif %}">
         {% trans %}Select a media{% endtrans %}
     </a>
-    <a class="create-media" href="{{ path('egzakt_media_backend_media_create_ajax') }}">{% trans %}Upload a new media{% endtrans %}</a>
+    <a class="create-media">{% trans %}Upload a new media{% endtrans %}</a>
 
     <script>
         if ('undefined' === typeof egzaktMediaScript){
-            mediaTemplateUrl = '{{ asset('bundles/egzaktmedia/backend/js/templates/media.twig') }}';
-            listAjaxUrl = '{{ path('egzakt_media_backend_media_list_ajax') }}';
-
             egzaktMediaScript = $('<script>');
             egzaktMediaScript.attr('src', '{{ asset('bundles/egzaktmedia/backend/js/media_select.js') }}');
 
@@ -20,9 +17,20 @@
             twigjs = $('<script>');
             twigjs.attr('src', '{{ asset('bundles/egzaktmedia/backend/js/twig.js') }}');
 
+            fosjs = $('<script>');
+            fosjs.attr('src', '{{ asset('bundles/fosjsrouting/js/router.js') }}');
+            fosjscallback = $('<script>');
+            fosjscallback.attr('src', '{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}');
+
             $('body').append(twigjs);
+            $('body').append(fosjs);
+            $('body').append(fosjscallback);
             $('body').append(egzaktMediaScript);
             $('head').append(egzaktMediaStyle);
+
+            $().ready(function(){
+                $.mediaManager();
+            });
         }
     </script>
 {% endblock %}

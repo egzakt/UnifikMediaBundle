@@ -69,12 +69,13 @@ class MediaController extends BaseController
 
         /* @var $media Media */
         foreach ($medias as $media) {
-            $current = new \stdClass();
-            $current->name = $media->getName();
-            $current->id = $media->getId();
-            $current->type = $media->getType();
-            $current->path = $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb');
-            $current->editLink = $this->generateUrl( $media->getRouteBackend(), $media->getRouteBackendParams() );
+            $current = array(
+                'name' => $media->getName(),
+                'id' => $media->getId(),
+                'type' => $media->getType(),
+                'path' => $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb'),
+                'editLink' =>  $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
+            );
             $mediasOutput[] = $current;
         }
 

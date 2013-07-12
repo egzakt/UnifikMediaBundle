@@ -82,7 +82,7 @@
                 $.post('{{ url('egzakt_media_backend_video_create') }}', {
                     video_url: input.val()
                 }, function(data){
-                    data = $.parseJSON(data);
+                    console.log(data);
                     var link = "<li>" +
                                    "<a href='" + data.path + "'>" + data.name + "</a>"
                                 "</li>";

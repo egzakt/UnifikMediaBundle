@@ -88,6 +88,7 @@ class VideoController extends BaseController
             'id' => $video->getId(),
             'thumbnailUrl' => $cacheManager->getBrowserPath($video->getThumbnailUrl(), 'media_thumb'),
             "message" => "File uploaded",
+            'name' => $video->getName(),
         ));
 	}
 
