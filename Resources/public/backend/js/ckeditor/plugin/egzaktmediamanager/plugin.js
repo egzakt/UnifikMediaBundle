@@ -15,25 +15,30 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
                     $('body').append(twigjs);
                     $('body').append(egzaktMediaScript);
                     $('head').append(egzaktMediaStyle);
-
-                    $().ready(function(){
-                        $.mediaManager();
-                        $.mediaManager.loadCk(editor);
-                    });
+                    $.mediaManager();
                 }
+
+                $.mediaManager.loadCk(editor);
             }
         }));
 
         if ( editor.ui.addButton ) {
-            editor.ui.addButton( 'Insert media', {
+            editor.ui.addButton( 'Insert_media', {
                 label: 'Insert media',
-                command: 'openmediamanager'
+                command: 'openmediamanager',
+                toolbar: 'link'
             });
         }
     },
 
-    insertMedia: function( editor, image ) {
-        editor.insertHtml('<img src="'+ image.path + '">');
+    insertMedia: function( editor, media ) {
+        switch (media.type){
+            case 'image':
+                editor.insertHtml('<img src="'+ media.path + '">');
+                break;
+            case 'document':
+                editor.insertHtml('<a href="' + media.mediaUrl + '">' + media.name + '</a>' );
+        }
     }
 });
 

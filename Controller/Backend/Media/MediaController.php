@@ -74,6 +74,7 @@ class MediaController extends BaseController
                 'id' => $media->getId(),
                 'type' => $media->getType(),
                 'path' => $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb'),
+                'mediaUrl' => $media->getMediaPath(),
                 'editLink' =>  $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
             );
             $mediasOutput[] = $current;
