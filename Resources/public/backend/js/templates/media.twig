@@ -1,4 +1,4 @@
-{% if 'all' == mediaType %}
+{% if mediaType.length > 1 %}
 <ul id="media-filters">
     <li><a class="media-filter"><input type="hidden" value="image">Images</a></li>
     <li><a class="media-filter"><input type="hidden" value="video">Videos</a></li>
@@ -11,7 +11,7 @@
         <div class="list_box">
             {% set i = 0 %}
             {% for media in medias %}
-                {% if 'all' == mediaType or mediaType == media.type %}
+                {% if media.type in mediaType %}
                 <div id="item_{{ media.id }}" class="media media-{{ media.type }}" data-media-manager-id="{{ i }}">
                     <img src="{{ media.path }}" title="{{ media.name }}">
                 </div>
@@ -34,7 +34,7 @@
     </div>
 </div>
 
-{% if 'all' == mediaType %}
+{% if mediaType.length > 1 %}
 <script>
     $('.media').hide();
     $('.media-image').css('display', 'inline-block');

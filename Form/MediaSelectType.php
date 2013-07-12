@@ -45,7 +45,7 @@ class MediaSelectType extends AbstractType
         $resolver->setDefaults(array(
            'class' => 'Egzakt\MediaBundle\Entity\Media',
            'media_method' => null,
-           'type' => 'all',
+           'type' => array('image', 'video', 'document'),
         ));
     }
 
