@@ -38,6 +38,7 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
                 break;
             case 'document':
                 editor.insertHtml('<a href="' + media.mediaUrl + '">' + media.name + '</a>' );
+                break;
         }
     }
 });
