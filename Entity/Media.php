@@ -394,6 +394,16 @@ class Media extends BaseEntity
         return $this->hidden;
     }
 
+    public function getReplaceRegex()
+    {
+        return '';
+    }
+
+    public function getReplaceUrl()
+    {
+        return '';
+    }
+
     /**
      * Serialize the media to an array
      */

@@ -121,4 +121,14 @@ class Video extends Media
         $array['embedUrl'] = $parser->getEmbedUrl();
         return $array;
     }
+
+    public function getReplaceRegex()
+    {
+        return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=").*("[^>]*>)/', $this->getId());
+    }
+
+    public function getReplaceUrl()
+    {
+        return $this->container->get('egzakt_media.parser')->getParser($this->getUrl())->getEmbedUrl();
+    }
 }

@@ -34,4 +34,14 @@ class Image extends Media
             return 'egzakt_media_backend_image';
         return 'egzakt_media_backend_image_' . $action;
     }
+
+    public function getReplaceRegex()
+    {
+        return sprintf('/(<img [^>]*data-mediaid="%d"[^>]*src=").*("[^>]*>)/', $this->getId());
+    }
+
+    public function getReplaceUrl()
+    {
+        return $this->getMediaPath();
+    }
 }

@@ -8,6 +8,8 @@ parameters:
 
     egzakt_media.form.type.media_select.class: Egzakt\MediaBundle\Form\MediaSelectType
 
+    egzakt_media.listener.media_change.class: Egzakt\MediaBundle\Listener\MediaChangeListener
+
 services:
 
     # Media Parser
@@ -37,3 +39,8 @@ services:
             class: %egzakt_media.form.type.media_select.class%
             tags:
               - { name: form.type, alias: media_select }
+
+    egzakt_media.media_change_listener:
+            class: %egzakt_media.listener.media_change.class%
+            tags:
+              - { name: doctrine.event_subscriber, connection: default }

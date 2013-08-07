@@ -79,4 +79,14 @@ class Document extends Media
     {
         return $this->thumbnail->getMediaPath();
     }
+
+    public function getReplaceRegex()
+    {
+        return sprintf('/(<a [^>]*data-mediaid="%d"[^>]*href=").*("[^>]*>)/', $this->getId());
+    }
+
+    public function getReplaceUrl()
+    {
+        return $this->getMediaPath();
+    }
 }
