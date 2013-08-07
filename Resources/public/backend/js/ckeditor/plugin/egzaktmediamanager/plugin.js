@@ -10,7 +10,7 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
                     egzaktMediaStyle.attr('href', '/bundles/egzaktmedia/backend/css/media.css');
 
                     twigjs = $('<script>');
-                    twigjs.attr('src', '/bundles/egzaktmedia/backend/js/twig.js');
+                    twigjs.attr('src', '/bundles/egzaktsystem/backend/js/twig.js');
 
                     $('body').append(twigjs);
                     $('body').append(egzaktMediaScript);
@@ -19,7 +19,8 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
                 }
 
                 $.mediaManager.loadCk(editor);
-            }
+            },
+            allowedContent: 'iframe[!width, !height, !src, data-mediaid, frameborder, allowfullscreen]; img[data-mediaid, !src, alt]; a[data-mediaid, !href]' //http://docs.ckeditor.com/#!/guide/dev_allowed_content_rules
         }));
 
         if ( editor.ui.addButton ) {
@@ -34,10 +35,13 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
     insertMedia: function( editor, media ) {
         switch (media.type){
             case 'image':
-                editor.insertHtml('<img src="'+ media.path + '">');
+                editor.insertHtml('<img data-mediaid="' + media.id + '" src="'+ media.path + '">');
                 break;
             case 'document':
-                editor.insertHtml('<a href="' + media.mediaUrl + '">' + media.name + '</a>' );
+                editor.insertHtml('<a data-mediaid="' + media.id + '" href="' + media.mediaUrl + '">' + media.name + '</a>' );
+                break;
+            case 'video':
+                editor.insertHtml('<iframe data-mediaid="' + media.id + '" width="560" height="315" frameborder="0"  allowfullscreen src="' + media.embedUrl + '"></iframe>');
                 break;
         }
     }

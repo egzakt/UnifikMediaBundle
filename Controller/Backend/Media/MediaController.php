@@ -65,19 +65,9 @@ class MediaController extends BaseController
 
         $mediasOutput = array();
 
-        $cacheManager = $this->container->get('liip_imagine.cache.manager');
-
         /* @var $media Media */
         foreach ($medias as $media) {
-            $current = array(
-                'name' => $media->getName(),
-                'id' => $media->getId(),
-                'type' => $media->getType(),
-                'path' => $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb'),
-                'mediaUrl' => $media->getMediaPath(),
-                'editLink' =>  $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
-            );
-            $mediasOutput[] = $current;
+            $mediasOutput[] = $media->toArray();
         }
 
         return new JsonResponse(array(

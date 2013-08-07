@@ -77,6 +77,11 @@
             e.preventDefault();
             $.mediaManager.insert();
         });
+
+        $('.media img').dblclick(function(e) {
+            e.preventDefault();
+            $.mediaManager.insert();
+        });
     };
 
     $.mediaManager.insert = function() {

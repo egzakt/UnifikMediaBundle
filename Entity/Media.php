@@ -393,4 +393,19 @@ class Media extends BaseEntity
     {
         return $this->hidden;
     }
+
+    /**
+     * Serialize the media to an array
+     */
+    public function toArray()
+    {
+        return array(
+            'name' => $this->getName(),
+            'id' => $this->getId(),
+            'type' => $this->getType(),
+            'path' => $this->container->get('liip_imagine.cache.manager')->getBrowserPath($this->getThumbnailUrl(), 'media_thumb'),
+            'mediaUrl' => $this->getMediaPath(),
+            'editLink' =>  $this->container->get('router')->generate($this->getRouteBackend(), $this->getRouteBackendParams()),
+        );
+    }
 }

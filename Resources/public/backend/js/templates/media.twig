@@ -1,8 +1,8 @@
 {% if mediaType.length > 1 %}
 <ul id="media-filters">
-    <li><a class="media-filter"><input type="hidden" value="image">Images</a></li>
-    <li><a class="media-filter"><input type="hidden" value="video">Videos</a></li>
-    <li><a class="media-filter"><input type="hidden" value="document">Documents</a></li>
+    <li><a class="media-filter" data-media-type="image">Images</a></li>
+    <li><a class="media-filter" data-media-type="video">Videos</a></li>
+    <li><a class="media-filter" data-media-type="document">Documents</a></li>
 </ul>
 {% endif %}
 
@@ -40,7 +40,9 @@
     $('.media-image').css('display', 'inline-block');
     $('.media-filter').click(function(e){
         e.preventDefault();
-        var type = $(this).find('input').val();
+        var type = $(this).data('media-type');
+        if ('none' != $('.media-'+type).css('display'))
+            return;
         $('.media').fadeOut().delay(600).parent().find('.media-'+type).css({
             opacity: 0,
             display:'inline-block'

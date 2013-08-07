@@ -111,6 +111,14 @@ class Video extends Media
         return 'egzakt_media_backend_video_' . $action;
     }
 
-
-
+    /**
+     * @inheritdoc
+     */
+    public function toArray()
+    {
+        $array = parent::toArray();
+        $parser = $this->container->get('egzakt_media.parser')->getParser($this->getUrl());
+        $array['embedUrl'] = $parser->getEmbedUrl();
+        return $array;
+    }
 }
