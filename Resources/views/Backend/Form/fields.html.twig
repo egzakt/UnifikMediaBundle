@@ -7,24 +7,16 @@
     <a class="create-media">{% trans %}Upload a new media{% endtrans %}</a>
 
     <script>
-        if ('undefined' === typeof egzaktMediaScript){
-            egzaktMediaScript = $('<script>');
-            egzaktMediaScript.attr('src', '{{ asset('bundles/egzaktmedia/backend/js/media_select.js') }}');
-
-            egzaktMediaStyle = $('<link rel="stylesheet">');
-            egzaktMediaStyle.attr('href', '{{ asset('bundles/egzaktmedia/backend/css/media.css') }}');
-
-            twigjs = $('<script>');
-            twigjs.attr('src', '{{ asset('bundles/egzaktsystem/backend/js/twig.js') }}');
-
-
-            $('body').append(twigjs);
-            $('body').append(egzaktMediaScript);
-            $('head').append(egzaktMediaStyle);
-
-            $().ready(function(){
-                $.mediaManager();
-            });
-        }
+        $().ready(function(){
+            if('undefined' == typeof egzaktMediaScript) {
+                var loader = new DynamicLoader();
+                loader.addScript('egzaktmediascript', '/bundles/egzaktmedia/backend/js/media_select.js');
+                loader.addScript('twigjsscript', '/bundles/egzaktsystem/backend/js/twig.js');
+                loader.addStyle('egzaktmediastyle', '/bundles/egzaktmedia/backend/css/media.css');
+                loader.load(function(){
+                    $.mediaManager();
+                });
+            }
+        });
     </script>
 {% endblock %}

@@ -22,7 +22,6 @@
         });
 
         $('.select-media').click(function(){
-            alert('.select-media');
             $.mediaManager.load($(this));
         });
     };
