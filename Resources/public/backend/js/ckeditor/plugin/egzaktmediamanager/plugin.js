@@ -3,22 +3,41 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
         editor.addCommand( 'openmediamanager', new CKEDITOR.command( editor, {
             exec: function( editor ){
                 if ('undefined' === typeof egzaktMediaScript){
-                    egzaktMediaScript = $('<script>');
-                    egzaktMediaScript.attr('src', '/bundles/egzaktmedia/backend/js/media_select.js');
+                    var egzaktMediaScript = document.createElement('script');
+                    egzaktMediaScript.src = '/bundles/egzaktmedia/backend/js/media_select.js';
+                    egzaktMediaScript.type = 'text/javascript';
 
-                    egzaktMediaStyle = $('<link rel="stylesheet">');
-                    egzaktMediaStyle.attr('href', '/bundles/egzaktmedia/backend/css/media.css');
+                    //Wait until the script is fully loaded before calling the media manager
+                    egzaktMediaScript.onload = function(){
+                        $.mediaManager();
+                        $.mediaManager.loadCk(editor);
+                    };
+                    //Our great friend IE doesn't support onload event, a special event is needed just for him
+                    egzaktMediaScript.onreadystatechange = function(){
+                        if('loaded' == this.readyState) {
+                            $.mediaManager();
+                            $.mediaManager.loadCk(editor);
+                        }
+                    };
 
-                    twigjs = $('<script>');
-                    twigjs.attr('src', '/bundles/egzaktsystem/backend/js/twig.js');
+                    document.getElementsByTagName('body')[0].appendChild(egzaktMediaScript);
 
-                    $('body').append(twigjs);
-                    $('body').append(egzaktMediaScript);
-                    $('head').append(egzaktMediaStyle);
-                    $.mediaManager();
+                    var egzaktMediaStyle = document.createElement('link')
+                    egzaktMediaStyle.href = '/bundles/egzaktmedia/backend/css/media.css';
+                    egzaktMediaStyle.rel = 'stylesheet';
+
+                    var twigjs = document.createElement('script');
+                    twigjs.src = '/bundles/egzaktsystem/backend/js/twig.js';
+                    twigjs.type = 'text/javascript';
+
+                    var body = document.getElementsByTagName('body');
+                    body.appendChild(twigjs);
+                    body.appendChild(egzaktMediaScript);
+                    document.getElementByTagName('head')[0].appendChild(egzaktMediaStyle);
+
+                }else{
+                    $.mediaManager.loadCk(editor);
                 }
-
-                $.mediaManager.loadCk(editor);
             },
             allowedContent: 'iframe[!width, !height, !src, data-mediaid, frameborder, allowfullscreen]; img[data-mediaid, !src, alt]; a[data-mediaid, !href]' //http://docs.ckeditor.com/#!/guide/dev_allowed_content_rules
         }));

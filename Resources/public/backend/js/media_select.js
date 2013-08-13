@@ -1,7 +1,7 @@
 (function($){
-    var listContent = {}, selectedMedia, settings;
+    var listContent = {}, selectedMedia;
 
-    $.mediaManager = function ( options ) {
+    $.mediaManager = function () {
         $('.create-media').fancybox({
             autoDimensions: false,
             width: '60%',
@@ -22,17 +22,18 @@
         });
 
         $('.select-media').click(function(){
+            alert('.select-media');
             $.mediaManager.load($(this));
         });
     };
 
     $.mediaManager.loadCk = function (editor) {
-        $.mediaManager.isCk = true;
-        $.mediaManager.load(editor);
-    }
+        this.isCk = true;
+        this.load(editor);
+    };
 
     $.mediaManager.load = function (trigerringElement) {
-        $.mediaManager.triggeringElement = trigerringElement;
+        this.triggeringElement = trigerringElement;
 
         if (!listContent.medias) {
             $.post( Routing.generate('egzakt_media_backend_media_list_ajax'), null, function(response){
@@ -42,7 +43,7 @@
         } else {
             $.mediaManager.show();
         }
-    }
+    };
 
     $.mediaManager.show = function() {
         if ($.mediaManager.isCk)
@@ -56,7 +57,6 @@
             width: '90%',
             height: 600
         });
-
         $('.media img').click(function(e){
             e.preventDefault();
 
@@ -85,11 +85,11 @@
     };
 
     $.mediaManager.insert = function() {
-        if ($.mediaManager.isCk){
-            $.mediaManager.insertCk();
+        if (this.isCk){
+            this.insertCk();
             return;
         }
-        var parent = $.mediaManager.triggeringElement.parent();
+        var parent = this.triggeringElement.parent();
 
         parent.find('.input-media').val(selectedMedia.id);
         parent.find('.image-media').attr('src', selectedMedia.path);
@@ -97,7 +97,6 @@
     };
 
     $.mediaManager.insertCk = function() {
-        console.log(CKEDITOR.plugins.get('egzaktmediamanager'));
         CKEDITOR.plugins.get('egzaktmediamanager').insertMedia($.mediaManager.triggeringElement, selectedMedia);
         $.fancybox.close();
     };
