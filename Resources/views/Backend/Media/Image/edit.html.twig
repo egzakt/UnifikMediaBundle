@@ -1,67 +1,98 @@
-{% extends 'EgzaktMediaBundle:Backend/Media:layout.html.twig' %}
+{% extends 'EgzaktMediaBundle:Backend:layout.html.twig' %}
 {% form_theme form 'EgzaktSystemBundle:Backend/Core:edit_fields.html.twig' %}
 
 {% block content_hemediaer %}
     <h1>{{ media.i18nTitle|trans|raw }}</h1>
 {% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    {% stylesheets
-    '@EgzaktMediaBundle/Resources/public/backend/css/*'
-    %}
-    <link rel="stylesheet" type="text/css" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock %}
-
 {% block content_main %}
 
     <form novalidate="novalidate" action="{{ path(media.route, media.routeParams) }}" method="post" {{ form_enctype(form) }}>
 
-        {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
+        {% block edit_actions %}
+        {% include 'EgzaktMediaBundle:Backend/Media/Core:edit_actions.html.twig' with {
             'entity': media,
-            'delete_route': path(media.route('delete'), media.routeParams),
+            'delete_route': path(media.route('delete'), media.routeParams()),
+            'delete_route_rel': path(media.route('delete'), media.routeParams({'message': true})),
             'cancel_route': path(media.route('list')),
         } %}
+        {% endblock %}
 
         <div id="fields_box">
             <table class="fields" cellspacing="0">
+
                 {{ form_errors(form) }}
+
                 {{ form_row(form.name) }}
+
                 {{ form_row(form.mediaFile) }}
-                {% include 'EgzaktMediaBundle:Backend/Media:edit_image_aviary.html.twig' with {
+
+                {% include 'EgzaktMediaBundle:Backend/Media/Image:edit_image_aviary.html.twig' with {
                     'media': media,
                 } %}
+
                 {% include 'EgzaktSystemBundle:Backend/Core:collapsable_fields.html.twig' with {
-                'link_name': 'Parameters',
-                'fields': [form_row(form.description), form_row(form.title)]
+                    'link_name': 'Description',
+                    'fields': [form_row(form.description), form_row(form.caption)]
                 } %}
+
                 {{ form_rest(form) }}
 
-                {% if media.id %}
-                    <tr>
-                        <th>
-                            {% trans %}Last update {% endtrans %} :
-                        </th>
-                        <td style="vertical-align:bottom">
-                            {{ media.updatedAt|date }}
-                        </td>
-                    </tr>
-                {% endif %}
+                <tr>
+                    <th>
+                        {% trans %}Last update {% endtrans %} :
+                    </th>
+                    <td style="vertical-align:bottom">
+                        {{ media.updatedAt|date }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        {% trans %}Uploaded on {% endtrans %} :
+                    </th>
+                    <td style="vertical-align:bottom">
+                        {{ media.createdAt|date }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        {% trans %}File extension{% endtrans %} :
+                    </th>
+                    <td style="vertical-align:bottom">
+                        {{ fileExtension }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        {% trans %}Real file name{% endtrans %} :
+                    </th>
+                    <td style="vertical-align:bottom">
+                        {{ realName }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        {% trans %}Format{% endtrans %} :
+                    </th>
+                    <td style="vertical-align:bottom">
+                        {% if media.width is not empty and media.height is not empty %}
+                            {{ media.width ~ ' X ' ~ media.height }} (px)
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        {% trans %}Size{% endtrans %} :
+                    </th>
+                    <td style="vertical-align:bottom">
+                        {{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}
+                    </td>
+                </tr>
             </table>
         </div>
 
-        {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
-        'entity': media,
-        'delete_route': path(media.route('delete'), media.routeParams),
-        'cancel_route': path(media.route('list')),
-        } %}
+        {{ block("edit_actions") }}
 
     </form>
 
-    {% javascripts
-    '@EgzaktMediaBundle/Resources/public/backend/js/*'
-    %}
-    <script src="{{ asset_url }}"></script>
-    {% endjavascripts %}
 {% endblock content_main %}

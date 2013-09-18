@@ -1,0 +1,66 @@
+<div class="list_box">
+    <table cellspacing="0" class="table-autosort">
+        <thead>
+        <tr>
+            <th class="name">{% trans %}Thumbnail{% endtrans %}</th>
+            <th class="table-sortable:ignorecase">{% trans %}Name{% endtrans %}</th>
+            <th class="table-sortable:date">{% trans %}Last updated{% endtrans %}</th>
+
+            <th>{% trans %}Format{% endtrans %}</th>
+            <th class="edit"></th>
+            <th class="delete"></th>
+
+        </tr>
+        <tr class="filters">
+            <th class="name">
+                &nbsp;
+            </th>
+            <th>
+                <input onkeyup="Table.filter(this,this)" class="filter" alt="{{ "Search a name"|trans }}" />
+            </th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for media in images %}
+            <tr id="item_{{ media.id }}">
+                <td class="name">
+                    <a class="image-thumbnail" href="{{ asset(media.mediaPath) }}">
+                        <img src="{{ media.mediaPath|imagine_filter('media_thumb') }}">
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ path(media.route, media.routeParams) }}">{{ media|raw }}</a>
+                </td>
+                <td>{{ media.updatedat|date('Y-m-d') }}</td>
+                <td>
+                    {% if media.width is not empty and media.height is not empty %}
+                        {{ media.width ~ ' X ' ~ media.height }} (px)
+                    {% endif %}
+                </td>
+                <td class="edit">
+                    {% if media.isEditable %}
+                        <a href="{{ path(media.route, media.routeParams) }}" title="{% trans %}Edit{% endtrans %}">
+                            <img src="{{ asset('bundles/egzaktsystem/backend/images/buttons/edit.png') }}" width="15" height="15" alt="" />
+                        </a>
+                    {% endif %}
+                </td>
+                <td>
+                    <a id="media-delete" href="{{ path(media.route('delete'), media.routeParams) }}" rel="{{ path(media.route('delete'), media.routeParams({'message': true})) }}" title="{% trans %}Delete{% endtrans %}">
+                        <img src="{{ asset('bundles/egzaktsystem/backend/images/buttons/delete.png') }}" width="12" height="15" alt="" />
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="total">
+        <span class="sub-total"></span>
+        {% set count = images|length %}
+        {% transchoice count %}{0} No results|{1} One result|]1,Inf] %count% results{% endtranschoice %}
+    </div>
+</div>

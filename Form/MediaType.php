@@ -14,7 +14,7 @@ class MediaType extends AbstractType
             ->add('name')
             ->add('mediaFile', 'advanced_file', array('file_path_method' => 'mediaPath'))
             ->add('description', 'ckeditor')
-            ->add('title')
+            ->add('caption')
         ;
     }
 

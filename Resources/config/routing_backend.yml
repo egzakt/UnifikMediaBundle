@@ -1,13 +1,52 @@
-#List
+# Media
+egzakt_media_backend_media:
+    pattern:  /media
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:media" }
+
 egzakt_media_backend_media_list_ajax:
     pattern:  /media/select/{type}
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:listAjax", type: 'all' }
     options:
         expose: true
 
-egzakt_media_backend_image:
-    pattern:  /image
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:index" }
+# Upload
+egzakt_media_backend_media_upload:
+    pattern: /upload
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Upload:upload" }
+
+egzakt_media_backend_media_upload_fancybox:
+    pattern:  /upload/ajax
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Upload:fancyboxUpload" }
+    options:
+        expose: true
+
+# Image
+egzakt_media_backend_image_edit:
+    pattern:  /image/{id}/edit
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:edit"}
+
+egzakt_media_backend_image_aviary_edit:
+    pattern: /image/{id}/update/
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:updateImage" }
+
+egzakt_media_backend_image_duplicate:
+    pattern:  /{id}/duplicate
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:duplicate" }
+
+#
+#  OLD ROUTE BELOW
+#
+
+#List
+#egzakt_media_backend_media_list_ajax:
+#    pattern:  /media/select/{type}
+#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:listAjax", type: 'all' }
+#    options:
+#        expose: true
+
+#egzakt_media_backend_image:
+#    pattern:  /image
+#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:index" }
 
 egzakt_media_backend_video:
     pattern:  /video
@@ -17,9 +56,9 @@ egzakt_media_backend_document:
     pattern:  /document
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Document:index" }
 
-egzakt_media_backend_media:
-    pattern:  /media
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:index" }
+#egzakt_media_backend_media:
+#    pattern:  /media
+#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:index" }
 
 #Edit
 egzakt_media_backend_media_edit:
@@ -34,18 +73,14 @@ egzakt_media_backend_document_edit:
     pattern:  /document/{id}/edit
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Document:edit", id: 0 }
 
-egzakt_media_backend_image_edit:
-    pattern:  /image/{id}/edit
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:edit", id: 0 }
+
 
 #Duplicate
 egzakt_media_backend_media_duplicate:
     pattern:  /{id}/duplicate
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:duplicate" }
 
-egzakt_media_backend_image_duplicate:
-    pattern:  /{id}/duplicate
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:duplicate" }
+
 
 egzakt_media_backend_video_duplicate:
     pattern:  /{id}/duplicate
@@ -73,11 +108,11 @@ egzakt_media_backend_document_delete:
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }
 
 #Create
-egzakt_media_backend_media_create_ajax:
-    pattern:  /create/ajax
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:createAjax" }
-    options:
-        expose: true
+#egzakt_media_backend_media_create_ajax:
+#    pattern:  /create/ajax
+#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:createAjax" }
+#    options:
+#        expose: true
 
 egzakt_media_backend_video_create:
     pattern:  /create/video
@@ -88,9 +123,7 @@ egzakt_media_backend_media_create:
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:create" }
 
 #Ajax image update
-egzakt_media_backend_image_image_edit:
-    pattern: /{id}/image/edit
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:updateImage" }
+
 
 egzakt_media_backend_video_image_edit:
     pattern: /{id}/image/edit

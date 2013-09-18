@@ -26,10 +26,10 @@ class Media extends BaseEntity
      */
     protected $type;
 
-	/**
-	 * @var \Symfony\Component\HttpFoundation\File\UploadedFile
-	 */
-	protected $media;
+    /**
+     * @var \Symfony\Component\HttpFoundation\File\UploadedFile
+     */
+    protected $media;
 
     /**
      * @var string
@@ -54,7 +54,7 @@ class Media extends BaseEntity
     /**
      * @var string
      */
-    protected $title;
+    protected $caption;
 
     /**
      * @var string
@@ -62,9 +62,9 @@ class Media extends BaseEntity
     protected $mimeType;
 
     /**
-     * @var string
+     * @var float
      */
-    protected $displayName;
+    protected $size;
 
     /**
      * Internal field used to hide the media from the list in certain case
@@ -74,24 +74,24 @@ class Media extends BaseEntity
 
 
 
-	public function __construct()
-	{
-		//The default type is media
-		$this->type = "media";
+    public function __construct()
+    {
+        //The default type is media
+        $this->type = "media";
         $this->hidden = false;
-	}
+    }
 
-	/**
-	 * @return string
-	 */
-	public function __toString()
-	{
-		if(false == $this->id)
-			return "New media";
-		if($this->name)
-			return $this->name;
-		return '';
-	}
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        if(false == $this->id)
+            return "New media";
+        if($this->name)
+            return $this->name;
+        return '';
+    }
 
     /**
      * Get the backend route
@@ -99,29 +99,29 @@ class Media extends BaseEntity
      * @return string
      */
     public function getRouteBackend($action = 'edit')
-	{
+    {
         if ('list' === $action)
             return 'egzakt_media_backend_media';
-		return 'egzakt_media_backend_media_' . $action;
-	}
+        return 'egzakt_media_backend_media_' . $action;
+    }
 
-	/**
-	 * Get Backend route params
-	 *
-	 * @param array $params Array of params to get
-	 *
-	 * @return array
-	 */
-	public function getRouteBackendParams($params = array())
-	{
-		$defaults = array(
-			'id' => $this->id ? $this->id : 0
-		);
+    /**
+     * Get Backend route params
+     *
+     * @param array $params Array of params to get
+     *
+     * @return array
+     */
+    public function getRouteBackendParams($params = array())
+    {
+        $defaults = array(
+            'id' => $this->id ? $this->id : 0
+        );
 
-		$params = array_merge($defaults, $params);
+        $params = array_merge($defaults, $params);
 
-		return $params;
-	}
+        return $params;
+    }
 
     /**
      * Get the url used to serve the thumbnail
@@ -211,27 +211,27 @@ class Media extends BaseEntity
      * @param $path
      */
     public function setMediaPath($path)
-	{
-		$this->mediaPath = $path;
-	}
+    {
+        $this->mediaPath = $path;
+    }
 
-	/**
+    /**
      * Get the media file
-	 * @return \Symfony\Component\HttpFoundation\File\UploadedFile
-	 */
-	public function getMediaFile()
-	{
-		return $this->media;
-	}
+     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+     */
+    public function getMediaFile()
+    {
+        return $this->media;
+    }
 
-	/**
+    /**
      * Set the media file
-	 * @param \Symfony\Component\HttpFoundation\File\UploadedFile
-	 */
-	public function setMediaFile($file)
-	{
-		$this->media = $file;
-	}
+     * @param \Symfony\Component\HttpFoundation\File\UploadedFile
+     */
+    public function setMediaFile($file)
+    {
+        $this->media = $file;
+    }
 
     /**
      * Set createdAt
@@ -308,9 +308,9 @@ class Media extends BaseEntity
      * @param string $title
      * @return Media
      */
-    public function setTitle($title)
+    public function setCaption($caption)
     {
-        $this->title = $title;
+        $this->caption = $caption;
     
         return $this;
     }
@@ -320,9 +320,9 @@ class Media extends BaseEntity
      *
      * @return string 
      */
-    public function getTitle()
+    public function getCaption()
     {
-        return $this->title;
+        return $this->caption;
     }
 
     /**
@@ -349,26 +349,23 @@ class Media extends BaseEntity
     }
 
     /**
-     * Set displayName
+     * setSize
      *
-     * @param string $displayName
-     * @return Media
+     * @param $size
      */
-    public function setDisplayName($displayName)
+    public function setSize($size)
     {
-        $this->displayName = $displayName;
-    
-        return $this;
+        $this->size = $size;
     }
 
     /**
-     * Get displayName
+     * getSize
      *
-     * @return string 
+     * @return float
      */
-    public function getDisplayName()
+    public function getSize()
     {
-        return $this->displayName;
+        return $this->size;
     }
 
     /**
@@ -414,8 +411,11 @@ class Media extends BaseEntity
             'id' => $this->getId(),
             'type' => $this->getType(),
             'path' => $this->container->get('liip_imagine.cache.manager')->getBrowserPath($this->getThumbnailUrl(), 'media_thumb'),
+            'pathLarge' => $this->container->get('liip_imagine.cache.manager')->getBrowserPath($this->getThumbnailUrl(), 'media_thumb_large'),
             'mediaUrl' => $this->getMediaPath(),
             'editLink' =>  $this->container->get('router')->generate($this->getRouteBackend(), $this->getRouteBackendParams()),
+            'size' => $this->size,
+            'caption' => $this->caption
         );
     }
 }

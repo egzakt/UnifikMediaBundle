@@ -1,0 +1,50 @@
+{% extends 'EgzaktMediaBundle:Backend:layout.html.twig' %}
+
+{% block content_hemediaer %}
+    <h1>{% trans %}Medias library{% endtrans %}</h1>
+{% endblock %}
+
+{% block content_header %}{% trans %}Medias library{% endtrans %}{% endblock %}
+
+{% block content_main %}
+
+    <div id="media-tabs">
+        <ul>
+            <li><a href="#media-tabs-1">{% trans %}Images{% endtrans %}</a></li>
+            <li><a href="#media-tabs-2">{% trans %}Documents{% endtrans %}</a></li>
+            <li><a href="#media-tabs-3">{% trans %}Videos{% endtrans %}</a></li>
+            <li><a href="#media-tabs-4">{% trans %}Embed video{% endtrans %}</a></li>
+            <li id="upload-tab"><a href="#media-tabs-5">+ {% trans %}Upload{% endtrans %}</a></li>
+        </ul>
+        <div id="media-tabs-1">
+            {% include 'EgzaktMediaBundle:Backend/Media/Media/tabs:images_tab.html.twig' %}
+        </div>
+        <div id="media-tabs-2">
+            {% include 'EgzaktMediaBundle:Backend/Media/Media/tabs:documents_tab.html.twig' %}
+        </div>
+        <div id="media-tabs-3">
+            {% include 'EgzaktMediaBundle:Backend/Media/Media/tabs:videos_tab.html.twig' %}
+        </div>
+        <div id="media-tabs-4">
+            {% include 'EgzaktMediaBundle:Backend/Media/Media/tabs:embed_videos_tab.html.twig' %}
+        </div>
+        <div id="media-tabs-5">
+            {% include 'EgzaktMediaBundle:Backend/Media/Media/tabs:upload_tab.html.twig' %}
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        $('#media-tabs').tabs();
+        $().ready(function(){
+            $('.image-thumbnail').fancybox();
+            $('.fancy-video').fancybox({
+                'type': 'iframe'
+            });
+        });
+
+    </script>
+
+
+{% endblock content_main %}
+

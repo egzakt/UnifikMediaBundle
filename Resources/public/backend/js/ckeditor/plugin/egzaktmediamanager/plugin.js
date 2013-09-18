@@ -30,7 +30,7 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
     insertMedia: function( editor, media ) {
         switch (media.type){
             case 'image':
-                editor.insertHtml('<img data-mediaid="' + media.id + '" src="'+ media.path + '">');
+                editor.insertHtml('<img data-mediaid="' + media.id + '" ' + media.attr + ' src="'+ media.mediaUrl + '">');
                 break;
             case 'document':
                 editor.insertHtml('<a data-mediaid="' + media.id + '" href="' + media.mediaUrl + '">' + media.name + '</a>' );

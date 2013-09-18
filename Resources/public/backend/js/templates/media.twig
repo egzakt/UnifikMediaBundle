@@ -1,9 +1,9 @@
 {% if mediaType.length > 1 %}
-<ul id="media-filters">
-    <li><a class="media-filter" data-media-type="image">Images</a></li>
-    <li><a class="media-filter" data-media-type="video">Videos</a></li>
-    <li><a class="media-filter" data-media-type="document">Documents</a></li>
-</ul>
+    <ul id="media-filters">
+        <li><a class="media-filter" data-media-type="image">Images</a></li>
+        <li><a class="media-filter" data-media-type="video">Videos</a></li>
+        <li><a class="media-filter" data-media-type="document">Documents</a></li>
+    </ul>
 {% endif %}
 
 <div id="media-wrapper">
@@ -12,9 +12,9 @@
             {% set i = 0 %}
             {% for media in medias %}
                 {% if media.type in mediaType %}
-                <div id="item_{{ media.id }}" class="media media-{{ media.type }}" data-media-manager-id="{{ i }}">
-                    <img src="{{ media.path }}" title="{{ media.name }}">
-                </div>
+                    <div id="item_{{ media.id }}" class="media media-{{ media.type }}" data-media-manager-id="{{ i }}">
+                        <img src="{{ media.path }}" title="{{ media.name }}">
+                    </div>
                 {% endif %}
                 {% set i = i + 1 %}
             {% endfor %}
@@ -22,31 +22,39 @@
     </div>
 
     <div id="media-details">
+        <h2 id="welcome-message">Please, select a file ...</h2>
         <div id="media-details-inner">
             <input type="hidden" name="selected-id">
-            <h4></h4>
+            <h3></h3>
             <img>
             <div>
-                <a id="edit-media-link">Edit</a>
+                <a id="edit-media-link"><span class="media-button blue">Edit</span></a>
             </div>
-            <a id="insert-media">Insert</a>
+            <a id="insert-media"><span class="media-button green">Insert</span></a>
+
+            <p id="file-size"><strong>File size:</strong> <span></span> kb</p>
+
+            <p id="image-format"><strong>Image format:</strong> <span></span> (px)</p>
+
+            <p id="file-caption"><strong>Caption:</strong><br><span></span></p>
+
         </div>
     </div>
 </div>
 
 {% if mediaType.length > 1 %}
-<script>
-    $('.media').hide();
-    $('.media-image').css('display', 'inline-block');
-    $('.media-filter').click(function(e){
-        e.preventDefault();
-        var type = $(this).data('media-type');
-        if ('none' != $('.media-'+type).css('display'))
-            return;
-        $('.media').fadeOut().delay(600).parent().find('.media-'+type).css({
-            opacity: 0,
-            display:'inline-block'
-        }).animate({opacity: 1}, 1000);
-    });
-</script>
+    <script>
+        $('.media').hide();
+        $('.media-image').css('display', 'inline-block');
+        $('.media-filter').click(function(e){
+            e.preventDefault();
+            var type = $(this).data('media-type');
+            if ('none' != $('.media-'+type).css('display'))
+                return;
+            $('.media').fadeOut().delay(600).parent().find('.media-'+type).css({
+                opacity: 0,
+                display:'inline-block'
+            }).animate({opacity: 1}, 1000);
+        });
+    </script>
 {% endif %}

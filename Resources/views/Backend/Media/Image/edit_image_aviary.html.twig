@@ -1,7 +1,8 @@
 <tr>
     <th></th>
     <td>
-        <img id='image' src='{{ asset(media.mediaPath) }}'/>
+        <img id='image' src='{{ asset(media.mediaPath|imagine_filter('media_thumb_editor')) }}' />
+        <img id="aviary-ajax-loader" src="{{ asset('bundles/egzaktmedia/backend/images/ajax-loader.gif') }}">
         <p><input class="edit-aviary" type='image' src='http://images.aviary.com/images/edit-photo.png' value='Edit photo' onclick="return launchEditor('image', '{{ asset(media.mediaPath) }}');" /></p>
     </td>
 </tr>
@@ -11,15 +12,19 @@
     var featherEditor = new Aviary.Feather({
         apiKey: 'i3kui99ayvje8cix',
         apiVersion: 2,
-        tools: 'enhance,frames,effects,stickers,crop,resize,warmth,orientation,brightness,focus,warmth,contrast,saturation,sharpness,splash,text,whiten,draw,redeye,blemish',
+        maxSize: 800, // Output image size (default 800x800 px)
+        displayImageSize: true,
+        tools: 'draw,text,enhance,frames,effects,stickers,crop,resize,warmth,orientation,brightness,focus,warmth,contrast,saturation,sharpness,splash,whiten,redeye,blemish',
         appendTo: '',
         onSave: function(imageID, newURL) {
+            $('#aviary-ajax-loader').show();
             var img = $('#'+imageID);
-            $.get('{{ url(media.routeBackend('image_edit'), media.routeBackendParams) }}', {
+            $.get('{{ url(media.routeBackend('aviary_edit'), media.routeBackendParams) }}', {
                 image: newURL
             }, function(data){
                 img.fadeOut();
                 img.attr('src', img.attr('src')+"?"+new Date().getTime());
+                $('#aviary-ajax-loader').hide();
                 img.fadeIn();
             });
         },

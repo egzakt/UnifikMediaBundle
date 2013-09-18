@@ -1,0 +1,8 @@
+Egzakt\MediaBundle\Entity\EmbedVideo:
+    type: entity
+    table: null
+    fields:
+        url:
+            type: string
+            length: 255
+    lifecycleCallbacks: {  }

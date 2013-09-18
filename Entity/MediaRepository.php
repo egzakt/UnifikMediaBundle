@@ -12,15 +12,15 @@ use Egzakt\SystemBundle\Lib\BaseEntityRepository;
  */
 class MediaRepository extends BaseEntityRepository
 {
-	public function findByType($type)
-	{
-		$type = ucfirst($type);
-		$qb = $this->createQueryBuilder('m')
-					//The discriminator is not an accessible field, we not to use INSTANCE OF
-					->andWhere('m INSTANCE OF :type')
+    public function findByType($type)
+    {
+        $type = ucfirst($type);
+        $qb = $this->createQueryBuilder('m')
+                    //The discriminator is not an accessible field, we not to use INSTANCE OF
+                    ->andWhere('m INSTANCE OF :type')
                     ->andWhere('m.hidden = false')
-					->setParameter('type', $type);
+                    ->setParameter('type', $type);
 
-		return $this->processQuery($qb);
-	}
+        return $this->processQuery($qb);
+    }
 }

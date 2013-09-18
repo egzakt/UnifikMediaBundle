@@ -1,35 +1,86 @@
+/* MEDIA CENTER TABS */
+
+#media-tabs ul {
+    height: 30px;
+}
+
+#upload-tab {
+    background: #39b54a;
+}
+
+#upload-tab:hover,
+#upload-tab.ui-state-active {
+    background: #0073ea;
+}
+
+#upload-tab a {
+    color: #FFFFFF;
+}
+
+/* PLUPLOAD */
+
 .plupload .plupload_header_content{
-	color: #0073ea;
+    color: #0073ea;
 }
 
 #uploader_filelist .plupload_file_name a{
-	color: #0073ea;
+    color: #0073ea;
 }
 
 #uploader_filelist .plupload_file_name a:hover{
-	text-decoration: underline;
+    text-decoration: underline;
 }
 
 .plupload_filelist_footer td.plupload_file_name{
-	width: 100%;
+    width: 100%;
 }
 
-#video-list li{
-	display: none;
+/* AVIARY */
+
+#aviary-ajax-loader {
+    display: none;
+    float: left;
+    position: relative;
+    left: 55px;
+    top: 10px;
+    background: #FFFFFF;
+    border-radius: 5px;
+    padding: 5px;
+    opacity: 0.4
 }
 
-#list_actions_bar ul{
-    margin-bottom: 5px;
+/* MEDIA_SELECT FORM FIELD */
+
+#welcome-message {
+    text-align: center;
 }
 
-#list_actions_bar ul li, #media-filters li{
+.media-button {
     display: inline-block;
+    color: #fff;
+    padding: 0 5px;
+    border-radius: 3px;
+    margin: 2px;
+}
+
+.media-button.green {
+    border: 2px solid #39b54a;
+    background-color: #39b54a;
+}
+
+.media-button.blue {
+    border: 2px solid #2882E6;
+    background-color: #2882E6;
 }
 
 .media{
     display: inline-block;
     margin: 10px;
     border: 5px solid #fff;
+}
+
+.media-image img {
+    margin-bottom: -4px;
 }
 
 .media-selected{
@@ -57,3 +108,18 @@
     padding: 10px 20px;
     display: none;
 }
+
+/* GENERAL */
+
+#video-list li{
+    display: none;
+}
+
+#list_actions_bar ul{
+    margin-bottom: 5px;
+}
+
+#list_actions_bar ul li, #media-filters li{
+    display: inline-block;
+}
+

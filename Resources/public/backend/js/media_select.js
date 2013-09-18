@@ -5,9 +5,9 @@
         $('.create-media').fancybox({
             autoDimensions: false,
             width: '60%',
-            height: '60%',
+            height: '48%',
             scrolling: 'no',
-            href: Routing.generate('egzakt_media_backend_media_create_ajax')
+            href: Routing.generate('egzakt_media_backend_media_upload_fancybox')
         });
 
         $.mediaManager.template = twig({
@@ -45,10 +45,11 @@
     };
 
     $.mediaManager.show = function() {
-        if ($.mediaManager.isCk)
+        if ($.mediaManager.isCk) {
             listContent.mediaType = ['image', 'video', 'document'];
-        else
+        } else {
             listContent.mediaType = $.mediaManager.triggeringElement.data('media-type');
+        }
 
         $.fancybox({
             content: $.mediaManager.template.render(listContent),
@@ -66,9 +67,28 @@
             div.addClass('media-selected');
 
             selectedMedia = listContent.medias[div.data('media-manager-id')];
-            divDetails.find('h4').html(selectedMedia.name);
+            divDetails.find('h3').html(selectedMedia.name);
             divDetails.find('a#edit-media-link').attr('href', selectedMedia.editLink);
-            divDetails.find('img').attr('src', selectedMedia.path);
+            divDetails.find('img').attr('src', selectedMedia.pathLarge);
+            divDetails.find('#file-size').find('span').html((selectedMedia.size / 1024).toFixed(2));
+
+            if ('image' == selectedMedia.type) {
+                var imageFormat = $('#image-format');
+                imageFormat.find('span').html(selectedMedia.width + ' X ' + selectedMedia.height);
+                imageFormat.show();
+            } else {
+                divDetails.find('#image-format').hide();
+            }
+
+            if (null != selectedMedia.caption) {
+                var fileCaption = $('#file-caption');
+                fileCaption.find('span').html(selectedMedia.caption);
+                fileCaption.show();
+            } else {
+                $('#file-caption').hide();
+            }
+
+            $('#welcome-message').hide();
             divDetails.show();
         });
 
@@ -98,5 +118,6 @@
     $.mediaManager.insertCk = function() {
         CKEDITOR.plugins.get('egzaktmediamanager').insertMedia($.mediaManager.triggeringElement, selectedMedia);
         $.fancybox.close();
+        this.isCk = false;
     };
 }(jQuery));

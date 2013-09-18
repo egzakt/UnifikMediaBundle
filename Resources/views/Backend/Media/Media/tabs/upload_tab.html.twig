@@ -1,0 +1,61 @@
+<div>
+    <div id="uploader-message"></div>
+    <form id="pluploader-form">
+        <div id="uploader">
+        </div>
+    </form>
+
+</div>
+
+<script type="text/javascript">
+    $().ready((function() {
+
+        $("#uploader").plupload({
+            // General settings
+            runtimes : 'html5,gears,flash,silverlight',
+            url : '{{ url('egzakt_media_backend_media_upload') }}',
+            max_file_size : '10mb',
+            chunk_size : '1mb',
+            unique_names : true,
+
+            // Flash settings
+            flash_swf_url : '/plupload/js/plupload.flash.swf',
+
+            // Silverlight settings
+            silverlight_xap_url : '/plupload/js/plupload.silverlight.xap'
+        });
+
+        var uploader = $('#uploader').plupload('getUploader');
+
+        uploader.bind('Error', function(up, error){
+            $('.plupload_header_text').html(error.message);
+        });
+
+        uploader.bind('FileUploaded', function(up, file, data){
+            var response = $.parseJSON(data.response);
+            if(response.error){
+                up.trigger('error', response);
+            }
+            $('.plupload_header_text').html(response.message);
+            file.name = '<a href="' + response.url + '">' + file.name  + "</a>";
+        });
+
+        $('form#pluploader-form').submit(function(e) {
+            var uploader = $('#uploader').plupload('getUploader');
+
+            if (uploader.files.length > 0) {
+                uploader.bind('StateChanged', function() {
+                    if (uploader.files.length === (uploader.total.uploaded + uploader.total.failed)) {
+                        $('form')[0].submit();
+                    }
+                });
+
+                uploader.start();
+            } else {
+                alert('{% trans %}You must at least upload one file.{% endtrans %}');
+            }
+
+            return false;
+        });
+    }));
+</script>

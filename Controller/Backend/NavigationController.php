@@ -12,18 +12,17 @@ use Egzakt\SystemBundle\Lib\Backend\BaseController;
 class NavigationController extends BaseController
 {
     /**
-     * Global Bundle Bar Action
+     * Global bundle bar
      *
-     * @param string $masterRoute
-     *
+     * @param $_masterRoute
      * @return Response
      */
-   	public function globalModuleBarAction($masterRoute)
-	{
-		$selected = (0 === strpos($masterRoute, 'egzakt_media_backend_media'));
-		return $this->render('EgzaktMediaBundle:Backend/Navigation:global_bundle_bar.html.twig', array(
-			'selected' => $selected,
-		));
-	}
+    public function globalModuleBarAction($_masterRoute)
+    {
+        $selected = (0 === strpos($_masterRoute, 'egzakt_media_backend_media'));
+        return $this->render('EgzaktMediaBundle:Backend/Navigation:global_bundle_bar.html.twig', array(
+            'selected' => $selected,
+        ));
+    }
 
 }

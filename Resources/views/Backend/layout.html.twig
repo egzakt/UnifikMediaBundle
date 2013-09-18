@@ -1,0 +1,110 @@
+{% extends 'EgzaktSystemBundle:Backend:layout.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# User symlink path cause @ target have a known issue with the css rewrite filter #}
+    {% stylesheets filter='cssrewrite'
+        'bundles/egzaktmedia/backend/css/*'
+    %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block content %}
+
+    <h1>{% block content_header %}{% trans %}Medias{% endtrans %}{% endblock %}</h1>
+
+    {% block flash_message %}
+
+        {% if app.session.flashbag.has('success') %}
+            <div class="flash-success">
+                {% for flashMessage in app.session.flashbag.get('success') %}
+                    <p>{{ flashMessage|trans }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if app.session.flashbag.has('error') %}
+            <div class="flash-error">
+                {% for flashMessage in app.session.flashbag.get('error') %}
+                    <p>{{ flashMessage|trans }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    {% endblock %}
+
+    {% block content_main '' %}
+
+    <div id="delete_dialog"></div>
+
+    {# Script not in external file cause it need translations  #}
+    <script type="text/javascript">
+        $(function(){
+
+            $('a#media-delete').click(function(e){
+                if ($(this).attr('rel')) {
+                    var linkObj = $(this);
+
+                    $.ajax({
+                        type: "GET",
+                        dataType: 'json',
+                        url: $(this).attr('rel'),
+                        beforeSend: function(){
+                            $('#loading').show();
+                        },
+                        success: function(response){
+
+                            $('#loading').hide();
+                            $('#delete_dialog').html(response.template);
+
+                            if (response.isDeletable) {
+                                $('#delete_dialog').dialog({
+                                    modal: true,
+                                    width: 600,
+                                    title: "{% trans %}Delete confirmation{% endtrans %}",
+                                    buttons: {
+                                        "{% trans %}Delete{% endtrans %}": function() {
+                                            window.location = linkObj.attr('href');
+                                            $(this).dialog("close");
+                                        },
+                                        "{% trans %}Cancel{% endtrans %}": function() {
+                                            $(this).dialog("close");
+                                        }
+                                    }
+                                });
+
+                            } else {
+                                $('#delete_dialog').dialog({
+                                    modal: true,
+                                    title: "{% trans %}Notice{% endtrans %}",
+                                    buttons: {
+                                        Ok: function() {
+                                            $(this).dialog("close");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+
+                    e.preventDefault();
+                }
+            });
+
+        });
+    </script>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {% javascripts
+        '@EgzaktMediaBundle/Resources/public/backend/js/media.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/plupload/plupload.full.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/plupload/jquery.ui.plupload/jquery.ui.plupload.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/plupload/jquery.plupload.queue/jquery.plupload.queue.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

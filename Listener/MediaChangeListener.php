@@ -4,23 +4,23 @@ namespace Egzakt\MediaBundle\Listener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Doctrine\ORM\Mapping\PostUpdate;
 use Egzakt\MediaBundle\Entity\Document;
 use Egzakt\MediaBundle\Entity\Image;
 use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\MediaBundle\Entity\Video;
 use Egzakt\SystemBundle\Entity\TextTranslation;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
-class MediaChangeListener implements EventSubscriber{
+class MediaChangeListener implements EventSubscriber
+{
     private $markedToUpdate;
 
     public function getSubscribedEvents()
     {
         return array(
             'preUpdate',
-            'postUpdate',
+            'postUpdate'
         );
     }
 
@@ -53,13 +53,48 @@ class MediaChangeListener implements EventSubscriber{
             $entity = $args->getEntity();
 
             if ($entity instanceof Media) {
-                $texts = $em->getRepository('EgzaktSystemBundle:TextTranslation')->findAll();
-                /** @var $text TextTranslation */
-                foreach ( $texts as $text ) {
-                    $replacement = sprintf('$1%s$2', $entity->getReplaceUrl());
-                    $text->setText(preg_replace($entity->getReplaceRegex(), $replacement, $text->getText()));
-                    $em->persist($text);
-                    $em->flush($text);
+
+                $metadataFactory = $em->getMetadataFactory();
+
+                $metadata = $metadataFactory->getAllMetadata();
+
+                /* @var $classMetadata ClassMetadata */
+                foreach ($metadata as $classMetadata) {
+
+                    $textFields = array();
+
+                    foreach ($classMetadata->getFieldNames() as $fieldName) {
+
+                        $fieldMapping = $classMetadata->getFieldMapping($fieldName);
+
+                        if ('text' == $fieldMapping['type']) {
+                            $textFields[] = $fieldName;
+                        }
+                    }
+
+                    if (!empty($textFields)) {
+                        $qb = $em->getRepository($classMetadata->getName())->createQueryBuilder('t');
+
+                        foreach ($textFields as $textFieldName) {
+                            $qb->orWhere('t.' . $textFieldName . ' LIKE :expression')
+                                ->setParameter('expression', '%data-mediaid="'.$entity->getId().'"%')
+                            ;
+                        }
+
+                        $results = $qb->getQuery()->getResult();
+
+                        foreach ($results as $result) {
+                            foreach ($textFields as $textFieldName) {
+                                $getMethod = 'get' . ucfirst($textFieldName);
+                                $setMethod = 'set' . ucfirst($textFieldName);
+
+                                $replacement = sprintf('$1%s$2', $entity->getReplaceUrl());
+                                $result->$setMethod(preg_replace($entity->getReplaceRegex(), $replacement, $result->$getMethod()));
+                            }
+                        }
+
+                        $em->flush();
+                    }
                 }
             }
         }
