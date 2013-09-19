@@ -4,9 +4,12 @@ Egzakt\MediaBundle\Entity\Image:
     fields:
         width:
             type: integer
+            nullable: true
         height:
             type: integer
+            nullable: true
         attr:
             type: string
             length: 50
+            nullable: true
     lifecycleCallbacks: { }

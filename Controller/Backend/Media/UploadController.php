@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Egzakt\MediaBundle\Entity\Image;
 use Egzakt\MediaBundle\Entity\Document;
 use Egzakt\MediaBundle\Entity\Video;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Upload Controller
@@ -32,7 +33,8 @@ class UploadController extends BaseController
      * Upload action
      *
      * @param Request $request
-     * @return JsonResponse|Response
+     * @return JsonResponse
+     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
     public function uploadAction(Request $request)
     {
@@ -69,7 +71,7 @@ class UploadController extends BaseController
 
         }
 
-        return $this->render('EgzaktMediaBundle:Backend/Media/Media:media.html.twig');
+        throw new NotFoundHttpException();
     }
 
     /**

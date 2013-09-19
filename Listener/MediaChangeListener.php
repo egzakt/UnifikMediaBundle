@@ -49,6 +49,7 @@ class MediaChangeListener implements EventSubscriber
     public function postUpdate(LifecycleEventArgs $args)
     {
         if ($this->markedToUpdate) {
+
             $em = $args->getEntityManager();
             $entity = $args->getEntity();
 
@@ -77,7 +78,7 @@ class MediaChangeListener implements EventSubscriber
 
                         foreach ($textFields as $textFieldName) {
                             $qb->orWhere('t.' . $textFieldName . ' LIKE :expression')
-                                ->setParameter('expression', '%data-mediaid="'.$entity->getId().'"%')
+                                ->setParameter('expression', '%data-mediaid="' . $entity->getId() . '"%')
                             ;
                         }
 

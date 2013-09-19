@@ -41,6 +41,45 @@ An example of a complete config is:
       width: 800
       height: 300
 
+### Stof Doctrine Extensions
+To get the uploader work, you need to activate the uploadable functionality in `app/config/config.yml`:
+
+    # Stof doctrine extension
+	stof_doctrine_extensions:
+    	orm:
+        	default:
+            	uploadable: true
+            	
+### Liip Imagine Bundle
+Here the minimum Liip Imagine config to have the media manager work:
+
+In `app/config/config.yml`:
+
+	liip_imagine:
+    	filter_sets:
+       	 	media_thumb:
+            	quality: 75
+            	filters:
+                	thumbnail: { size: [120, 120], mode: outbound }
+        	media_thumb_large:
+            	quality: 75
+            	filters:
+                	thumbnail: { size: [250, 250], mode: outbound }
+        	media_thumb_editor:
+            	quality: 75
+            	filters:
+                	relative_resize: { heighten: 500 }
+                	
+In `app/config/routing.yml`:
+
+	_imagine:
+    	resource: .
+    	type:     imagine
+
+### Fos Js Routing
+
+This bundle need [FosJsRoutingBundle](https://github.com/FriendsOfSymfony/FOSJsRoutingBundle) to work proprely. See the bundle doc to know how implement it.
+
 ### Entity relation
 It is possible to add a many-to-one relationsheep be some entity an a Media. By example, we can add a thumbanil to a news entity:
 

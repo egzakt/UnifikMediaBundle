@@ -66,7 +66,7 @@ class MediaController extends BaseController
         if ($this->get('request')->get('message')) {
             $template = $this->renderView('EgzaktMediaBundle:Backend/Media/Core:delete_message.html.twig', array(
                 'entity' => $media,
-                'associatedContents' => $associatedContents
+                'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
             ));
 
             return new JsonResponse(array(
@@ -76,8 +76,8 @@ class MediaController extends BaseController
         }
 
         // Unlink content in case 'onDelete set null' hasn't been set
-        if (count($associatedContents)) {
-            foreach ($associatedContents as $methodGroup) {
+        if (count($associatedContents['field'])) {
+            foreach ($associatedContents['field'] as $methodGroup) {
                 foreach ($methodGroup as $methodName => $entities) {
                     foreach ($entities as $entity) {
                         $method = 'set' . ucfirst($methodName);
@@ -86,6 +86,9 @@ class MediaController extends BaseController
                 }
             }
         }
+
+        // Remove the file from all texts where it is used
+        $this->removeMediaFromTexts($media, $associatedContents['text']);
 
         $this->getEm()->remove($media);
         $this->getEm()->flush();
@@ -171,6 +174,8 @@ class MediaController extends BaseController
         $metadata = $metadataFactory->getAllMetadata();
 
         $entitiesAssociated = array();
+        $entitiesAssociated['field'] = array();
+        $entitiesAssociated['text'] = array();
 
         /* @var $classMetadata ClassMetadata */
         foreach ($metadata as $classMetadata) {
@@ -188,7 +193,26 @@ class MediaController extends BaseController
                     ));
 
                     if ($entities) {
-                        $entitiesAssociated[$entityName][$fieldName] = $entities;
+                        $entitiesAssociated['field'][$entityName][$fieldName] = $entities;
+                    }
+                }
+            }
+
+            foreach ($classMetadata->getFieldNames() as $fieldName) {
+
+                $explode = explode('\\', $classMetadata->getName());
+                $entityName = array_pop($explode);
+
+                $fieldMapping = $classMetadata->getFieldMapping($fieldName);
+
+                if ('text' == $fieldMapping['type']) {
+                    $entities = $this->getEm()->getRepository($classMetadata->getName())->createQueryBuilder('t')
+                        ->where('t.' . $fieldName . ' LIKE :expression')
+                        ->setParameter('expression', '%data-mediaid="'.$media->getId().'"%')
+                        ->getQuery()->getResult();
+
+                    if ($entities) {
+                        $entitiesAssociated['text'][$entityName][$fieldName] = $entities;
                     }
                 }
             }
@@ -197,50 +221,30 @@ class MediaController extends BaseController
         return $entitiesAssociated;
     }
 
-//    public function test() {
-//        $metadataFactory = $em->getMetadataFactory();
-//
-//        $metadata = $metadataFactory->getAllMetadata();
-//
-//        /* @var $classMetadata ClassMetadata */
-//        foreach ($metadata as $classMetadata) {
-//
-//            $textFields = array();
-//
-//            foreach ($classMetadata->getFieldNames() as $fieldName) {
-//
-//                $fieldMapping = $classMetadata->getFieldMapping($fieldName);
-//
-//                if ('text' == $fieldMapping['type']) {
-//                    $textFields[] = $fieldName;
-//                }
-//            }
-//
-//            if (!empty($textFields)) {
-//                $qb = $em->getRepository($classMetadata->getName())->createQueryBuilder('t');
-//
-//                foreach ($textFields as $textFieldName) {
-//                    $qb->orWhere('t.' . $textFieldName . ' LIKE :expression')
-//                        ->setParameter('expression', '%data-mediaid="'.$entity->getId().'"%')
-//                    ;
-//                }
-//
-//                $results = $qb->getQuery()->getResult();
-//
-//                foreach ($results as $result) {
-//                    foreach ($textFields as $textFieldName) {
-//                        $getMethod = 'get' . ucfirst($textFieldName);
-//                        $setMethod = 'set' . ucfirst($textFieldName);
-//
-//                        $replacement = sprintf('$1%s$2', $entity->getReplaceUrl());
-//                        $result->$setMethod(preg_replace($entity->getReplaceRegex(), $replacement, $result->$getMethod()));
-//                    }
-//                }
-//
-//                $em->flush();
-//            }
-//        }
-//    }
+    /**
+     * Remove $media from any text containing it
+     *
+     * @param Media $media
+     * @param array $associatedText
+     */
+    private function removeMediaFromTexts(Media $media, array $associatedText) {
+
+        foreach ($associatedText as $entityGroup) {
+            foreach ($entityGroup as $fieldName => $entities) {
+
+                $getMethod = 'get' . ucfirst($fieldName);
+                $setMethod = 'set' . ucfirst($fieldName);
+
+                foreach ($entities as $entity) {
+                    $entity->$setMethod(preg_replace($media->getReplaceRegex(), '', $entity->$getMethod()));
+
+                }
+            }
+        }
+
+        $this->getEm()->flush();
+
+    }
 
 
 /**
