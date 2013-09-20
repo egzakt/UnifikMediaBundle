@@ -37,7 +37,7 @@
 
 /* AVIARY */
 
-#aviary-ajax-loader {
+#aviary_ajax_loader {
     display: none;
     float: left;
     position: relative;
@@ -123,3 +123,7 @@
     display: inline-block;
 }
 
+/* IMAGE */
+#association_list ul {
+    list-style: disc;
+}

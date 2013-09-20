@@ -41,10 +41,53 @@
             $('.fancy-video').fancybox({
                 'type': 'iframe'
             });
+
+            $('input.checkall').click( function () {
+                $(this).closest('table').find(':checkbox').prop('checked', this.checked);
+            });
+        });
+
+        $('input.submit_action').click(function(e){
+
+            var select = $(this).closest('form').find('select');
+
+            if (select.val() != 'choose' ) {
+                var count = $(this).closest('form').find('tbody').find(':checked').length;
+
+                $('#delete_dialog').html('{% trans %}You are about to remove{% endtrans %} ' + count + ' {% trans %}medias{% endtrans %}.');
+
+                $('#delete_dialog').dialog({
+                    modal: true,
+                    title: "{% trans %}Delete confirmation{% endtrans %}",
+                    buttons: {
+                        "{% trans %}Delete{% endtrans %}": function() {
+                            $(select).closest('form').submit();
+                            $(this).dialog("close");
+                        },
+                        "{% trans %}Cancel{% endtrans %}": function() {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            } else {
+                $('#delete_dialog').html('{% trans %}Yous must select an action{% endtrans %}.');
+
+                $('#delete_dialog').dialog({
+                    modal: true,
+                    title: "{% trans %}Notice{% endtrans %}",
+                    buttons: {
+                        "{% trans %}Ok{% endtrans %}": function() {
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            }
+
+            e.preventDefault();
+
         });
 
     </script>
-
 
 {% endblock content_main %}
 

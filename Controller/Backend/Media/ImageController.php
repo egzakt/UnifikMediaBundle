@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Egzakt\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Egzakt\MediaBundle\Controller\Backend\Media\MediaController;
 
 /**
  * Image controller
@@ -62,11 +63,14 @@ class ImageController extends BaseController
         $explode = explode('/', $media->getMediaPath());
         $realName = array_pop($explode);
 
+        $associatedContents = MediaController::getAssociatedContents($media, $this->container);
+
         return $this->render('EgzaktMediaBundle:Backend/Media/Image:edit.html.twig', array(
             'form' => $form->createView(),
             'media' => $media,
             'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
-            'realName' => $realName
+            'realName' => $realName,
+            'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
         ));
     }
 

@@ -88,6 +88,29 @@
                         {{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}
                     </td>
                 </tr>
+                <tr>
+                    <th>
+                        {% trans %}Associated contents{% endtrans %} :
+                    </th>
+                    <td id="association_list">
+                        {% if associatedContents|length > 0 %}
+                            <ul>
+                                {% for entityName,methodGroup in associatedContents %}
+                                    {% for methodName,entities in methodGroup %}
+                                        <li>
+                                            {{ entities|length }} {{ entityName }} {% trans %}with this file as{% endtrans %} {{ methodName }}
+                                            <ul>
+                                                {% for entity in entities %}
+                                                    - {{ entity }}
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                </tr>
             </table>
         </div>
 

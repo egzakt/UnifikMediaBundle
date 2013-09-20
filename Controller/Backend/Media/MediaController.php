@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Egzakt\SystemBundle\Lib\Backend\BaseController;
 use Egzakt\MediaBundle\Entity\MediaRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Media Controller
@@ -34,10 +35,52 @@ class MediaController extends BaseController
 
     public function mediaAction(Request $request)
     {
+        $t = $this->get('translator');
+
         $images = $this->mediaRepository->findByType('image');
         $videos = $this->mediaRepository->findByType('video');
         $embedVideos = $this->mediaRepository->findByType('embedvideo');
         $documents = $this->mediaRepository->findByType('document');
+
+        if ('POST' == $request->getMethod()) {
+            if ('delete' == $request->request->get('action')) {
+                if ($request->request->has('image_form')) {
+
+                    $nbMediaRemoved = 0;
+
+                    foreach ($request->request->all() as $parameterName => $value) {
+                        if ( false !== strpos($parameterName, 'massdelete' )) {
+                            $media = $this->mediaRepository->find($value);
+
+
+                            if ($media) {
+
+                                $associatedContents = $this::getAssociatedContents($media, $this->container);
+
+                                // Unlink content in case 'onDelete set null' hasn't been set
+                                $this->removeMediaRelation($associatedContents['field']);
+
+                                // Remove the file from all texts where it is used
+                                $this->removeMediaFromTexts($media, $associatedContents['text']);
+
+                                $this->getEm()->remove($media);
+
+                                $this->getEm()->flush();
+
+                                $nbMediaRemoved++;
+                            }
+                        }
+                    }
+
+                    $this->get('session')->getFlashBag()->set('success',
+                        $nbMediaRemoved . ' ' . $t->trans('media(s) were removed in the process') . '.'
+                    );
+
+                    $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+
+                }
+            }
+        }
 
         return $this->render('EgzaktMediaBundle:Backend/Media/Media:media.html.twig', array(
             'images' => $images,
@@ -61,7 +104,7 @@ class MediaController extends BaseController
             throw $this->createNotFoundException('Unable to find Media entity.');
         }
 
-        $associatedContents = $this->getAssociatedContents($media);
+        $associatedContents = $this::getAssociatedContents($media, $this->container);
 
         if ($this->get('request')->get('message')) {
             $template = $this->renderView('EgzaktMediaBundle:Backend/Media/Core:delete_message.html.twig', array(
@@ -75,20 +118,13 @@ class MediaController extends BaseController
             ));
         }
 
+
         // Unlink content in case 'onDelete set null' hasn't been set
-        if (count($associatedContents['field'])) {
-            foreach ($associatedContents['field'] as $methodGroup) {
-                foreach ($methodGroup as $methodName => $entities) {
-                    foreach ($entities as $entity) {
-                        $method = 'set' . ucfirst($methodName);
-                        $entity->$method(null);
-                    }
-                }
-            }
-        }
+        $this->removeMediaRelation($associatedContents['field']);
 
         // Remove the file from all texts where it is used
         $this->removeMediaFromTexts($media, $associatedContents['text']);
+
 
         $this->getEm()->remove($media);
         $this->getEm()->flush();
@@ -165,11 +201,14 @@ class MediaController extends BaseController
      * Return all entities associated to the given media
      *
      * @param Media $media
+     * @param ContainerInterface $container
      * @return array
      */
-    public function getAssociatedContents(Media $media)
+    public static function getAssociatedContents(Media $media, ContainerInterface $container)
     {
-        $metadataFactory = $this->getEm()->getMetadataFactory();
+        $em = $container->get('doctrine')->getManager();
+
+        $metadataFactory = $em->getMetadataFactory();
 
         $metadata = $metadataFactory->getAllMetadata();
 
@@ -188,7 +227,7 @@ class MediaController extends BaseController
                     $explode = explode('\\', $sourceEntity);
                     $entityName = array_pop($explode);
 
-                    $entities = $this->getEm()->getRepository($sourceEntity)->findBy(array(
+                    $entities = $em->getRepository($sourceEntity)->findBy(array(
                         $fieldName => $media->getId()
                     ));
 
@@ -206,7 +245,7 @@ class MediaController extends BaseController
                 $fieldMapping = $classMetadata->getFieldMapping($fieldName);
 
                 if ('text' == $fieldMapping['type']) {
-                    $entities = $this->getEm()->getRepository($classMetadata->getName())->createQueryBuilder('t')
+                    $entities = $em->getRepository($classMetadata->getName())->createQueryBuilder('t')
                         ->where('t.' . $fieldName . ' LIKE :expression')
                         ->setParameter('expression', '%data-mediaid="'.$media->getId().'"%')
                         ->getQuery()->getResult();
@@ -219,6 +258,24 @@ class MediaController extends BaseController
         }
 
         return $entitiesAssociated;
+    }
+
+    /**
+     * Replace related relations with NULL value
+     *
+     * @param array $associatedField
+     */
+    private function removeMediaRelation(array $associatedField) {
+        if (count($associatedField)) {
+            foreach ($associatedField as $methodGroup) {
+                foreach ($methodGroup as $methodName => $entities) {
+                    foreach ($entities as $entity) {
+                        $method = 'set' . ucfirst($methodName);
+                        $entity->$method(null);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -243,7 +300,6 @@ class MediaController extends BaseController
         }
 
         $this->getEm()->flush();
-
     }
 
 
