@@ -26,6 +26,16 @@ class Image extends Media
     private $attr;
 
     /**
+     * @var Document
+     */
+    private $document;
+
+    /**
+     * @var Video
+     */
+    private $video;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -101,6 +111,46 @@ class Image extends Media
     public function getAttr()
     {
         return $this->attr;
+    }
+
+    /**
+     * Set document
+     *
+     * @param Document $document
+     */
+    public function setDocument(Document $document)
+    {
+        $this->document = $document;
+    }
+
+    /**
+     * Get document
+     *
+     * @return Document
+     */
+    public function getDocument()
+    {
+        return $this->document;
+    }
+
+    /**
+     * Set video
+     *
+     * @param Document $document
+     */
+    public function setVideo(Video $video)
+    {
+        $this->video = $video;
+    }
+
+    /**
+     * Get video
+     *
+     * @return Document
+     */
+    public function getVideo()
+    {
+        return $this->video;
     }
 
     /**

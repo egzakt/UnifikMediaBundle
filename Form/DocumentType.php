@@ -10,12 +10,12 @@ class DocumentType extends MediaType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-		parent::buildForm($builder, $options);
+        parent::buildForm($builder, $options);
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-		parent::setDefaultOptions($resolver);
+        parent::setDefaultOptions($resolver);
 
         $resolver->setDefaults(array(
             'data_class' => 'Egzakt\MediaBundle\Entity\Document'

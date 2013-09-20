@@ -98,11 +98,11 @@ class Media extends BaseEntity
      * @param string $action
      * @return string
      */
-    public function getRouteBackend($action = 'edit')
+    public function getRouteBackend($action = null)
     {
         if ('list' === $action)
             return 'egzakt_media_backend_media';
-        return 'egzakt_media_backend_media_' . $action;
+        return 'egzakt_media_backend_media';
     }
 
     /**

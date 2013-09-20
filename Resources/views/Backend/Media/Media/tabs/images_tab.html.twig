@@ -1,16 +1,19 @@
 <form method="POST">
     <div class="list_box">
-        <select name="action">
-            <option value="choose">{% trans %}Choose an action ...{% endtrans %}</option>
-            <option value="delete">{% trans %}Delete{% endtrans %}</option>
-        </select>
-        <input type="submit" value="Submit" class="submit_action">
-        <input type="hidden" name="image_form" value="image_form">
+
+        <div class="bulk_actions">
+            <select name="action">
+                <option value="choose">{% trans %}Choose an action{% endtrans %} :</option>
+                <option value="delete">{% trans %}Delete{% endtrans %}</option>
+            </select>
+            <input type="submit" value="Submit" class="submit_action">
+        </div>
+
         <table cellspacing="0" class="table-autosort">
             <thead>
             <tr>
-                <th>&nbsp;</th>
-                <th class="name">{% trans %}Thumbnail{% endtrans %}</th>
+                <th class="name">&nbsp;</th>
+                <th>{% trans %}Thumbnail{% endtrans %}</th>
                 <th class="table-sortable:ignorecase">{% trans %}Name{% endtrans %}</th>
                 <th class="table-sortable:date">{% trans %}Last updated{% endtrans %}</th>
 

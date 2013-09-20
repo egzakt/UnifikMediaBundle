@@ -11,6 +11,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class Video extends Media
 {
     /**
+     * @var Image
+     */
+    private $thumbnail;
+
+    /**
      * Get id
      *
      * @return integer 
@@ -18,6 +23,36 @@ class Video extends Media
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set thumbnail
+     *
+     * @param \Egzakt\MediaBundle\Entity\Image $thumbnail
+     * @return Document
+     */
+    public function setThumbnail(Image $thumbnail = null)
+    {
+        $this->thumbnail = $thumbnail;
+    }
+
+    /**
+     * Get thumbnail
+     *
+     * @return \Egzakt\MediaBundle\Entity\Image
+     */
+    public function getThumbnail()
+    {
+        return $this->thumbnail;
+    }
+
+    /**
+     * Get the thumbnail url
+     * @return string
+     */
+    public function getThumbnailUrl()
+    {
+        return $this->thumbnail->getMediaPath();
     }
 
     /**
@@ -36,9 +71,11 @@ class Video extends Media
      */
     public function getRouteBackend($action = 'edit')
     {
-        if ('list' === $action)
-            return 'egzakt_media_backend_image';
-        return 'egzakt_media_backend_image_' . $action;
+        if ('list' === $action) {
+            return 'egzakt_media_backend_media';
+        }
+
+        return 'egzakt_media_backend_video_' . $action;
     }
 
     /**
@@ -48,7 +85,7 @@ class Video extends Media
      */
     public function getReplaceRegex()
     {
-        return sprintf('/(<img [^>]*data-mediaid="%d"[^>]*src=").*("[^>]*>)/', $this->getId());
+        return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=").*("[^>]*><\/iframe>)/', $this->getId());
     }
 
     /**

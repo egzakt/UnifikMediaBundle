@@ -36,6 +36,9 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
                 editor.insertHtml('<a data-mediaid="' + media.id + '" href="' + media.mediaUrl + '">' + media.name + '</a>' );
                 break;
             case 'video':
+                editor.insertHtml('<iframe data-mediaid="' + media.id + '" width="560" height="315" frameborder="0"  allowfullscreen src="' + media.mediaUrl + '"></iframe>');
+                break;
+            case 'embedvideo':
                 editor.insertHtml('<iframe data-mediaid="' + media.id + '" width="560" height="315" frameborder="0"  allowfullscreen src="' + media.embedUrl + '"></iframe>');
                 break;
         }

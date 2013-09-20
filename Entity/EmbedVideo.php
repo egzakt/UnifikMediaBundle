@@ -106,8 +106,10 @@ class EmbedVideo extends Media
 
     public function getRouteBackend($action = 'edit')
     {
-        if ('list' === $action)
-            return 'egzakt_media_backend_video';
+        if ('list' === $action) {
+            return 'egzakt_media_backend_media';
+        }
+
         return 'egzakt_media_backend_video_' . $action;
     }
 

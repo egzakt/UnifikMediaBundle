@@ -12,7 +12,7 @@
 
 {% block content %}
 
-    <h1>{% block content_header %}{% trans %}Medias{% endtrans %}{% endblock %}</h1>
+    {% block content_header %}<h1>{% trans %}Medias{% endtrans %}</h1>{% endblock %}
 
     {% block flash_message %}
 

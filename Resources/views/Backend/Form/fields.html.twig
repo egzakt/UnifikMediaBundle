@@ -2,9 +2,9 @@
     <input class="input-media" type="hidden" {{ block('widget_attributes') }} {% if media %}value="{{ media.id }}"{% endif %} />
     <a class="select-media" data-media-type="{{ types | json_encode() }}">
         <img class="image-media" src="{% if media %}{{ media.thumbnailUrl | imagine_filter('media_thumb') }}{% endif %}">
-        <span class="media-button blue">{% trans %}Select a media{% endtrans %}</span>
+        <span class="media_button blue">{% trans %}Select a media{% endtrans %}</span>
     </a>
-    <a class="create-media"><span class="media-button green">{% trans %}Upload a new media{% endtrans %}</span></a>
+    <a class="create-media"><span class="media_button green">{% trans %}Upload a new media{% endtrans %}</span></a>
 
     <script>
         $().ready(function(){

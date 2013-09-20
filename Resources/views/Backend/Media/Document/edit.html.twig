@@ -1,4 +1,4 @@
-{% extends 'EgzaktMediaBundle:Backend/Media:layout.html.twig' %}
+{% extends 'EgzaktMediaBundle:Backend:layout.html.twig' %}
 {% form_theme form 'EgzaktSystemBundle:Backend/Core:edit_fields.html.twig' %}
 
 {% block content_hemediaer %}
@@ -18,21 +18,29 @@
 
     <form novalidate="novalidate" action="{{ path(media.route, media.routeParams) }}" method="post" {{ form_enctype(form) }}>
 
-        {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
+        {% block edit_actions %}
+            {% include 'EgzaktMediaBundle:Backend/Media/Core:edit_actions.html.twig' with {
             'entity': media,
-            'delete_route': path(media.route('delete'), media.routeParams),
+            'delete_route': path(media.route('delete'), media.routeParams()),
+            'delete_route_rel': path(media.route('delete'), media.routeParams({'message': true})),
             'cancel_route': path(media.route('list')),
-        } %}
+            } %}
+        {% endblock %}
 
         <div id="fields_box">
             <table class="fields" cellspacing="0">
+
                 {{ form_errors(form) }}
+
                 {{ form_row(form.name) }}
+
                 {{ form_row(form.mediaFile) }}
+
                 {% include 'EgzaktSystemBundle:Backend/Core:collapsable_fields.html.twig' with {
                     'link_name': 'Parameters',
-                    'fields': [form_row(form.description), form_row(form.title)]
+                    'fields': [form_row(form.description), form_row(form.caption)]
                 } %}
+
                 {{ form_rest(form) }}
 
                 {% if media.id %}
@@ -44,15 +52,66 @@
                             {{ media.updatedAt|date }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {% trans %}Uploaded on {% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ media.createdAt|date }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {% trans %}File extension{% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ fileExtension }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {% trans %}Real file name{% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ realName }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {% trans %}Size{% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}
+                        </td>
+                    </tr>
+                    {% if associatedContents|length > 0 %}
+                        <tr>
+                            <th>
+                                {% trans %}Associated contents{% endtrans %} :
+                            </th>
+                            <td id="association_list">
+                                <ul>
+                                    {% for entityName,methodGroup in associatedContents %}
+                                        {% for methodName,entities in methodGroup %}
+                                            <li>
+                                                {{ entities|length }} {{ entityName }} {% trans %}with this file as{% endtrans %} {{ methodName }}
+                                                <ul>
+                                                    {% for entity in entities %}
+                                                        - {{ entity }}
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endif %}
             </table>
         </div>
 
-        {% include 'EgzaktMediaBundle:Backend/Media:edit_actions.html.twig' with {
-        'entity': media,
-        'delete_route': path(media.route('delete'), media.routeParams),
-        'cancel_route': path(media.route('list')),
-        } %}
+        {{ block('edit_actions') }}
 
     </form>
 {% endblock content_main %}

@@ -57,10 +57,13 @@ class UploadController extends BaseController
                     break;
                 case 'video/mpeg':
                 case 'video/mp4':
+                case 'application/x-shockwave-flash':
+                case 'video/x-flv':
                 case 'video/quicktime':
+
                 case 'video/x-ms-wmv':
                 case 'video/x-msvideo':
-                case 'video/x-flv':
+
                     $uploadFunction = 'videoUpload';
                     break;
                 default:
@@ -117,14 +120,27 @@ class UploadController extends BaseController
      */
     private function videoUpload(UploadedFile $file)
     {
+        $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
+
         $media = new Video();
+        $media->setContainer($this->container);
         $media->setMediaFile($file);
         $media->setName($file->getClientOriginalName());
 
         $this->getEm()->persist($media);
-
-        $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
         $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
+
+        //Generate the thumbnail
+        $image = new Image();
+        $image->setName("Preview - ".$file->getClientOriginalName());
+        $image->setHidden(true);
+        $image->setVideo($media);
+
+        $this->getEm()->persist($image);
+
+        $media->setThumbnail($image);
+
+        $uploadableManager->markEntityToUpload($image, new MediaFileInfo($this->getVideoThumbnailPath($file)));
 
         $this->getEm()->flush();
 
@@ -160,11 +176,13 @@ class UploadController extends BaseController
         $image = new Image();
         $image->setName("Preview - ".$file->getClientOriginalName());
         $image->setHidden(true);
+        $image->setDocument($media);
 
         $this->getEm()->persist($image);
-        $uploadableManager->markEntityToUpload($image, new MediaFileInfo($this->getThumbnailPath($file)));
 
         $media->setThumbnail($image);
+
+        $uploadableManager->markEntityToUpload($image, new MediaFileInfo($this->getThumbnailPath($file)));
 
         $this->getEm()->flush();
 
@@ -191,10 +209,26 @@ class UploadController extends BaseController
                 return $this->createPdfPreview($file->getPathname());
             case 'application/msword':
                 return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png';
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png';
             case 'application/vnd.oasis.opendocument.text':
                 return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/writer-icon.jpg';
             default:
                 return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/file-icon.png';
+        }
+    }
+
+    /**
+     * Get the path of the thumbnail icon depending of the content
+     *
+     * @param UploadedFile $file
+     * @return string
+     */
+    private function getVideoThumbnailPath(UploadedFile $file)
+    {
+        switch ($file->getMimeType()) {
+            default:
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/video-icon.png';
         }
     }
 

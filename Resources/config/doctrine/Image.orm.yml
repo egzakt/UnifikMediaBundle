@@ -13,3 +13,18 @@ Egzakt\MediaBundle\Entity\Image:
             length: 50
             nullable: true
     lifecycleCallbacks: { }
+    oneToOne:
+        document:
+            targetEntity: Egzakt\MediaBundle\Entity\Document
+            inversedBy: thumbnail
+            joinColumn:
+                name: document
+                referencedColumnName: id
+                onDelete: cascade
+        video:
+            targetEntity: Egzakt\MediaBundle\Entity\Video
+            inversedBy: thumbnail
+            joinColumn:
+                name: video
+                referencedColumnName: id
+                onDelete: cascade

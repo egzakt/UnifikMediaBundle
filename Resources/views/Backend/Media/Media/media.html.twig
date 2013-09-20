@@ -1,10 +1,9 @@
 {% extends 'EgzaktMediaBundle:Backend:layout.html.twig' %}
 
-{% block content_hemediaer %}
+{% block content_header %}
+    <a href="#" id="refresh_media">{% trans %}Refresh{% endtrans %}</a>
     <h1>{% trans %}Medias library{% endtrans %}</h1>
 {% endblock %}
-
-{% block content_header %}{% trans %}Medias library{% endtrans %}{% endblock %}
 
 {% block content_main %}
 
@@ -35,18 +34,10 @@
 
     <script type="text/javascript">
 
+        // Tabs
         $('#media-tabs').tabs();
-        $().ready(function(){
-            $('.image-thumbnail').fancybox();
-            $('.fancy-video').fancybox({
-                'type': 'iframe'
-            });
 
-            $('input.checkall').click( function () {
-                $(this).closest('table').find(':checkbox').prop('checked', this.checked);
-            });
-        });
-
+        // Bulk actions
         $('input.submit_action').click(function(e){
 
             var select = $(this).closest('form').find('select');

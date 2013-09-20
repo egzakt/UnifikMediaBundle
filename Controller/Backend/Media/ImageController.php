@@ -29,6 +29,7 @@ class ImageController extends BaseController
     public function editAction($id, Request $request)
     {
         $media = $this->getEm()->getRepository('EgzaktMediaBundle:Image')->find($id);
+
         if (!$media) {
             throw $this->createNotFoundException('Unable to find the media');
         }
@@ -107,8 +108,6 @@ class ImageController extends BaseController
         foreach ($this->container->getParameter('liip_imagine.filter_sets') as $filter => $value ) {
             $cacheManager->remove($image->getMediaPath(), $filter);
         }
-
-        $test = $image->getMediaPath();
 
         return new JsonResponse(array());
     }

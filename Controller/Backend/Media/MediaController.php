@@ -33,6 +33,12 @@ class MediaController extends BaseController
         $this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Media');
     }
 
+    /**
+     * Media library
+     *
+     * @param Request $request
+     * @return Response
+     */
     public function mediaAction(Request $request)
     {
         $t = $this->get('translator');
@@ -42,43 +48,42 @@ class MediaController extends BaseController
         $embedVideos = $this->mediaRepository->findByType('embedvideo');
         $documents = $this->mediaRepository->findByType('document');
 
+        // Bulk actions
         if ('POST' == $request->getMethod()) {
             if ('delete' == $request->request->get('action')) {
-                if ($request->request->has('image_form')) {
 
-                    $nbMediaRemoved = 0;
+                $nbMediaRemoved = 0;
 
-                    foreach ($request->request->all() as $parameterName => $value) {
-                        if ( false !== strpos($parameterName, 'massdelete' )) {
-                            $media = $this->mediaRepository->find($value);
+                foreach ($request->request->all() as $parameterName => $value) {
+                    if ( false !== strpos($parameterName, 'massdelete' )) {
+                        $media = $this->mediaRepository->find($value);
 
 
-                            if ($media) {
+                        if ($media) {
 
-                                $associatedContents = $this::getAssociatedContents($media, $this->container);
+                            $associatedContents = $this::getAssociatedContents($media, $this->container);
 
-                                // Unlink content in case 'onDelete set null' hasn't been set
-                                $this->removeMediaRelation($associatedContents['field']);
+                            // Unlink content in case 'onDelete set null' hasn't been set
+                            $this->removeMediaRelation($associatedContents['field']);
 
-                                // Remove the file from all texts where it is used
-                                $this->removeMediaFromTexts($media, $associatedContents['text']);
+                            // Remove the file from all texts where it is used
+                            $this->removeMediaFromTexts($media, $associatedContents['text']);
 
-                                $this->getEm()->remove($media);
+                            $this->getEm()->remove($media);
 
-                                $this->getEm()->flush();
+                            $this->getEm()->flush();
 
-                                $nbMediaRemoved++;
-                            }
+                            $nbMediaRemoved++;
                         }
                     }
-
-                    $this->get('session')->getFlashBag()->set('success',
-                        $nbMediaRemoved . ' ' . $t->trans('media(s) were removed in the process') . '.'
-                    );
-
-                    $this->redirect($this->generateUrl('egzakt_media_backend_media'));
-
                 }
+
+                $this->get('session')->getFlashBag()->set('success',
+                    $nbMediaRemoved . ' ' . $t->trans('media(s) were removed in the process') . '.'
+                );
+
+                return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+
             }
         }
 
@@ -98,6 +103,8 @@ class MediaController extends BaseController
      */
     public function deleteAction($id)
     {
+        $t = $this->get('translator');
+
         /** @var Media $media */
         $media = $this->mediaRepository->find($id);
         if (!$media) {
@@ -125,11 +132,15 @@ class MediaController extends BaseController
         // Remove the file from all texts where it is used
         $this->removeMediaFromTexts($media, $associatedContents['text']);
 
+        $this->get('session')->getFlashBag()->set('success',
+            $media->getName() . ' ' . $t->trans(' has been removed') . '.'
+        );
 
         $this->getEm()->remove($media);
         $this->getEm()->flush();
 
         $this->get('egzakt_system.router_invalidator')->invalidate();
+
 
         return $this->redirect($this->generateUrl($media->getRouteBackend('list')));
     }
@@ -301,148 +312,4 @@ class MediaController extends BaseController
 
         $this->getEm()->flush();
     }
-
-
-/**
- *
- *       OLD CODE BELOW
- * -----------------------------
- *
- */
-
-
-//    /**
-//     * Lists all media entities (not child entities).
-//     *
-//     * @return \Symfony\Bundle\FrameworkBundle\Controller\Response
-//     */
-//    public function indexAction()
-//    {
-//        $medias = $this->mediaRepository->findByType('media');
-//
-//        return $this->render('EgzaktMediaBundle:Backend/Media/Media:list.html.twig', array(
-//            'medias' => $medias,
-//        ));
-//    }
-
-//    /**
-//     * Ajax version of the list action. Used to select a media to insert in another entity
-//     *
-//     * @param $type
-//     * @return Response
-//     */
-//    public function listAjaxAction($type)
-//    {
-//        if ("all" == $type)
-//            $medias = $this->mediaRepository->findByHidden(false);
-//        else
-//            $medias = $this->mediaRepository->findByType($type);
-//
-//        $mediasOutput = array();
-//
-//        /* @var $media Media */
-//        foreach ($medias as $media) {
-//            $mediasOutput[] = $media->toArray();
-//        }
-//
-//        return new JsonResponse(array(
-//            'medias' => $mediasOutput,
-//        ));
-//    }
-
-//    /**
-//     * Create a media and guess the type with the mime type
-//     * @param Request $request
-//     * @return JsonResponse|Response
-//     */
-//    public function createAction(Request $request)
-//	{
-//		if ("POST" == $request->getMethod()) {
-//			$file = $request->files->get('file');
-//
-//			if (!$file instanceof UploadedFile || !$file->isValid()) {
-//				return new JsonResponse(array(
-//					"error" => array(
-//						"message" => "Unable to upload the file",
-//					),
-//				));
-//			}
-//
-//            switch ($file->getMimeType()) {
-//                case 'image/jpeg':
-//                case 'image/png':
-//                case 'image/gif':
-//                    $controller = "EgzaktMediaBundle:Backend/Media/Image:create";
-//                    break;
-//                case 'video/mpeg':
-//                    $controller = "EgzaktMediaBundle:Backend/Media/Video:create";
-//                    break;
-//                default:
-//                    $controller = "EgzaktMediaBundle:Backend/Media/Document:create";
-//            }
-//
-//            return $this->forward($controller, array(
-//                'file' => $file,
-//            ));
-//
-//		}
-//		return $this->render('EgzaktMediaBundle:Backend/Media/Media:create.html.twig');
-//	}
-
-//    /**
-//     * Ajax version of the create action,
-//     * @return Response
-//     */
-//    public function createAjaxAction()
-//    {
-//        return $this->render('EgzaktMediaBundle:Backend/Media/Media:create_ajax.html.twig');
-//    }
-
-//    /**
-//     * Displays a form to edit an existing ad entity
-//     *
-//     * @param $id
-//     * @param Request $request
-//     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
-//     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-//     */
-//    public function editAction($id, Request $request)
-//	{
-//        $media = $this->mediaRepository->find($id);
-//        if (!$media) {
-//             throw $this->createNotFoundException('Unable to find the media');
-//        }
-//
-//		$form = $this->createForm(new MediaType(), $media);
-//
-//		if ("POST" == $request->getMethod()) {
-//
-//			$form->submit($request);
-//
-//			if ($form->isValid()) {
-//				$this->getEm()->persist($media);
-//
-//				//Update the file only if a new one has been uploaded
-//				if ($media->getMediaFile()) {
-//					$uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-//					$uploadableManager->markEntityToUpload($media, $media->getMediaFile());
-//				}
-//
-//				$this->getEm()->flush();
-//
-//				$this->get('egzakt_system.router_invalidator')->invalidate();
-//
-//				if ($request->request->has('save')) {
-//					return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
-//				}
-//
-//				return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
-//			}
-//		}
-//
-//		return $this->render('EgzaktMediaBundle:Backend/Media/Media:edit.html.twig', array(
-//			'form' => $form->createView(),
-//			'media' => $media,
-//		));
-//	}
 }

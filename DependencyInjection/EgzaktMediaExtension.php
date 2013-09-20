@@ -38,8 +38,25 @@ class EgzaktMediaExtension extends Extension implements PrependExtensionInterfac
                     'quality' => 100,
                     'filters' => array(
                         'thumbnail' => array(
-                            'size' => array(120, 120),
+                            'size' => array(80, 80),
                             'mode' => 'outbound'
+                        )
+                    )
+                ),
+                'media_thumb_large' => array(
+                    'quality' => 100,
+                    'filters' => array(
+                        'thumbnail' => array(
+                            'size' => array(250, 250),
+                            'mode' => 'outbound'
+                        )
+                    )
+                ),
+                'media_thumb_editor' => array(
+                    'quality' => 100,
+                    'filters' => array(
+                        'relative_resize' => array(
+                            'heighten' => 500
                         )
                     )
                 )

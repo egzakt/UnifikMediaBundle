@@ -4,4 +4,7 @@ Egzakt\MediaBundle\Entity\Document:
     oneToOne:
         thumbnail:
             targetEntity: Image
+            mappedBy: document
+            cascade: [persist]
+            orphanRemoval: true
     lifecycleCallbacks: {  }

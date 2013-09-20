@@ -14,8 +14,8 @@
             // General settings
             runtimes : 'html5,gears,flash,silverlight',
             url : '{{ url('egzakt_media_backend_media_upload') }}',
-            max_file_size : '10mb',
-            chunk_size : '1mb',
+            max_file_size : '20mb',
+            chunk_size : 0, // chunk disabled cause we don't handle it
             unique_names : true,
 
             // Flash settings

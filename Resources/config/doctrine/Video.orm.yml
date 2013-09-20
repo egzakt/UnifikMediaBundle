@@ -3,3 +3,9 @@ Egzakt\MediaBundle\Entity\Video:
     table: null
     fields:
     lifecycleCallbacks: {  }
+    oneToOne:
+        thumbnail:
+            targetEntity: Image
+            mappedBy: video
+            cascade: [persist]
+            orphanRemoval: true

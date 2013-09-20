@@ -43,8 +43,10 @@ class Document extends Media
 
     public function getRouteBackend($action = 'edit')
     {
-        if ('list' === $action)
-            return 'egzakt_media_backend_document';
+        if ('list' === $action) {
+            return 'egzakt_media_backend_media';
+        }
+
         return 'egzakt_media_backend_document_' . $action;
     }
 
@@ -54,11 +56,9 @@ class Document extends Media
      * @param \Egzakt\MediaBundle\Entity\Image $thumbnail
      * @return Document
      */
-    public function setThumbnail(\Egzakt\MediaBundle\Entity\Image $thumbnail = null)
+    public function setThumbnail(Image $thumbnail = null)
     {
         $this->thumbnail = $thumbnail;
-    
-        return $this;
     }
 
     /**
