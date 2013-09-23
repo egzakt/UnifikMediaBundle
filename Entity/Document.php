@@ -10,12 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 class Document extends Media
 {
     /**
-     * @var \Egzakt\MediaBundle\Entity\Image
-     */
-    private $thumbnail;
-
-
-    /**
      * Get type
      *
      * @return string
@@ -48,36 +42,6 @@ class Document extends Media
         }
 
         return 'egzakt_media_backend_document_' . $action;
-    }
-
-    /**
-     * Set thumbnail
-     *
-     * @param \Egzakt\MediaBundle\Entity\Image $thumbnail
-     * @return Document
-     */
-    public function setThumbnail(Image $thumbnail = null)
-    {
-        $this->thumbnail = $thumbnail;
-    }
-
-    /**
-     * Get thumbnail
-     *
-     * @return \Egzakt\MediaBundle\Entity\Image 
-     */
-    public function getThumbnail()
-    {
-        return $this->thumbnail;
-    }
-
-    /**
-     * Get the thumbnail url
-     * @return string
-     */
-    public function getThumbnailUrl()
-    {
-        return $this->thumbnail->getMediaPath();
     }
 
     public function getReplaceRegex()

@@ -26,14 +26,9 @@ class Image extends Media
     private $attr;
 
     /**
-     * @var Document
+     * @var Media
      */
-    private $document;
-
-    /**
-     * @var Video
-     */
-    private $video;
+    private $parentMedia;
 
     /**
      * Get id
@@ -114,46 +109,6 @@ class Image extends Media
     }
 
     /**
-     * Set document
-     *
-     * @param Document $document
-     */
-    public function setDocument(Document $document)
-    {
-        $this->document = $document;
-    }
-
-    /**
-     * Get document
-     *
-     * @return Document
-     */
-    public function getDocument()
-    {
-        return $this->document;
-    }
-
-    /**
-     * Set video
-     *
-     * @param Document $document
-     */
-    public function setVideo(Video $video)
-    {
-        $this->video = $video;
-    }
-
-    /**
-     * Get video
-     *
-     * @return Document
-     */
-    public function getVideo()
-    {
-        return $this->video;
-    }
-
-    /**
      * getRouteBackend
      *
      * @param string $action
@@ -169,6 +124,16 @@ class Image extends Media
     }
 
     /**
+     * Override the parent method to return the file
+     *
+     * @return string
+     */
+    public function getThumbnailUrl()
+    {
+        return $this->getMediaPath();
+    }
+
+    /**
      * getReplaceRegex
      *
      * @return string
@@ -176,6 +141,26 @@ class Image extends Media
     public function getReplaceRegex()
     {
         return sprintf('/(<img [^>]*data-mediaid="%d"[^>]*src=")[^>]*("[^>]*>)/', $this->getId());
+    }
+
+    /**
+     * setParentMedia
+     *
+     * @param Media $parentMedia
+     */
+    public function setParentMedia(Media $parentMedia)
+    {
+        $this->parentMedia = $parentMedia;
+    }
+
+    /**
+     * getParentMedia
+     *
+     * @return Media
+     */
+    public function getParentMedia()
+    {
+        return $this->parentMedia;
     }
 
     /**

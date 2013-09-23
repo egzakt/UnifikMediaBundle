@@ -14,17 +14,10 @@ Egzakt\MediaBundle\Entity\Image:
             nullable: true
     lifecycleCallbacks: { }
     oneToOne:
-        document:
-            targetEntity: Egzakt\MediaBundle\Entity\Document
+        parentMedia:
+            targetEntity: Egzakt\MediaBundle\Entity\Media
             inversedBy: thumbnail
             joinColumn:
-                name: document
-                referencedColumnName: id
-                onDelete: cascade
-        video:
-            targetEntity: Egzakt\MediaBundle\Entity\Video
-            inversedBy: thumbnail
-            joinColumn:
-                name: video
+                name: parentMedia
                 referencedColumnName: id
                 onDelete: cascade

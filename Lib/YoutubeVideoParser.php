@@ -17,7 +17,7 @@ class YoutubeVideoParser extends MediaParser implements MediaParserInterface {
     public function getThumbnailUrl()
     {
         if ($this->getId()) {
-            return 'http://img.youtube.com/vi/' . $this->getId() . '/hqdefault.jpg';
+            return 'http://img.youtube.com/vi/' . $this->getId() . '/0.jpg';
         }
 
         return null;
@@ -46,10 +46,10 @@ class YoutubeVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function getId()
     {
-        parse_str(parse_url($this->getMediaUrl(), PHP_URL_QUERY), $vars);
-
-        if (array_key_exists('v', $vars)) {
-            return $vars['v'];
+        if (preg_match('/youtube.com/i', $this->getMediaUrl())) {
+            return preg_replace('#^(http://)?(www\.)?youtube.com/embed/([^/]+)#i', '$3', $this->getMediaUrl());
+        } elseif (preg_match('/youtu.be/i', $this->getMediaUrl())) {
+            return preg_replace('#^(http://)?(www\.)?youtu.be/([^/]+)#i', '$3', $this->getMediaUrl());
         }
 
         return null;
@@ -66,7 +66,7 @@ class YoutubeVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function supports($mediaUrl)
     {
-        return preg_match('/youtube.com/i', $mediaUrl);
+        return (preg_match('/youtube.com/i', $mediaUrl) || preg_match('/youtu.be/i', $mediaUrl));
     }
 
 }

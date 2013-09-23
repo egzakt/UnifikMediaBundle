@@ -6,21 +6,21 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class VideoType extends MediaType
+class EmbedVideoType extends MediaType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-		parent::buildForm($builder, $options);
+        parent::buildForm($builder, $options);
 
-		$builder->add('url');
+        $builder->add('url');
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-		parent::setDefaultOptions($resolver);
+        parent::setDefaultOptions($resolver);
 
         $resolver->setDefaults(array(
-            'data_class' => 'Egzakt\MediaBundle\Entity\Video'
+            'data_class' => 'Egzakt\MediaBundle\Entity\EmbedVideo'
         ));
     }
 

@@ -67,6 +67,11 @@ class Media extends BaseEntity
     protected $size;
 
     /**
+     * @var Image
+     */
+    private $thumbnail;
+
+    /**
      * Non mapped field
      *
      * @var boolean
@@ -126,16 +131,6 @@ class Media extends BaseEntity
         $params = array_merge($defaults, $params);
 
         return $params;
-    }
-
-    /**
-     * Get the url used to serve the thumbnail
-     * Some child class may have to overwrite it
-     * @return string
-     */
-    public function getThumbnailUrl()
-    {
-        return $this->getMediaPath();
     }
 
     /**
@@ -424,6 +419,36 @@ class Media extends BaseEntity
     public function needUpdate()
     {
         return $this->needUpdate;
+    }
+
+    /**
+     * Set thumbnail
+     *
+     * @param \Egzakt\MediaBundle\Entity\Image $thumbnail
+     * @return Document
+     */
+    public function setThumbnail(Image $thumbnail = null)
+    {
+        $this->thumbnail = $thumbnail;
+    }
+
+    /**
+     * Get thumbnail
+     *
+     * @return \Egzakt\MediaBundle\Entity\Image
+     */
+    public function getThumbnail()
+    {
+        return $this->thumbnail;
+    }
+
+    /**
+     * Get the thumbnail url
+     * @return string
+     */
+    public function getThumbnailUrl()
+    {
+        return $this->thumbnail->getMediaPath();
     }
 
     /**

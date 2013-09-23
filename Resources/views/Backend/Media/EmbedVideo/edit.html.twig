@@ -29,24 +29,38 @@
 
         <div id="fields_box">
             <table class="fields" cellspacing="0">
+
                 {{ form_errors(form) }}
+
                 {{ form_row(form.name) }}
-                {{ form_row(form.mediaFile) }}
+
                 {{ form_row(form.url) }}
-                {% include 'EgzaktMediaBundle:Backend/Media:edit_image_aviary.html.twig' with {
-                    'media': media,
-                } %}
+
+                {#{% include 'EgzaktMediaBundle:Backend/Media:edit_image_aviary.html.twig' with {#}
+                {#'media': media,#}
+                {#} %}#}
+
                 <tr>
                     <th></th>
                     <td>
-                        <iframe src="{{ video_url }}" width="640" height="390" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+                        <iframe src="{{ media.mediaPath }}" width="640" height="390" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
                     </td>
                 </tr>
+
                 {% include 'EgzaktSystemBundle:Backend/Core:collapsable_fields.html.twig' with {
                 'link_name': 'Parameters',
                 'fields': [form_row(form.description), form_row(form.caption)]
                 } %}
+
+                <tr style="display: none">
+                    <th></th>
+                    <td>
+                        {{ form_widget(form.mediaFile) }}
+                    </td>
+                </tr>
+
                 {{ form_rest(form) }}
+
                 {% if media.id %}
                     <tr>
                         <th>
@@ -56,6 +70,37 @@
                             {{ media.updatedAt|date }}
                         </td>
                     </tr>
+                    <tr>
+                        <th>
+                            {% trans %}Uploaded on {% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ media.createdAt|date }}
+                        </td>
+                    </tr>
+                    {% if associatedContents|length > 0 %}
+                        <tr>
+                            <th>
+                                {% trans %}Associated contents{% endtrans %} :
+                            </th>
+                            <td id="association_list">
+                                <ul>
+                                    {% for entityName,methodGroup in associatedContents %}
+                                        {% for methodName,entities in methodGroup %}
+                                            <li>
+                                                {{ entities|length }} {{ entityName }} {% trans %}with this file as{% endtrans %} {{ methodName }}
+                                                <ul>
+                                                    {% for entity in entities %}
+                                                        - {{ entity }}
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                        </tr>
+                    {% endif %}
                 {% endif %}
             </table>
         </div>

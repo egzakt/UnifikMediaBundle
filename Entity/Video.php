@@ -11,11 +11,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class Video extends Media
 {
     /**
-     * @var Image
-     */
-    private $thumbnail;
-
-    /**
      * Get id
      *
      * @return integer 
@@ -23,36 +18,6 @@ class Video extends Media
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set thumbnail
-     *
-     * @param \Egzakt\MediaBundle\Entity\Image $thumbnail
-     * @return Document
-     */
-    public function setThumbnail(Image $thumbnail = null)
-    {
-        $this->thumbnail = $thumbnail;
-    }
-
-    /**
-     * Get thumbnail
-     *
-     * @return \Egzakt\MediaBundle\Entity\Image
-     */
-    public function getThumbnail()
-    {
-        return $this->thumbnail;
-    }
-
-    /**
-     * Get the thumbnail url
-     * @return string
-     */
-    public function getThumbnailUrl()
-    {
-        return $this->thumbnail->getMediaPath();
     }
 
     /**

@@ -2,10 +2,12 @@
 
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
-use Egzakt\MediaBundle\Entity\Video;
-use Egzakt\MediaBundle\Form\VideoType;
+use Egzakt\MediaBundle\Entity\EmbedVideo;
+use Egzakt\MediaBundle\Entity\Image;
+use Egzakt\MediaBundle\Form\EmbedVideoType;
 use Egzakt\MediaBundle\Lib\MediaFileInfo;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,34 +24,6 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 class EmbedVideoController extends BaseController
 {
     /**
-     * @var mediaRepository
-     */
-    protected $mediaRepository;
-
-    /**
-     * Init
-     */
-    public function init()
-    {
-        parent::init();
-        $this->mediaRepository = $this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Video');
-    }
-
-
-    /**
-     * Display video list
-     *
-     * @return Response
-     */
-    public function indexAction()
-    {
-        $medias = $this->mediaRepository->findByHidden(false);
-        return $this->render('EgzaktMediaBundle:Backend/Media/Video:list.html.twig', array(
-            'medias' => $medias,
-        ));
-    }
-
-    /**
      * Create a video from a url
      *
      * @param Request $request
@@ -63,18 +37,22 @@ class EmbedVideoController extends BaseController
         }
 
         $mediaParser = $this->get('egzakt_media.parser');
-        if (!$mediaParser->getParser($request->get('video_url'))) {
+        if (!$mediaParser = $mediaParser->getParser($request->get('video_url'))) {
             return new JsonResponse(array(
                 'error' => array(
                     'message' => 'Unable to parse the video url',
-                ),
+                )
             ));
         }
 
-        $video = new Video();
+        $video = new EmbedVideo();
 
         $video->setUrl($request->get('video_url'));
         $video->setName($request->get('video_url'));
+        $video->setMimeType('EmbedVideo');
+        $video->setSize(0);
+        $video->setMediaPath($mediaParser->getEmbedUrl());
+
 
         $this->updateThumbnail($video);
 
@@ -102,13 +80,12 @@ class EmbedVideoController extends BaseController
      */
     public function editAction($id, Request $request)
     {
-        /** @var Video $media */
-        $media = $this->mediaRepository->find($id);
+        $media = $this->getEm()->getRepository('EgzaktMediaBundle:EmbedVideo')->find($id);
         if (!$media) {
             throw $this->createNotFoundException('Unanble to find the media');
         }
 
-        $form = $this->createForm(new VideoType(), $media);
+        $form = $this->createForm(new EmbedVideoType(), $media);
 
         if ("POST" == $request->getMethod()) {
 
@@ -118,11 +95,16 @@ class EmbedVideoController extends BaseController
             if ($form->isValid()) {
                 $this->getEm()->persist($media);
 
-                //Update the file only if a new one has been uploaded
-                if ($media->getMediaFile()) {
-                    $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-                    $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
-                }elseif ($oldUrl !== $media->getUrl()) {
+                if ($oldUrl !== $media->getUrl()) {
+
+                    $mediaParser = $this->get('egzakt_media.parser');
+                    if (!$mediaParser = $mediaParser->getParser($request->get('video_url'))) {
+
+                        $form->addError(new FormError('New embed video is not valid'));
+
+                        return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
+                    }
+
                     $this->updateThumbnail($media);
                 }
 
@@ -131,7 +113,7 @@ class EmbedVideoController extends BaseController
                 $this->get('egzakt_system.router_invalidator')->invalidate();
 
                 if ($request->request->has('save')) {
-                    return $this->redirect($this->generateUrl('egzakt_media_backend_video'));
+                    return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
                 }
 
                 return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
@@ -141,28 +123,52 @@ class EmbedVideoController extends BaseController
         $mediaParser = $this->get('egzakt_media.parser');
         $parser = $mediaParser->getParser($media->getUrl());
 
-        return $this->render('EgzaktMediaBundle:Backend/Media/Video:edit.html.twig', array(
+        $associatedContents = MediaController::getAssociatedContents($media, $this->container);
+
+        return $this->render('EgzaktMediaBundle:Backend/Media/EmbedVideo:edit.html.twig', array(
             'form' => $form->createView(),
             'media' => $media,
             'video_url' => $parser->getEmbedUrl(),
+            'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
         ));
     }
 
     /**
      * Update (or create) the thumbnail for a video
-     * @param Video $video
+     * @param EmbedVideo $video
      */
-    public function updateThumbnail(Video $video)
+    public function updateThumbnail(EmbedVideo $video)
     {
         $mediaParser = $this->get('egzakt_media.parser');
         $parser = $mediaParser->getParser($video->getUrl());
 
         //The file needs to be download from a remote server and stored temporary on the server to allow doctrine extension to handle it properly
-        $tempFile = '/tmp/'.$parser->getId().'.jpg';
-        file_put_contents($tempFile, file_get_contents($parser->getThumbnailUrl()));
+        $tempFile = '/tmp/' . uniqid('EmbedVideoThumbnail-') . '.jpg';
+
+        $thumbnailUrl = $parser->getThumbnailUrl();
+
+        if (null == $thumbnailUrl) {
+            $thumbnailUrl = $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/video-icon.png';
+        }
+
+        file_put_contents($tempFile, file_get_contents($thumbnailUrl));
+
+        if ($video->getThumbnail()) {
+            $this->getEm()->remove($video->getThumbnail());
+        }
+
+        //Generate the thumbnail
+        $image = new Image();
+        $image->setName("Preview - " . $video->getName());
+        $image->setHidden(true);
+        $image->setParentMedia($video);
+
+        $this->getEm()->persist($image);
+
+        $video->setThumbnail($image);
 
         $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-        $uploadableManager->markEntityToUpload($video, new MediaFileInfo($tempFile));
+        $uploadableManager->markEntityToUpload($image, new MediaFileInfo($tempFile));
     }
 
 }

@@ -134,7 +134,7 @@ class UploadController extends BaseController
         $image = new Image();
         $image->setName("Preview - ".$file->getClientOriginalName());
         $image->setHidden(true);
-        $image->setVideo($media);
+        $image->setParentMedia($media);
 
         $this->getEm()->persist($image);
 
@@ -176,7 +176,7 @@ class UploadController extends BaseController
         $image = new Image();
         $image->setName("Preview - ".$file->getClientOriginalName());
         $image->setHidden(true);
-        $image->setDocument($media);
+        $image->setParentMedia($media);
 
         $this->getEm()->persist($image);
 

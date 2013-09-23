@@ -217,6 +217,14 @@ class MediaController extends BaseController
      */
     public static function getAssociatedContents(Media $media, ContainerInterface $container)
     {
+        $ignoreClass = array(
+            'Egzakt\MediaBundle\Entity\Media',
+            'Egzakt\MediaBundle\Entity\Image',
+            'Egzakt\MediaBundle\Entity\Document',
+            'Egzakt\MediaBundle\Entity\Video',
+            'Egzakt\MediaBundle\Entity\EmbedVideo'
+        );
+
         $em = $container->get('doctrine')->getManager();
 
         $metadataFactory = $em->getMetadataFactory();
@@ -229,40 +237,42 @@ class MediaController extends BaseController
 
         /* @var $classMetadata ClassMetadata */
         foreach ($metadata as $classMetadata) {
-            foreach ($classMetadata->getAssociationMappings() as $association) {
+            if (false == in_array($classMetadata->getName(), $ignoreClass)) {
+                foreach ($classMetadata->getAssociationMappings() as $association) {
 
-                if ('Egzakt\MediaBundle\Entity\Media' == $association['targetEntity']) {
-                    $fieldName = $association['fieldName'];
-                    $sourceEntity = $association['sourceEntity'];
+                    if ('Egzakt\MediaBundle\Entity\Media' == $association['targetEntity']) {
+                        $fieldName = $association['fieldName'];
+                        $sourceEntity = $association['sourceEntity'];
 
-                    $explode = explode('\\', $sourceEntity);
-                    $entityName = array_pop($explode);
+                        $explode = explode('\\', $sourceEntity);
+                        $entityName = array_pop($explode);
 
-                    $entities = $em->getRepository($sourceEntity)->findBy(array(
-                        $fieldName => $media->getId()
-                    ));
+                        $entities = $em->getRepository($sourceEntity)->findBy(array(
+                            $fieldName => $media->getId()
+                        ));
 
-                    if ($entities) {
-                        $entitiesAssociated['field'][$entityName][$fieldName] = $entities;
+                        if ($entities) {
+                            $entitiesAssociated['field'][$entityName][$fieldName] = $entities;
+                        }
                     }
                 }
-            }
 
-            foreach ($classMetadata->getFieldNames() as $fieldName) {
+                foreach ($classMetadata->getFieldNames() as $fieldName) {
 
-                $explode = explode('\\', $classMetadata->getName());
-                $entityName = array_pop($explode);
+                    $explode = explode('\\', $classMetadata->getName());
+                    $entityName = array_pop($explode);
 
-                $fieldMapping = $classMetadata->getFieldMapping($fieldName);
+                    $fieldMapping = $classMetadata->getFieldMapping($fieldName);
 
-                if ('text' == $fieldMapping['type']) {
-                    $entities = $em->getRepository($classMetadata->getName())->createQueryBuilder('t')
-                        ->where('t.' . $fieldName . ' LIKE :expression')
-                        ->setParameter('expression', '%data-mediaid="'.$media->getId().'"%')
-                        ->getQuery()->getResult();
+                    if ('text' == $fieldMapping['type']) {
+                        $entities = $em->getRepository($classMetadata->getName())->createQueryBuilder('t')
+                            ->where('t.' . $fieldName . ' LIKE :expression')
+                            ->setParameter('expression', '%data-mediaid="'.$media->getId().'"%')
+                            ->getQuery()->getResult();
 
-                    if ($entities) {
-                        $entitiesAssociated['text'][$entityName][$fieldName] = $entities;
+                        if ($entities) {
+                            $entitiesAssociated['text'][$entityName][$fieldName] = $entities;
+                        }
                     }
                 }
             }

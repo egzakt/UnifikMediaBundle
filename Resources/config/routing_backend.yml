@@ -63,74 +63,20 @@ egzakt_media_backend_video_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }
 
+# Embed Video
 
+egzakt_media_backend_embed_video_create:
+    pattern:  /embedvideo/create
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/EmbedVideo:create", id: 0 }
 
-#
-#  OLD ROUTE BELOW
-#
+egzakt_media_backend_embed_video_edit:
+    pattern:  /embedvideo/{id}/edit
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/EmbedVideo:edit", id: 0 }
 
-#List
-#egzakt_media_backend_media_list_ajax:
-#    pattern:  /media/select/{type}
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:listAjax", type: 'all' }
-#    options:
-#        expose: true
+egzakt_media_backend_embed_video_duplicate:
+    pattern:  /{id}/duplicate
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:duplicate" }
 
-#egzakt_media_backend_image:
-#    pattern:  /image
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:index" }
-
-#egzakt_media_backend_video:
-#    pattern:  /video
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Video:index" }
-
-#egzakt_media_backend_document:
-#    pattern:  /document
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Document:index" }
-
-#egzakt_media_backend_media:
-#    pattern:  /media
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:index" }
-
-#Edit
-#egzakt_media_backend_media_edit:
-#    pattern:  /media/{id}/edit
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:edit", id: 0 }
-
-
-
-#Duplicate
-#egzakt_media_backend_media_duplicate:
-#    pattern:  /{id}/duplicate
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:duplicate" }
-
-
-
-#Create
-#egzakt_media_backend_media_create_ajax:
-#    pattern:  /create/ajax
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:createAjax" }
-#    options:
-#        expose: true
-
-#egzakt_media_backend_video_create:
-#    pattern:  /create/video
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Video:create" }
-#
-#egzakt_media_backend_media_create:
-#    pattern:  /create
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:create" }
-
-
-
-#Ajax image update
-
-#egzakt_media_backend_video_image_edit:
-#    pattern: /{id}/image/edit
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:updateImage" }
-#
-#egzakt_media_backend_document_image_edit:
-#    pattern: /{id}/image/edit
-#    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:updateImage" }
-
-
+egzakt_media_backend_embed_video_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }

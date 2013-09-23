@@ -62,7 +62,7 @@ class DocumentController extends BaseController
                     $image = new Image();
                     $image->setName("Preview - ".$media->getMediaFile()->getClientOriginalName());
                     $image->setHidden(true);
-                    $image->setDocument($media);
+                    $image->setParentMedia($media);
 
                     $this->getEm()->persist($image);
                     $media->setThumbnail($image);

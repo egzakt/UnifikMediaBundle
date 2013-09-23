@@ -63,3 +63,9 @@ Egzakt\MediaBundle\Entity\Media:
         hidden:
             type: boolean
     lifecycleCallbacks: {  }
+    oneToOne:
+        thumbnail:
+            targetEntity: Image
+            mappedBy: parentMedia
+            cascade: [persist]
+            orphanRemoval: true

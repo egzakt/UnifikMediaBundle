@@ -18,55 +18,55 @@ class MediaFileInfo implements FileInfoInterface
      * @param $path
      */
     public function __construct($path)
-	{
-		$this->file = new File($path);
-	}
+    {
+        $this->file = new File($path);
+    }
 
     /**
      * @return string
      */
     public function getTmpName()
-	{
-		return $this->file->getPathname();
-	}
+    {
+        return $this->file->getPathname();
+    }
 
     /**
      * @return string
      */
     public function getName()
-	{
-		return $this->file->getFilename();
-	}
+    {
+        return $this->file->getFilename();
+    }
 
     /**
      * @return int
      */
     public function getSize()
-	{
-		return $this->file->getSize();
-	}
+    {
+        return $this->file->getSize();
+    }
 
     /**
      * @return null|string
      */
     public function getType()
-	{
-		return $this->file->getMimeType();
-	}
+    {
+        return $this->file->getMimeType();
+    }
 
     /**
      * @return int
      */
     public function getError()
-	{
-		return 0;
-	}
+    {
+        return 0;
+    }
 
     /**
      * @return bool
      */
     public function isUploadedFile()
-	{
-		return false;
-	}
+    {
+        return false;
+    }
 }

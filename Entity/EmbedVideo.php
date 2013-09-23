@@ -20,10 +20,10 @@ class EmbedVideo extends Media
      */
     protected $height;
 
-	/**
-	 * @var string
-	 */
-	protected $url;
+    /**
+     * @var string
+     */
+    protected $url;
 
 
     /**
@@ -82,19 +82,19 @@ class EmbedVideo extends Media
         return $this->height;
     }
 
-	/**
-	 * @param string $url
-	 */
-	public function setUrl( $url ) {
-		$this->url = $url;
-	}
+    /**
+     * @param string $url
+     */
+    public function setUrl( $url ) {
+        $this->url = $url;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getUrl() {
-		return $this->url;
-	}
+    /**
+     * @return string
+     */
+    public function getUrl() {
+        return $this->url;
+    }
 
     /**
      * @inheritdoc
@@ -110,7 +110,18 @@ class EmbedVideo extends Media
             return 'egzakt_media_backend_media';
         }
 
-        return 'egzakt_media_backend_video_' . $action;
+        return 'egzakt_media_backend_embed_video_' . $action;
+    }
+
+    /**
+     * Get mediaPath
+     *
+     * @param bool $absolute
+     * @return string
+     */
+    public function getMediaPath($absolute = false)
+    {
+        return $this->mediaPath;
     }
 
     /**
@@ -126,7 +137,7 @@ class EmbedVideo extends Media
 
     public function getReplaceRegex()
     {
-        return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=").*("[^>]*>)/', $this->getId());
+        return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=").*("[^>]*><\/iframe>)/', $this->getId());
     }
 
     public function getReplaceUrl()
