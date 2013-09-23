@@ -55,9 +55,24 @@ class DocumentController extends BaseController
                 if ($media->getMediaFile()) {
                     $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
                     $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
+
+                    $this->getEm()->remove($media->getThumbnail());
+
+                    //Generate the thumbnail
+                    $image = new Image();
+                    $image->setName("Preview - ".$media->getMediaFile()->getClientOriginalName());
+                    $image->setHidden(true);
+                    $image->setDocument($media);
+
+                    $this->getEm()->persist($image);
+                    $media->setThumbnail($image);
+
+                    $uploadableManager->markEntityToUpload($image, new MediaFileInfo($this->getThumbnailPath($media->getMediaFile())));
                 }
 
                 $this->getEm()->flush();
+
+
 
                 $this->get('egzakt_system.router_invalidator')->invalidate();
 
@@ -81,5 +96,46 @@ class DocumentController extends BaseController
             'realName' => $realName,
             'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
         ));
+    }
+
+    /**
+     * Get Thumbnail path
+     *
+     * @param UploadedFile $file
+     * @return string
+     */
+    private function getThumbnailPath(UploadedFile $file)
+    {
+        switch ($file->getMimeType()) {
+            case 'application/pdf':
+                return $this->createPdfPreview($file->getPathname());
+            case 'application/msword':
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png';
+            case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png';
+            case 'application/vnd.oasis.opendocument.text':
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/writer-icon.jpg';
+            default:
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/file-icon.png';
+        }
+    }
+
+    /**
+     * Generate a pdf preview if "convert" is present on the host system
+     *
+     * @param $path
+     * @return string
+     */
+    private function createPdfPreview($path)
+    {
+        if (shell_exec("which convert")) {
+            $target = $path.'.jpg';
+            $command = sprintf("convert %s[0] %s", $path, $target);
+            if (!shell_exec($command)) {
+                return $target;
+            }
+        }
+
+        return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/pdf-icon.png';
     }
 }

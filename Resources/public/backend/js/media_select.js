@@ -55,7 +55,10 @@
             content: $.mediaManager.template.render(listContent),
             autoDimensions: false,
             width: '90%',
-            height: 600
+            height: 600,
+            onClosed: function(){
+                $.mediaManager.isCk = false;
+            }
         });
         $('.media img').click(function(e){
             e.preventDefault();
