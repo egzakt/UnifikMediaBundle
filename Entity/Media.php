@@ -67,12 +67,17 @@ class Media extends BaseEntity
     protected $size;
 
     /**
+     * Non mapped field
+     *
+     * @var boolean
+     */
+    protected $needUpdate = false;
+
+    /**
      * Internal field used to hide the media from the list in certain case
      * @var boolean
      */
     protected  $hidden;
-
-
 
     public function __construct()
     {
@@ -399,6 +404,26 @@ class Media extends BaseEntity
     public function getReplaceUrl()
     {
         return '';
+    }
+
+    /**
+     * Set needUpdate
+     *
+     * @param $needUpdate
+     */
+    public function setNeedUpdate($needUpdate)
+    {
+        $this->needUpdate = $needUpdate;
+    }
+
+    /**
+     * needUpdate
+     *
+     * @return bool
+     */
+    public function needUpdate()
+    {
+        return $this->needUpdate;
     }
 
     /**

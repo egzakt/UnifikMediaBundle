@@ -48,7 +48,10 @@ class DocumentController extends BaseController
             if ($form->isValid()) {
                 $this->getEm()->persist($media);
 
-                //Update the file only if a new one has been uploaded
+                // Update link in text field
+                $media->setNeedUpdate(true);
+
+                //Update the file only if a new one has been uploaded or if the name have change
                 if ($media->getMediaFile()) {
                     $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
                     $uploadableManager->markEntityToUpload($media, $media->getMediaFile());

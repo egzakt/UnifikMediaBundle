@@ -48,12 +48,13 @@ class MediaChangeListener implements EventSubscriber
      */
     public function postUpdate(LifecycleEventArgs $args)
     {
-        if ($this->markedToUpdate) {
+        $entity = $args->getEntity();
+
+        if ($entity instanceof Media) {
 
             $em = $args->getEntityManager();
-            $entity = $args->getEntity();
 
-            if ($entity instanceof Media) {
+            if ($this->markedToUpdate || $entity->needUpdate()) {
 
                 $metadataFactory = $em->getMetadataFactory();
 
@@ -89,8 +90,17 @@ class MediaChangeListener implements EventSubscriber
                                 $getMethod = 'get' . ucfirst($textFieldName);
                                 $setMethod = 'set' . ucfirst($textFieldName);
 
-                                $replacement = sprintf('$1%s$2', $entity->getReplaceUrl());
-                                $result->$setMethod(preg_replace($entity->getReplaceRegex(), $replacement, $result->$getMethod()));
+                                if ('document' == $entity->getType()) {
+
+                                    $replacement = sprintf('$1%s$2%s$3', $entity->getReplaceUrl(), $entity->getName());
+                                    $result->$setMethod(preg_replace($entity->getReplaceRegex(), $replacement, $result->$getMethod()));
+
+                                } else {
+
+                                    $replacement = sprintf('$1%s$2', $entity->getReplaceUrl());
+                                    $result->$setMethod(preg_replace($entity->getReplaceRegex(), $replacement, $result->$getMethod()));
+
+                                }
                             }
                         }
 
