@@ -143,3 +143,31 @@
 #association_list ul {
     list-style: disc;
 }
+
+/* EMBED VIDEO TAB */
+
+div.add_embed {
+    margin: 20px 0;
+}
+
+#ajax_loader {
+    width: 20px;
+    position: relative;
+    top: 5px;
+}
+
+#video_url {
+    height: 20px;
+    width: 500px;
+}
+
+#add_embed_link {
+    text-decoration: none;
+    display: inline-block;
+    color: #fff;
+    padding: 0 5px;
+    border-radius: 3px;
+    margin: 2px;
+    border: 2px solid #39b54a;
+    background-color: #39b54a;
+}
