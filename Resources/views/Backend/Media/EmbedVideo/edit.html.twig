@@ -88,7 +88,7 @@
                                     {% for entityName,methodGroup in associatedContents %}
                                         {% for methodName,entities in methodGroup %}
                                             <li>
-                                                {{ entities|length }} {{ entityName }} {% trans %}with this file as{% endtrans %} {{ methodName }}
+                                                {{ entities|length }} {{ entityName }} {% trans %}with this file include in{% endtrans %} {{ methodName }} {% trans %}field{% endtrans %}.
                                                 <ul>
                                                     {% for entity in entities %}
                                                         - {{ entity }}

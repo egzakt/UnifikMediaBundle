@@ -66,7 +66,7 @@ class YoutubeVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function supports($mediaUrl)
     {
-        return (preg_match('/youtube.com/i', $mediaUrl) || preg_match('/youtu.be/i', $mediaUrl));
+        return (preg_match('#youtube.com/embed/[^/]+$#i', $mediaUrl) || preg_match('#youtu.be/[^/]+$#i', $mediaUrl));
     }
 
 }

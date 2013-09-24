@@ -140,7 +140,7 @@ class Image extends Media
      */
     public function getReplaceRegex()
     {
-        return sprintf('/(<img [^>]*data-mediaid="%d"[^>]*src=")[^>]*("[^>]*>)/', $this->getId());
+        return sprintf('/(<img [^>]*data-mediaid="%d"[^>]*src=")[^>]+("[^>]*>)/', $this->getId());
     }
 
     /**

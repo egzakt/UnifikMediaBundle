@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Egzakt\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
+use Egzakt\MediaBundle\Lib\MediaParserInterface;
 
 /**
  * EmbedVideo Controller
@@ -53,8 +54,7 @@ class EmbedVideoController extends BaseController
         $video->setSize(0);
         $video->setMediaPath($mediaParser->getEmbedUrl());
 
-
-        $this->updateThumbnail($video);
+        $this->updateThumbnail($video, $mediaParser);
 
         $this->getEm()->persist($video);
         $this->getEm()->flush();
@@ -81,6 +81,7 @@ class EmbedVideoController extends BaseController
     public function editAction($id, Request $request)
     {
         $media = $this->getEm()->getRepository('EgzaktMediaBundle:EmbedVideo')->find($id);
+
         if (!$media) {
             throw $this->createNotFoundException('Unanble to find the media');
         }
@@ -92,20 +93,27 @@ class EmbedVideoController extends BaseController
             $oldUrl = $media->getUrl();
             $form->submit($request);
 
+            $mediaParser = $this->get('egzakt_media.parser');
+
+            if ($oldUrl != $media->getUrl() && !$mediaParser = $mediaParser->getParser($form->get('url')->getData())) {
+
+                $t = $this->get('translator');
+
+                $form->get('url')->addError(new FormError($t->trans('This embed video url is not valid. Try the one in the iframe code if it\'s not already done.')));
+
+            }
+
             if ($form->isValid()) {
                 $this->getEm()->persist($media);
 
-                if ($oldUrl !== $media->getUrl()) {
+                if ($oldUrl != $media->getUrl()) {
 
-                    $mediaParser = $this->get('egzakt_media.parser');
-                    if (!$mediaParser = $mediaParser->getParser($request->get('video_url'))) {
+                    $media->setMediaPath($mediaParser->getEmbedUrl());
 
-                        $form->addError(new FormError('New embed video is not valid'));
+                    $this->updateThumbnail($media, $mediaParser);
 
-                        return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
-                    }
+                    $media->setNeedUpdate(true);
 
-                    $this->updateThumbnail($media);
                 }
 
                 $this->getEm()->flush();
@@ -128,24 +136,18 @@ class EmbedVideoController extends BaseController
         return $this->render('EgzaktMediaBundle:Backend/Media/EmbedVideo:edit.html.twig', array(
             'form' => $form->createView(),
             'media' => $media,
-            'video_url' => $parser->getEmbedUrl(),
+            'video_url' => $media->getMediaPath(),
             'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
         ));
     }
 
-    /**
-     * Update (or create) the thumbnail for a video
-     * @param EmbedVideo $video
-     */
-    public function updateThumbnail(EmbedVideo $video)
-    {
-        $mediaParser = $this->get('egzakt_media.parser');
-        $parser = $mediaParser->getParser($video->getUrl());
 
+    public function updateThumbnail(EmbedVideo $video, MediaParserInterface $mediaParser)
+    {
         //The file needs to be download from a remote server and stored temporary on the server to allow doctrine extension to handle it properly
         $tempFile = '/tmp/' . uniqid('EmbedVideoThumbnail-') . '.jpg';
 
-        $thumbnailUrl = $parser->getThumbnailUrl();
+        $thumbnailUrl = $mediaParser->getThumbnailUrl();
 
         if (null == $thumbnailUrl) {
             $thumbnailUrl = $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/video-icon.png';

@@ -50,7 +50,7 @@ class Video extends Media
      */
     public function getReplaceRegex()
     {
-        return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=")[^>]*("[^>]*><\/iframe>)/', $this->getId());
+        return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=")[^>]+("[^>]*><\/iframe>)/', $this->getId());
     }
 
     /**

@@ -95,6 +95,16 @@ class MediaChangeListener implements EventSubscriber
                                     $replacement = sprintf('$1%s$2%s$3', $entity->getReplaceUrl(), $entity->getName());
                                     $result->$setMethod(preg_replace($entity->getReplaceRegex(), $replacement, $result->$getMethod()));
 
+                                } elseif ('video' == $entity->getType() || 'embedvideo' == $entity->getType()) {
+
+                                    // Replace the whole expression cause ckEditor don't recognize his own transformation of <iframe...
+
+                                    $result->$setMethod(preg_replace(
+                                        $entity->getReplaceRegex(),
+                                        '<iframe data-mediaid="' . $entity->getId() . '" width="560" height="315" frameborder="0"  allowfullscreen src="' . $entity->getReplaceUrl() . '"></iframe>',
+                                        $result->$getMethod()
+                                    ));
+
                                 } else {
 
                                     $replacement = sprintf('$1%s$2', $entity->getReplaceUrl());

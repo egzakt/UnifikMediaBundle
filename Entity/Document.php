@@ -46,7 +46,7 @@ class Document extends Media
 
     public function getReplaceRegex()
     {
-        return sprintf('/(<a [^>]*data-mediaid="%d"[^>]*href=")[^>]*("[^>]*>)[^<]+(<\/a>)/', $this->getId());
+        return sprintf('/(<a [^>]*data-mediaid="%d"[^>]*href=")[^>]+("[^>]*>)[^<]+(<\/a>)/', $this->getId());
     }
 
     public function getReplaceUrl()

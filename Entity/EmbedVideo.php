@@ -130,18 +130,17 @@ class EmbedVideo extends Media
     public function toArray()
     {
         $array = parent::toArray();
-        $parser = $this->container->get('egzakt_media.parser')->getParser($this->getUrl());
-        $array['embedUrl'] = $parser->getEmbedUrl();
+        $array['embedUrl'] = $this->getMediaPath();
         return $array;
     }
 
     public function getReplaceRegex()
     {
-        return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=").*("[^>]*><\/iframe>)/', $this->getId());
+        return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=")[^>]+("[^>]*><\/iframe>)/', $this->getId());
     }
 
     public function getReplaceUrl()
     {
-        return $this->container->get('egzakt_media.parser')->getParser($this->getUrl())->getEmbedUrl();
+        return $this->getMediaPath();
     }
 }

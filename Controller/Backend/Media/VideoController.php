@@ -48,6 +48,7 @@ class VideoController extends BaseController
                 if ($media->getMediaFile()) {
                     $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
                     $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
+                    $media->setNeedUpdate(true);
                 }
 
                 $this->getEm()->flush();
