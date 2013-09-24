@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->integerNode('resultPerPage')
-                    ->defaultValue(2)
+                    ->defaultValue(20)
                     ->min(1)
                     ->max(100)
                     ->info("Number of items displayed per page.")
