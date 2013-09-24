@@ -46,7 +46,7 @@
 
     $.mediaManager.show = function() {
         if ($.mediaManager.isCk) {
-            listContent.mediaType = ['image', 'video', 'document'];
+            listContent.mediaType = ['image', 'video', 'document', 'embedvideo'];
         } else {
             listContent.mediaType = $.mediaManager.triggeringElement.data('media-type');
         }
