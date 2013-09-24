@@ -13,6 +13,7 @@ use Egzakt\SystemBundle\Lib\Backend\BaseController;
 use Egzakt\MediaBundle\Entity\MediaRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Egzakt\MediaBundle\Lib\MediaPager;
 
 /**
  * Media Controller
@@ -43,10 +44,19 @@ class MediaController extends BaseController
     {
         $t = $this->get('translator');
 
-        $images = $this->mediaRepository->findByType('image');
-        $videos = $this->mediaRepository->findByType('video');
-        $embedVideos = $this->mediaRepository->findByType('embedvideo');
-        $documents = $this->mediaRepository->findByType('document');
+        $this->mediaRepository->setReturnQueryBuilder(true);
+
+        $imageQb = $this->mediaRepository->findByType('image');
+        $documentQb = $this->mediaRepository->findByType('document');
+        $videoQb = $this->mediaRepository->findByType('video');
+        $embedVideoQb = $this->mediaRepository->findByType('embedvideo');
+
+        // Pagers
+        $resultPerPage = $this->container->getParameter('egzakt_media.resultPerPage');
+        $imagePager = new MediaPager($imageQb, 1, $resultPerPage);
+        $documentPager = new MediaPager($documentQb, 1, $resultPerPage);
+        $videoPager = new MediaPager($videoQb, 1, $resultPerPage);
+        $embedVideoPager = new MediaPager($embedVideoQb, 1, $resultPerPage);
 
         // Bulk actions
         if ('POST' == $request->getMethod()) {
@@ -88,11 +98,62 @@ class MediaController extends BaseController
         }
 
         return $this->render('EgzaktMediaBundle:Backend/Media/Media:media.html.twig', array(
-            'images' => $images,
-            'videos' => $videos,
-            'embedVideos' => $embedVideos,
-            'documents' => $documents
+            'imageView' => $this->renderView('EgzaktMediaBundle:Backend/Media/Media/tabs/content:images_content.html.twig', array('medias' => $imagePager->getResult())),
+            'imagePageTotal' => $imagePager->getPageTotal(),
+
+            'documentView' => $this->renderView('EgzaktMediaBundle:Backend/Media/Media/tabs/content:documents_content.html.twig', array('medias' => $documentPager->getResult())),
+            'documentPageTotal' => $documentPager->getPageTotal(),
+
+            'videoView' => $this->renderView('EgzaktMediaBundle:Backend/Media/Media/tabs/content:videos_content.html.twig', array('medias' => $videoPager->getResult())),
+            'videoPageTotal' => $videoPager->getPageTotal(),
+
+            'embedVideoView' => $this->renderView('EgzaktMediaBundle:Backend/Media/Media/tabs/content:embed_videos_content.html.twig', array('medias' => $embedVideoPager->getResult())),
+            'embedVideoPageTotal' => $embedVideoPager->getPageTotal()
         ));
+    }
+
+    /**
+     * mediaPager
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function mediaPagerAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest() && $request->query->has('page') && $request->query->has('type')) {
+
+            $this->mediaRepository->setReturnQueryBuilder(true);
+
+            switch ($request->query->get('type')) {
+                case 'image':
+                    $mediaQb = $this->mediaRepository->findByType('image');
+                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:images_content.html.twig';
+                    break;
+                case 'document':
+                    $mediaQb = $this->mediaRepository->findByType('document');
+                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:documents_content.html.twig';
+                    break;
+                case 'video':
+                    $mediaQb = $this->mediaRepository->findByType('video');
+                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:videos_content.html.twig';
+                    break;
+                case 'embedvideo':
+                    $mediaQb = $this->mediaRepository->findByType('embedvideo');
+                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:embed_videos_content.html.twig';
+                    break;
+                default:
+                    throw new \Exception('Error');
+            }
+
+            $mediaPager = new MediaPager($mediaQb, $request->query->get('page'));
+
+            return new JsonResponse(array(
+                'html' => $this->renderView($template, array('medias' => $mediaPager->getResult()))
+            ));
+        }
+
+        return new JsonResponse(array());
     }
 
     /**

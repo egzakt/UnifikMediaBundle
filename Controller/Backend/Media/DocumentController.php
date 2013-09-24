@@ -7,7 +7,6 @@ use Egzakt\MediaBundle\Entity\Image;
 use Egzakt\MediaBundle\Form\DocumentType;
 use Egzakt\MediaBundle\Lib\MediaFileInfo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

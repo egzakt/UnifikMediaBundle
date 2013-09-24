@@ -38,9 +38,9 @@
 
     <div id="delete_dialog"></div>
 
-    {# Script not in external file cause it need translations  #}
+    {# Script not in external file cause it need translations, triggered in media.js  #}
     <script type="text/javascript">
-        $(function(){
+        function deleteScript() {
 
             $('a#media-delete').click(function(e){
                 if ($(this).attr('rel')) {
@@ -92,7 +92,7 @@
                 }
             });
 
-        });
+        }
     </script>
 
 {% endblock %}
@@ -104,6 +104,7 @@
         '@EgzaktMediaBundle/Resources/public/backend/js/plupload/plupload.full.js'
         '@EgzaktMediaBundle/Resources/public/backend/js/plupload/jquery.ui.plupload/jquery.ui.plupload.js'
         '@EgzaktMediaBundle/Resources/public/backend/js/plupload/jquery.plupload.queue/jquery.plupload.queue.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/jquery.simplePagination.js'
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

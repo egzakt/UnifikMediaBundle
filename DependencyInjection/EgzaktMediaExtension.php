@@ -25,6 +25,8 @@ class EgzaktMediaExtension extends Extension implements PrependExtensionInterfac
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+
+        $container->setParameter('egzakt_media.resultPerPage', $config['resultPerPage']);
     }
 
     /**

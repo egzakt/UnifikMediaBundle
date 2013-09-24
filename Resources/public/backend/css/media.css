@@ -30,6 +30,10 @@
     opacity: 0.4
 }
 
+#aviary_image {
+    max-height: 500px;
+}
+
 /* MEDIA_SELECT FORM FIELD */
 
 #welcome-message {
@@ -120,6 +124,14 @@
     margin: 0 0 20px 0;
 }
 
+#pager_wrapper {
+    text-align: center;
+}
+
+#pager_wrapper div {
+    display: inline-block;
+}
+
 /* MEDIA CENTER TABS */
 
 #media-tabs ul {
@@ -150,10 +162,10 @@ div.add_embed {
     margin: 20px 0;
 }
 
-#ajax_loader {
+#embed_ajax_loader {
     width: 20px;
     position: relative;
-    top: 5px;
+    top: 6px;
 }
 
 #video_url {

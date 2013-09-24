@@ -5,7 +5,7 @@
             <h4 id="message"></h4>
             <input id="video_url" type="text" name="video_url">
             <a id="add_embed_link" href="#">{% trans %}Add</a>{% endtrans %}
-            <img id="ajax_loader" src="{{ asset('bundles/egzaktsystem/backend/images/icons/ajax-loader.gif') }}">
+            <img id="embed_ajax_loader" src="{{ asset('bundles/egzaktsystem/backend/images/icons/ajax-loader.gif') }}">
         </div>
 
         <div class="bulk_actions">
@@ -16,102 +16,47 @@
             <input type="submit" value="Submit" class="submit_action">
         </div>
 
-        <table cellspacing="0" class="table-autosort">
-            <thead>
-            <tr>
-                <th class="name">&nbsp;</th>
-                <th>{% trans %}Thumbnail{% endtrans %}</th>
-                <th class="table-sortable:ignorecase">{% trans %}Name{% endtrans %}</th>
-                <th class="table-sortable:date">{% trans %}Last updated{% endtrans %}</th>
-                <th class="edit"></th>
-                <th class="delete"></th>
-
-            </tr>
-            <tr class="filters">
-                <th class="name">
-                    <input type="checkbox" class="checkall">
-                </th>
-                <th>&nbsp;</th>
-                <th>
-                    <input onkeyup="Table.filter(this,this)" class="filter" alt="{{ "Search a name"|trans }}" />
-                </th>
-                <th>&nbsp</th>
-                <th>&nbsp;</th>
-                <th>&nbsp;</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for media in embedVideos %}
-                <tr id="item_{{ media.id }}">
-                    <td class="name">
-                        <input type="checkbox" name="massdelete{{ loop.index }}" value="{{ media.id }}">
-                    </td>
-                    <td>
-                        <a class="fancy-video" href="{{ media.mediaPath }}">
-                            {% if media.thumbnail %}
-                                <img src="{{ media.thumbnail.mediaPath | imagine_filter('media_thumb') }}" height="42">
-                            {% endif %}
-                        </a>
-                    </td>
-                    <td>
-                        <a href="{{ path(media.route, media.routeParams) }}">{{ media|raw }}</a>
-                    </td>
-                    <td>{{ media.updatedat|date('Y-m-d') }}</td>
-                    <td class="edit">
-                        {% if media.isEditable %}
-                            <a href="{{ path(media.route, media.routeParams) }}" title="{% trans %}Edit{% endtrans %}">
-                                <img src="{{ asset('bundles/egzaktsystem/backend/images/buttons/edit.png') }}" width="15" height="15" alt="" />
-                            </a>
-                        {% endif %}
-                    </td>
-                    <td>
-                        <a id="media-delete" href="{{ path(media.route('delete'), media.routeParams) }}" rel="{{ path(media.route('delete'), media.routeParams({'message': true})) }}" title="{% trans %}Delete{% endtrans %}">
-                            <img src="{{ asset('bundles/egzaktsystem/backend/images/buttons/delete.png') }}" width="12" height="15" alt="" />
-                        </a>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-
-        <div class="total">
-            <span class="sub-total"></span>
-            {% set count = videos|length %}
-            {% transchoice count %}{0} No results|{1} One result|]1,Inf] %count% results{% endtranschoice %}
+        <div id="embed_video_container">
+            {{ embedVideoView|raw }}
         </div>
+
     </div>
-
-    <script type="text/javascript">
-        $(function(){
-
-            $('#ajax_loader').hide();
-
-            $('#add_embed_link').on('click', function(e){
-
-                $('#ajax_loader').show();
-
-                $.ajax({
-                    method: 'POST',
-                    url: "{{ path('egzakt_media_backend_embed_video_create') }}",
-                    data: {'video_url': $('#video_url').val() },
-                    dataType: "json",
-                    success: function(data){
-                        if (data.error != undefined) {
-                            $('#message').html(data.error.message);
-                        } else {
-                            $('#message').html(data.message);
-                        }
-                        $('#ajax_loader').hide();
-                    },
-                    error: function(){
-                        $('#ajax_loader').hide();
-                        alert('{% trans %}An internal error occured{% endtrans %}');
-                    }
-                });
-
-                e.preventDefault();
-            });
-        });
-    </script>
-
 </form>
+
+<div id="pager_wrapper">
+    <div id="embed_video_pager">
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+
+        $('#embed_ajax_loader').hide();
+
+        $('#add_embed_link').on('click', function(e){
+
+            $('#embed_ajax_loader').show();
+
+            $.ajax({
+                method: 'POST',
+                url: "{{ path('egzakt_media_backend_embed_video_create') }}",
+                data: {'video_url': $('#video_url').val() },
+                dataType: "json",
+                success: function(data){
+                    if (data.error != undefined) {
+                        $('#message').html(data.error.message);
+                    } else {
+                        $('#message').html(data.message);
+                    }
+                    $('#embed_ajax_loader').hide();
+                },
+                error: function(){
+                    $('#ajax_loader').hide();
+                    alert('{% trans %}An internal error occured{% endtrans %}');
+                }
+            });
+
+            e.preventDefault();
+        });
+    });
+</script>

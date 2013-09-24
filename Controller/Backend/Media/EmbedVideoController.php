@@ -33,6 +33,8 @@ class EmbedVideoController extends BaseController
      */
     public function createAction(Request $request)
     {
+        $t = $this->get('translator');
+
         if ("POST" !== $request->getMethod()) {
             throw new Exception('The request method must be post.');
         }
@@ -41,7 +43,7 @@ class EmbedVideoController extends BaseController
         if (!$mediaParser = $mediaParser->getParser($request->get('video_url'))) {
             return new JsonResponse(array(
                 'error' => array(
-                    'message' => 'Unable to parse the video url',
+                    'message' => $t->trans('Unable to parse the video url')
                 )
             ));
         }
@@ -59,14 +61,8 @@ class EmbedVideoController extends BaseController
         $this->getEm()->persist($video);
         $this->getEm()->flush();
 
-        $cacheManager = $this->container->get('liip_imagine.cache.manager');
-
         return new JsonResponse(array(
-            'url' => $this->generateUrl($video->getRouteBackend(), $video->getRouteBackendParams()),
-            'id' => $video->getId(),
-            'thumbnailUrl' => $cacheManager->getBrowserPath($video->getThumbnailUrl(), 'media_thumb'),
-            "message" => "File uploaded",
-            'name' => $video->getName(),
+            "message" => $t->trans('File uploaded')
         ));
     }
 
@@ -127,9 +123,6 @@ class EmbedVideoController extends BaseController
                 return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
             }
         }
-
-        $mediaParser = $this->get('egzakt_media.parser');
-        $parser = $mediaParser->getParser($media->getUrl());
 
         $associatedContents = MediaController::getAssociatedContents($media, $this->container);
 

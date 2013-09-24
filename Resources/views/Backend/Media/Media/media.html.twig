@@ -78,7 +78,98 @@
 
         });
 
+        $(function(){
+
+            // Image Pager
+            $('#image_pager').pagination({
+                pages: {{ imagePageTotal }},
+                cssStyle: 'light-theme',
+                onPageClick: function(pageNumber, event){
+
+                    $('#loading').show();
+
+                    $.ajax({
+                        method: "GET",
+                        url: "{{ path('egzakt_media_backend_media_pager') }}",
+                        data: {page: pageNumber, type: 'image'},
+                        contentType: 'json',
+                        success: function(data) {
+                            $('#image_container').html($(data.html));
+                            bindScripts();
+                            $('#loading').hide();
+                        }
+                    });
+                }
+            });
+
+            // Document Pager
+            $('#document_pager').pagination({
+                pages: {{ documentPageTotal }},
+                cssStyle: 'light-theme',
+                onPageClick: function(pageNumber, event){
+
+                    $('#loading').show();
+
+                    $.ajax({
+                        method: "GET",
+                        url: "{{ path('egzakt_media_backend_media_pager') }}",
+                        data: {page: pageNumber, type: 'document'},
+                        contentType: 'json',
+                        success: function(data) {
+                            $('#document_container').html($(data.html));
+                            bindScripts();
+                            $('#loading').hide();
+                        }
+                    });
+                }
+            });
+
+            // Video Pager
+            $('#video_pager').pagination({
+                pages: {{ videoPageTotal }},
+                cssStyle: 'light-theme',
+                onPageClick: function(pageNumber, event){
+
+                    $('#loading').show();
+
+                    $.ajax({
+                        method: "GET",
+                        url: "{{ path('egzakt_media_backend_media_pager') }}",
+                        data: {page: pageNumber, type: 'video'},
+                        contentType: 'json',
+                        success: function(data) {
+                            $('#video_container').html($(data.html));
+                            bindScripts();
+                            $('#loading').hide();
+                        }
+                    });
+                }
+            });
+
+            // EmbedVideo Pager
+            $('#embed_video_pager').pagination({
+                pages: {{ videoPageTotal }},
+                cssStyle: 'light-theme',
+                onPageClick: function(pageNumber, event){
+
+                    $('#loading').show();
+
+                    $.ajax({
+                        method: "GET",
+                        url: "{{ path('egzakt_media_backend_media_pager') }}",
+                        data: {page: pageNumber, type: 'embedvideo'},
+                        contentType: 'json',
+                        success: function(data) {
+                            $('#embed_video_container').html($(data.html));
+                            bindScripts();
+                            $('#loading').hide();
+                        }
+                    });
+                }
+            });
+
+        });
+
     </script>
 
 {% endblock content_main %}
-

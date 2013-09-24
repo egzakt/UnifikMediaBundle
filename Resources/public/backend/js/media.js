@@ -1,5 +1,10 @@
 $(function(){
 
+    bindScripts();
+
+});
+
+function bindScripts() {
     // Reload button
     $('#refresh_media').on('click', function(){
         window.location.reload();
@@ -15,4 +20,6 @@ $(function(){
     $('input.checkall').click( function () {
         $(this).closest('table').find(':checkbox').prop('checked', this.checked);
     });
-});
+
+    deleteScript();
+}

@@ -3,6 +3,10 @@ egzakt_media_backend_media:
     pattern:  /
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:media" }
 
+egzakt_media_backend_media_pager:
+    pattern:  /media/page
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:mediaPager" }
+
 egzakt_media_backend_media_list_ajax:
     pattern:  /media/select/{type}
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:listAjax", type: 'all' }
