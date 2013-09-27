@@ -1,0 +1,65 @@
+{% spaceless %}
+
+    <ul id="media_filters">
+        {% if mediaType|length > 1 %}
+            <li><a class="media_filter" data-media-type="image">{% trans %}Images{% endtrans %}</a></li>
+            <li><a class="media_filter" data-media-type="video">{% trans %}Videos{% endtrans %}</a></li>
+            <li><a class="media_filter" data-media-type="document">{% trans %}Documents{% endtrans %}</a></li>
+            <li><a class="media_filter" data-media-type="embedvideo">{% trans %}Embed videos{% endtrans %}</a></li>
+        {% endif %}
+        <li><a class="upload">+ {% trans %}Upload a new file{% endtrans %}</a></li>
+    </ul>
+
+
+    <div id="media_wrapper">
+
+        <div id="media_container">
+
+            <div id="media_list">
+
+                {% for media in medias %}
+                    {% if media.type in mediaType %}
+                        <div id="item_{{ media.id }}" class="media media_{{ media.type }}" data-media-manager-id="{{ loop.index0 }}">
+                            <img src="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb', true) ~ '?' ~ random(9999)}}" title="{{ media.name }}">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+            </div>
+
+            <div id="media_details">
+
+                <h2 id="welcome_message">{% trans %}Please, select a file ...{% endtrans %}</h2>
+                <div id="media_details_inner">
+                    <input type="hidden" name="selected-id">
+                    <h3></h3>
+                    <img>
+                    <div>
+                        <a id="edit_media_link"><span class="media_button blue">{% trans %}Edit{% endtrans %}</span></a>
+                    </div>
+                    <a id="insert_media"><span class="media_button green">{% trans %}Insert{% endtrans %}</span></a>
+
+                    <p id="file_size"><strong>{% trans %}File size{% endtrans %}:</strong><span></span> {% trans %}kb{% endtrans %}</p>
+
+                    <p id="image_format"><strong>{% trans %}Image format{% endtrans %}:</strong> <span></span> (px)</p>
+
+                    <p id="file_caption"><strong>Caption:</strong><br><span></span></p>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div id="uploader_wrapper">
+        <div>
+            <div id="uploader-message"></div>
+            <form id="pluploader-form">
+                <div id="uploader">
+                </div>
+            </form>
+        </div>
+    </div>
+
+{% endspaceless %}

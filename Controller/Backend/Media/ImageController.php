@@ -112,4 +112,9 @@ class ImageController extends BaseController
         return new JsonResponse(array());
     }
 
+    public function closePixlrAction()
+    {
+        return $this->render('EgzaktMediaBundle:Backend/Media/Image:close_pixlr.html.twig');
+    }
+
 }

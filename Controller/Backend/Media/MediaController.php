@@ -244,29 +244,42 @@ class MediaController extends BaseController
     }
 
     /**
-     * Ajax version of the list action. Used to select a media to insert in another entity
+     * listAjax
      *
-     * @param $type
-     * @return Response
+     * @param Request $request
+     * @return JsonResponse
      */
-    public function listAjaxAction($type)
+    public function listAjaxAction(Request $request)
     {
-        if ("all" == $type) {
-            $medias = $this->mediaRepository->findByHidden(false);
-        } else {
-            $medias = $this->mediaRepository->findByType($type);
+        if ($request->isXmlHttpRequest()) {
+
+            $type = $request->query->get('type');
+
+            if ("all" == $type) {
+                $medias = $this->mediaRepository->findByHidden(false);
+                $mediaType = array('image', 'video', 'document', 'embedvideo');
+            } else {
+                $medias = $this->mediaRepository->findByType($type);
+                $mediaType = array($type);
+            }
+
+            $mediasOutput = array();
+
+            /* @var $media Media */
+            foreach ($medias as $media) {
+                $mediasOutput[] = $media->toArray();
+            }
+
+            return new JsonResponse(array(
+                'html' => $this->renderView('EgzaktMediaBundle:Backend/Media/Media:media_select.html.twig', array(
+                    'medias' => $medias,
+                    'mediaType' => $mediaType
+                )),
+                'medias' => $mediasOutput
+            ));
         }
 
-        $mediasOutput = array();
-
-        /* @var $media Media */
-        foreach ($medias as $media) {
-            $mediasOutput[] = $media->toArray();
-        }
-
-        return new JsonResponse(array(
-            'medias' => $mediasOutput,
-        ));
+        return new JsonResponse();
     }
 
     /**

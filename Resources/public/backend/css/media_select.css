@@ -1,0 +1,144 @@
+/* MEDIA_SELECT FORM FIELD */
+
+#media_select_modal_container {
+    display: none;
+}
+
+.ui-dialog.media_select {
+    margin: 40px;
+    min-width: 80%;
+}
+
+.ui-dialog.media_select .ui-widget-header {
+    background: none;
+    border: none;
+    height: 20px;
+}
+
+.ui-dialog.media_select .ui-widget-header span {
+    font-size: 20px;
+    height: 20px;
+    line-height: 22px;
+}
+
+/* MEDIA SELECT */
+
+#media_container {
+    margin: 10px 0 0 0;
+    min-width: 100%;
+}
+
+#media_container div.frame {
+    padding: 10px;
+}
+
+#media_list {
+    display: inline-block;
+    width: 70%;
+    min-height: 400px;
+    box-shadow: 0px 0px 12px #333;
+    overflow: auto;
+    padding: 0;
+}
+
+#media_filters li a {
+    text-decoration: none;
+    display: inline-block;
+    color: #fff;
+    padding: 0 5px;
+    border-radius: 3px;
+    margin: 5px;
+    border: 2px solid #2882E6;
+    background-color: #2882E6;
+}
+
+#media_filters li a.upload {
+    border: 2px solid #39b54a;
+    background-color: #39b54a;
+}
+
+.media_image img {
+    margin-bottom: -4px;
+}
+
+.media{
+    display: inline-block;
+    margin: 10px;
+    border: 5px solid #fff;
+}
+
+.media_selected{
+    border: 5px solid #2882E6;
+    padding: 1px;
+}
+
+#media_details_inner{
+    padding: 10px 20px;
+    display: none;
+}
+
+#list_actions_bar ul li, #media_filters li{
+    display: inline-block;
+}
+
+/* DETAILS DIV */
+
+#media_details{
+    display: inline-block;
+    width: 30%;
+    min-height: 300px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+#media_details img {
+    max-width: 100%;
+}
+
+.media_button.green {
+    border: 2px solid #39b54a;
+    background-color: #39b54a;
+}
+
+.media_button.blue {
+    border: 2px solid #2882E6;
+    background-color: #2882E6;
+}
+
+#welcome_message {
+    text-align: center;
+}
+
+.media_button {
+    display: inline-block;
+    color: #fff;
+    padding: 0 5px;
+    border-radius: 3px;
+    margin: 2px;
+}
+
+/* PLUPLOAD */
+
+#uploader_wrapper {
+    display: none;
+}
+
+.plupload .plupload_header_content{
+    color: #0073ea;
+}
+
+#uploader_filelist .plupload_file_name a{
+    color: #0073ea;
+}
+
+#uploader_filelist .plupload_file_name a:hover{
+    text-decoration: underline;
+}
+
+.plupload_filelist_footer td.plupload_file_name{
+    width: 100%;
+}
+
+
+
+

@@ -8,8 +8,8 @@ egzakt_media_backend_media_pager:
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:mediaPager" }
 
 egzakt_media_backend_media_list_ajax:
-    pattern:  /media/select/{type}
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:listAjax", type: 'all' }
+    pattern:  /media/select
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:listAjax" }
     options:
         expose: true
 
@@ -40,6 +40,10 @@ egzakt_media_backend_image_duplicate:
 egzakt_media_backend_image_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }
+
+egzakt_media_backend_image_close_pixlr:
+    pattern:  /close-pixlr
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:closePixlr" }
 
 # Document
 egzakt_media_backend_document_edit:

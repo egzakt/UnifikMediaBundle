@@ -31,7 +31,7 @@
             <td>
                 <a class="fancy-video" href="{{ asset(media.mediaPath) }}">
                     {% if media.thumbnail %}
-                        <img src="{{ media.thumbnail.mediaPath | imagine_filter('media_thumb') }}" height="42">
+                        <img src="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb') }}" height="42">
                     {% endif %}
                 </a>
             </td>

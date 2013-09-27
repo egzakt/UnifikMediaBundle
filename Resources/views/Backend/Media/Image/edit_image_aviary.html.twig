@@ -1,7 +1,7 @@
 <tr>
     <th></th>
     <td>
-        <img id='aviary_image' src='{{ asset(media.mediaPath) }}' />
+        <img id='aviary_image' src='{{ asset(media.mediaPath) ~ '?' ~ random(999999) }}' />
         <img id="aviary_ajax_loader" src="{{ asset('bundles/egzaktmedia/backend/images/ajax-loader.gif') }}">
         <p><input class="edit-aviary" type='image' src='http://images.aviary.com/images/edit-photo.png' value='Edit photo' onclick="return launchEditor('aviary_image', '{{ asset(media.mediaPath) }}');" /></p>
     </td>

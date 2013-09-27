@@ -2,18 +2,30 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
     init: function( editor ) {
         editor.addCommand( 'openmediamanager', new CKEDITOR.command( editor, {
             exec: function( editor ){
-                if ('undefined' === typeof egzaktMediaScript){
-                    var loader = new DynamicLoader();
-                    loader.addScript('egzaktmediascript', '/bundles/egzaktmedia/backend/js/media_select.js');
-                    loader.addScript('twigjsscript', '/bundles/egzaktsystem/backend/js/twig.js');
-                    loader.addStyle('egzaktmediastyle', '/bundles/egzaktmedia/backend/css/media.css');
-                    loader.load(function(){
-                        $.mediaManager();
+
+                $('#loading').show();
+
+                $(document).ready(function(){
+                    if ('undefined' === typeof egzaktmediascript){
+
+                        var loader = new DynamicLoader();
+                        loader.addStyle('pluploadqueuestyle', '/bundles/egzaktmedia/backend/css/jquery.plupload.queue.css');
+                        loader.addStyle('uipluploadsytle', '/bundles/egzaktmedia/backend/css/jquery.ui.plupload.css');
+                        loader.addStyle('egzaktmediastyle', '/bundles/egzaktmedia/backend/css/media_select.css');
+                        loader.addScript('pluploadfull', '/bundles/egzaktmedia/backend/js/plupload/plupload.full.js');
+                        loader.addScript('uipluploadscript', '/bundles/egzaktmedia/backend/js/plupload/jquery.ui.plupload/jquery.ui.plupload.js');
+                        loader.addScript('pluploadqueuescript', '/bundles/egzaktmedia/backend/js/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
+                        loader.addScript('egzaktmediascript', '/bundles/egzaktmedia/backend/js/media_select.js');
+
+                        loader.load(function(){
+                            $.mediaManager();
+                            $.mediaManager.loadCk(editor);
+                        });
+                    }else{
                         $.mediaManager.loadCk(editor);
-                    });
-                }else{
-                    $.mediaManager.loadCk(editor);
-                }
+                    }
+                });
+
             },
             allowedContent: 'iframe[!width, !height, !src, data-mediaid, frameborder, allowfullscreen]; img[data-mediaid, !src, alt]; a[data-mediaid, !href]' //http://docs.ckeditor.com/#!/guide/dev_allowed_content_rules
         }));

@@ -11,8 +11,7 @@
             if('undefined' == typeof egzaktMediaScript) {
                 var loader = new DynamicLoader();
                 loader.addScript('egzaktmediascript', '/bundles/egzaktmedia/backend/js/media_select.js');
-                loader.addScript('twigjsscript', '/bundles/egzaktsystem/backend/js/twig.js');
-                loader.addStyle('egzaktmediastyle', '/bundles/egzaktmedia/backend/css/media.css');
+                loader.addStyle('egzaktmediastyle', '/bundles/egzaktmedia/backend/css/media_select.css');
                 loader.load(function(){
                     $.mediaManager();
                 });

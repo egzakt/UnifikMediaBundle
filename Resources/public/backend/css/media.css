@@ -34,66 +34,6 @@
     max-height: 500px;
 }
 
-/* MEDIA_SELECT FORM FIELD */
-
-#welcome-message {
-    text-align: center;
-}
-
-.media_button {
-    display: inline-block;
-    color: #fff;
-    padding: 0 5px;
-    border-radius: 3px;
-    margin: 2px;
-}
-
-.media_button.green {
-    border: 2px solid #39b54a;
-    background-color: #39b54a;
-}
-
-.media_button.blue {
-    border: 2px solid #2882E6;
-    background-color: #2882E6;
-}
-
-.media{
-    display: inline-block;
-    margin: 10px;
-    border: 5px solid #fff;
-}
-
-.media-image img {
-    margin-bottom: -4px;
-}
-
-.media-selected{
-    border: 5px solid #2882E6;
-}
-
-#media-list{
-    height: 60%;
-    overflow: auto;
-    padding: 0;
-    margin: 0;
-    display: inline-block;
-    vertical-align: top;
-}
-
-#media-details{
-    float: right;
-    width: 290px;
-    min-height: 300px;
-    display: inline-block;
-    border: 1px solid #000000;
-}
-
-#media-details-inner{
-    padding: 10px 20px;
-    display: none;
-}
-
 /* GENERAL */
 
 #video-list li{
@@ -102,10 +42,6 @@
 
 #list_actions_bar ul{
     margin-bottom: 5px;
-}
-
-#list_actions_bar ul li, #media-filters li{
-    display: inline-block;
 }
 
 #refresh_media {

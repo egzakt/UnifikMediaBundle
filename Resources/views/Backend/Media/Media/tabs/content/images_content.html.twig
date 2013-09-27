@@ -33,7 +33,7 @@
             </td>
             <td>
                 <a class="image-thumbnail" href="{{ asset(media.mediaPath) ~ '?' ~ random(999999) }}">
-                    <img src="{{ media.mediaPath|imagine_filter('media_thumb') }}">
+                    <img src="{{ media.mediaPath|imagine_filter('media_thumb') ~ '?' ~ random(999999)}}">
                 </a>
             </td>
             <td>

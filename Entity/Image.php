@@ -134,6 +134,16 @@ class Image extends Media
     }
 
     /**
+     * Override the parent method to return the file
+     *
+     * @return string
+     */
+    public function getThumbnail()
+    {
+        return $this;
+    }
+
+    /**
      * getReplaceRegex
      *
      * @return string
