@@ -7,18 +7,6 @@ $(function(){
     var listContent = {}, selectedMedia;
 
     $.mediaManager = function () {
-        $('.create-media').fancybox({
-            autoDimensions: false,
-            width: '60%',
-            height: '48%',
-            scrolling: 'no',
-            href: Routing.generate('egzakt_media_backend_media_upload_fancybox')
-        });
-
-        $('.create-media').click(function(){
-            $.mediaManager.triggeringElement = $(this);
-            listContent.medias = false;
-        });
 
         $('.select-media').click(function(){
             $.mediaManager.load($(this));
@@ -74,7 +62,9 @@ $(function(){
             modal: true,
             dialogClass: 'media_select',
             width: 'auto',
-            height: 'auto',
+            height: 600,
+            minHeight: 400,
+            minWidth: 400,
             position: {
                 my: 'left top',
                 at: 'left top',
@@ -111,6 +101,31 @@ $(function(){
             });
 
         }
+
+        // JQUERY UPLOADER
+
+        // Initialize the jQuery File Upload widget:
+        $('#fileupload').fileupload({
+            // Uncomment the following to send cross-domain cookies:
+            //xhrFields: {withCredentials: true},
+            url: Routing.generate('egzakt_media_backend_media_upload')
+        });
+
+
+        // Load existing files:
+        $('#fileupload').addClass('fileupload-processing');
+        $.ajax({
+            // Uncomment the following to send cross-domain cookies:
+            //xhrFields: {withCredentials: true},
+            url: $('#fileupload').fileupload('option', 'url'),
+            dataType: 'json',
+            context: $('#fileupload')[0]
+        }).always(function () {
+            $(this).removeClass('fileupload-processing');
+        }).done(function (result) {
+            $(this).fileupload('option', 'done')
+                .call(this, null, {result: result});
+        });
 
         // UPLOADER BUTTON
 
@@ -168,56 +183,6 @@ $(function(){
         $('.media img').dblclick(function(e) {
             e.preventDefault();
             $.mediaManager.insert();
-        });
-
-        // PLUPLOAD
-
-        $("#uploader").plupload({
-            // General settings
-            runtimes : 'html5,gears,flash,silverlight',
-            url : Routing.generate('egzakt_media_backend_media_upload_fancybox'),
-            max_file_size : '20mb',
-            chunk_size : 0, // chunk disabled cause we don't handle it
-            unique_names : true,
-
-            // Flash settings
-            flash_swf_url : '/plupload/js/plupload.flash.swf',
-
-            // Silverlight settings
-            silverlight_xap_url : '/plupload/js/plupload.silverlight.xap'
-        });
-
-        var uploader = $('#uploader').plupload('getUploader');
-
-        uploader.bind('Error', function(up, error){
-            $('.plupload_header_text').html(error.message);
-        });
-
-        uploader.bind('FileUploaded', function(up, file, data){
-            var response = $.parseJSON(data.response);
-            if(response.error){
-                up.trigger('error', response);
-            }
-            $('.plupload_header_text').html(response.message);
-            file.name = '<a href="' + response.url + '">' + file.name  + "</a>";
-        });
-
-        $('form#pluploader-form').submit(function(e) {
-            var uploader = $('#uploader').plupload('getUploader');
-
-            if (uploader.files.length > 0) {
-                uploader.bind('StateChanged', function() {
-                    if (uploader.files.length === (uploader.total.uploaded + uploader.total.failed)) {
-                        $('form')[0].submit();
-                    }
-                });
-
-                uploader.start();
-            } else {
-                alert('{% trans %}You must at least upload one file.{% endtrans %}');
-            }
-
-            return false;
         });
 
     };

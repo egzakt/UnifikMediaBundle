@@ -1,21 +1,3 @@
-/* PLUPLOAD */
-
-.plupload .plupload_header_content{
-    color: #0073ea;
-}
-
-#uploader_filelist .plupload_file_name a{
-    color: #0073ea;
-}
-
-#uploader_filelist .plupload_file_name a:hover{
-    text-decoration: underline;
-}
-
-.plupload_filelist_footer td.plupload_file_name{
-    width: 100%;
-}
-
 /* AVIARY */
 
 #aviary_ajax_loader {

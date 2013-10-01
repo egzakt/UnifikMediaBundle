@@ -146,7 +146,11 @@ class MediaController extends BaseController
                     throw new \Exception('Error');
             }
 
-            $mediaPager = new MediaPager($mediaQb, $request->query->get('page'));
+            $mediaPager = new MediaPager(
+                $mediaQb,
+                $request->query->get('page'),
+                $this->container->getParameter('egzakt_media.resultPerPage', 20)
+            );
 
             return new JsonResponse(array(
                 'html' => $this->renderView($template, array('medias' => $mediaPager->getResult()))

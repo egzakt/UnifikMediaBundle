@@ -16,10 +16,12 @@ class MediaRepository extends BaseEntityRepository
     {
         $type = ucfirst($type);
         $qb = $this->createQueryBuilder('m')
-                    //The discriminator is not an accessible field, we not to use INSTANCE OF
-                    ->andWhere('m INSTANCE OF :type')
-                    ->andWhere('m.hidden = false')
-                    ->setParameter('type', $type);
+            ->select('m,mt')
+            ->leftJoin('m.thumbnail', 'mt')
+            //The discriminator is not an accessible field, we have to use INSTANCE OF
+            ->andWhere('m INSTANCE OF :type')
+            ->andWhere('m.hidden = false')
+            ->setParameter('type', $type);
 
         return $this->processQuery($qb);
     }

@@ -35,9 +35,9 @@
 #media_list {
     display: inline-block;
     width: 70%;
-    min-height: 400px;
+    height: 450px;
     box-shadow: 0px 0px 12px #333;
-    overflow: auto;
+    overflow-y: scroll;
     padding: 0;
 }
 
@@ -73,7 +73,7 @@
 }
 
 #media_details_inner{
-    padding: 10px 20px;
+    padding: 10px 40px;
     display: none;
 }
 
@@ -117,28 +117,8 @@
     margin: 2px;
 }
 
-/* PLUPLOAD */
+/* UPLOAD */
 
 #uploader_wrapper {
     display: none;
 }
-
-.plupload .plupload_header_content{
-    color: #0073ea;
-}
-
-#uploader_filelist .plupload_file_name a{
-    color: #0073ea;
-}
-
-#uploader_filelist .plupload_file_name a:hover{
-    text-decoration: underline;
-}
-
-.plupload_filelist_footer td.plupload_file_name{
-    width: 100%;
-}
-
-
-
-

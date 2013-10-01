@@ -12,6 +12,7 @@ function bindScripts() {
 
     // Thumbnail, preview
     $('.image-thumbnail').fancybox();
+
     $('.fancy-video').fancybox({
         'type': 'iframe'
     });

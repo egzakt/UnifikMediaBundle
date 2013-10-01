@@ -2,12 +2,15 @@
 
 {% block stylesheets %}
     {{ parent() }}
+
     {# User symlink path cause @ target have a known issue with the css rewrite filter #}
     {% stylesheets filter='cssrewrite'
         'bundles/egzaktmedia/backend/css/*'
+        'bundles/egzaktmedia/backend/css/blueimp/*'
     %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
+
 {% endblock %}
 
 {% block content %}
@@ -99,12 +102,28 @@
 
 {% block javascripts %}
     {{ parent() }}
+
+    <!-- The Templates plugin is included to render the upload/download listings -->
+    <script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
+    <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+    <script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
+    <!-- The Canvas to Blob plugin is included for image resizing functionality -->
+    <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
+
     {% javascripts
         '@EgzaktMediaBundle/Resources/public/backend/js/media.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/plupload/plupload.full.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/plupload/jquery.ui.plupload/jquery.ui.plupload.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/plupload/jquery.plupload.queue/jquery.plupload.queue.js'
         '@EgzaktMediaBundle/Resources/public/backend/js/jquery.simplePagination.js'
+
+        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.iframe-transport.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-process.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-image.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-audio.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-video.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-validate.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-ui.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-jquery-ui.js'
+        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/main.js'
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

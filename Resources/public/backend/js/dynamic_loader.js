@@ -19,6 +19,9 @@ DynamicLoader.prototype.addStyle = function(id, href) {
 };
 
 DynamicLoader.prototype.load = function(callback) {
+
+    this.callback = callback;
+
     var body = document.getElementsByTagName('body')[0];
     for(var key in this.scriptList) {
         var script = document.createElement('script');
@@ -47,8 +50,6 @@ DynamicLoader.prototype.load = function(callback) {
 
         head.appendChild(link);
     }
-
-    this.callback = callback;
 };
 
 DynamicLoader.prototype.markScriptLoaded = function(id){
@@ -60,6 +61,8 @@ DynamicLoader.prototype.markScriptLoaded = function(id){
     }
 
     if (this.callback) {
+
         this.callback();
+
     }
 };

@@ -20,61 +20,47 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class UploadController extends BaseController
 {
-    /**
-     * FancyBox version of the create action
-     * @return Response
-     */
-    public function fancyboxUploadAction()
-    {
-        return $this->render('EgzaktMediaBundle:Backend/Media/Upload:upload_fancybox.html.twig');
-    }
 
-    /**
-     * Upload action
-     *
-     * @param Request $request
-     * @return JsonResponse
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
     public function uploadAction(Request $request)
     {
-        if ("POST" == $request->getMethod()) {
-            $file = $request->files->get('file');
 
-            if (!$file instanceof UploadedFile || !$file->isValid()) {
-                return new JsonResponse(array(
-                    "error" => array(
-                        "message" => "Unable to upload the file",
-                    ),
-                ));
+
+        if ($request->isXmlHttpRequest() && ( $request->files->has('files') )) {
+
+            if ("POST" == $request->getMethod()) {
+                $file = $request->files->get('files')[0];
+
+                if ($file instanceof UploadedFile && $file->isValid()) {
+
+                    switch ($file->getMimeType()) {
+                        case 'image/jpeg':
+                        case 'image/png':
+                        case 'image/gif':
+                            $uploadFunction = 'imageUpload';
+                            break;
+                        case 'video/mpeg':
+                        case 'video/mp4':
+                        case 'application/x-shockwave-flash':
+                        case 'video/x-flv':
+                        case 'video/quicktime':
+
+                        case 'video/x-ms-wmv':
+                        case 'video/x-msvideo':
+
+                            $uploadFunction = 'videoUpload';
+                            break;
+                        default:
+                            $uploadFunction = 'documentUpload';
+                    }
+
+                    return $this->$uploadFunction($file);
+                }
+
             }
-
-            switch ($file->getMimeType()) {
-                case 'image/jpeg':
-                case 'image/png':
-                case 'image/gif':
-                    $uploadFunction = 'imageUpload';
-                    break;
-                case 'video/mpeg':
-                case 'video/mp4':
-                case 'application/x-shockwave-flash':
-                case 'video/x-flv':
-                case 'video/quicktime':
-
-                case 'video/x-ms-wmv':
-                case 'video/x-msvideo':
-
-                    $uploadFunction = 'videoUpload';
-                    break;
-                default:
-                    $uploadFunction = 'documentUpload';
-            }
-
-            return $this->$uploadFunction($file);
 
         }
 
-        throw new NotFoundHttpException();
+        return new JsonResponse();
     }
 
     /**
@@ -104,12 +90,12 @@ class UploadController extends BaseController
 
         $cacheManager = $this->container->get('liip_imagine.cache.manager');
 
-        return new JsonResponse(array(
+        return new JsonResponse(array('files' => array(array(
+            'name' => $media->getName(),
+            'size' => $file->getClientSize(),
             'url' => $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
-            'id' => $media->getId(),
             'thumbnailUrl' => $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb'),
-            "message" => "File uploaded",
-        ));
+        ))));
     }
 
     /**
@@ -146,12 +132,12 @@ class UploadController extends BaseController
 
         $cacheManager = $this->container->get('liip_imagine.cache.manager');
 
-        return new JsonResponse(array(
+        return new JsonResponse(array('files' => array(array(
+            'name' => $media->getName(),
+            'size' => $file->getClientSize(),
             'url' => $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
-            'id' => $media->getId(),
-            'thumbnailUrl' => $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb'),
-            "message" => "File uploaded",
-        ));
+            'thumbnailUrl' => $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb')
+        ))));
     }
 
     /**
@@ -188,12 +174,12 @@ class UploadController extends BaseController
 
         $cacheManager = $this->container->get('liip_imagine.cache.manager');
 
-        return new JsonResponse(array(
+        return new JsonResponse(array('files' => array(array(
+            'name' => $media->getName(),
+            'size' => $file->getClientSize(),
             'url' => $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
-            'id' => $media->getId(),
-            'thumbnailUrl' => $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb'),
-            "message" => "File uploaded",
-        ));
+            'thumbnailUrl' => $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb')
+        ))));
     }
 
     /**

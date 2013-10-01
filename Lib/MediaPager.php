@@ -17,7 +17,7 @@ class MediaPager
     private $pageTotal;
 
 
-    public function __construct(QueryBuilder $queryBuilder, $currentPage = 1, $resultPerPage = 2)
+    public function __construct(QueryBuilder $queryBuilder, $currentPage = 1, $resultPerPage = 20)
     {
         if ($resultPerPage) {
 
@@ -27,15 +27,13 @@ class MediaPager
 
             $qb = clone $queryBuilder;
 
-//            $resultCount = count($this->result = $qb->getQuery()->getScalarResult());
-
             $resultCount = $qb->select('COUNT(m.id)')->getQuery()->getSingleScalarResult();
 
             $division = (int) ($resultCount / $resultPerPage);
 
-            $this->pageTotal = (($resultCount % $resultPerPage) == 0) ? $division : $division + 1;
+            unset($qb);
 
-//            $this->result = array_slice($this->result, ($currentPage - 1) * $resultPerPage, $resultPerPage, true);
+            $this->pageTotal = (($resultCount % $resultPerPage) == 0) ? $division : $division + 1;
 
             $this->result = $queryBuilder
                 ->setFirstResult(($currentPage - 1) * $resultPerPage)

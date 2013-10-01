@@ -8,18 +8,44 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
                 $(document).ready(function(){
                     if ('undefined' === typeof egzaktmediascript){
 
-                        var loader = new DynamicLoader();
-                        loader.addStyle('pluploadqueuestyle', '/bundles/egzaktmedia/backend/css/jquery.plupload.queue.css');
-                        loader.addStyle('uipluploadsytle', '/bundles/egzaktmedia/backend/css/jquery.ui.plupload.css');
-                        loader.addStyle('egzaktmediastyle', '/bundles/egzaktmedia/backend/css/media_select.css');
-                        loader.addScript('pluploadfull', '/bundles/egzaktmedia/backend/js/plupload/plupload.full.js');
-                        loader.addScript('uipluploadscript', '/bundles/egzaktmedia/backend/js/plupload/jquery.ui.plupload/jquery.ui.plupload.js');
-                        loader.addScript('pluploadqueuescript', '/bundles/egzaktmedia/backend/js/plupload/jquery.plupload.queue/jquery.plupload.queue.js');
-                        loader.addScript('egzaktmediascript', '/bundles/egzaktmedia/backend/js/media_select.js');
+                        var loader1 = new DynamicLoader();
 
-                        loader.load(function(){
-                            $.mediaManager();
-                            $.mediaManager.loadCk(editor);
+                        loader1.addStyle('blueimpgallery', 'http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css');
+                        loader1.addStyle('blueimpuploader', '/bundles/egzaktmedia/backend/css/blueimp/jquery.fileupload-ui.css');
+                        loader1.addStyle('egzaktmediastyle', '/bundles/egzaktmedia/backend/css/media_select.css');
+
+
+                        loader1.addScript('blueimptmpl', 'http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js');
+                        loader1.addScript('blueimploadimage', 'http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js');
+                        loader1.addScript('blueimpcanvastoblob', 'http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js');
+                        loader1.addScript('blueimpgallery', 'http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js');
+                        loader1.addScript('blueimptransport', '/bundles/egzaktmedia/backend/js/blueimp/jquery.iframe-transport.js');
+                        loader1.addScript('blueimpfileupload', '/bundles/egzaktmedia/backend/js/blueimp/jquery.fileupload.js');
+
+                        loader1.load(function(){
+
+                            loader2 = new DynamicLoader();
+
+                            loader2.addScript('blueimpprocess', '/bundles/egzaktmedia/backend/js/blueimp/jquery.fileupload-process.js');
+
+
+                            loader2.load(function(){
+
+                                loader3 = new DynamicLoader();
+
+                                loader3.addScript('blueimpimage', '/bundles/egzaktmedia/backend/js/blueimp/jquery.fileupload-image.js');
+                                loader3.addScript('blueimpaudio', '/bundles/egzaktmedia/backend/js/blueimp/jquery.fileupload-audio.js');
+                                loader3.addScript('blueimpvideo', '/bundles/egzaktmedia/backend/js/blueimp/jquery.fileupload-video.js');
+                                loader3.addScript('blueimpvalidate', '/bundles/egzaktmedia/backend/js/blueimp/jquery.fileupload-validate.js');
+                                loader3.addScript('blueimpui', '/bundles/egzaktmedia/backend/js/blueimp/jquery.fileupload-ui.js');
+                                loader3.addScript('blueimpjqueryui', '/bundles/egzaktmedia/backend/js/blueimp/jquery.fileupload-jquery-ui.js');
+                                loader3.addScript('egzaktmediascript', '/bundles/egzaktmedia/backend/js/media_select.js');
+
+                                loader3.load(function(){
+                                    $.mediaManager();
+                                    $.mediaManager.loadCk(editor);
+                                });
+                            });
                         });
                     }else{
                         $.mediaManager.loadCk(editor);
@@ -34,7 +60,8 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
             editor.ui.addButton( 'Insert_media', {
                 label: 'Insert media',
                 command: 'openmediamanager',
-                toolbar: 'link'
+                toolbar: 'link',
+                icon: this.path + 'insert_media.png'
             });
         }
     },

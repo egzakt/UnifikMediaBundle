@@ -1,61 +1,96 @@
-<div>
-    <div id="uploader-message"></div>
-    <form id="pluploader-form">
-        <div id="uploader">
+{% spaceless %}
+    <!-- The file upload form used as target for the file upload widget -->
+    <form id="fileupload" method="POST" enctype="multipart/form-data">
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div class="fileupload-buttonbar">
+            <div class="fileupload-buttons">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+            <span class="fileinput-button">
+                <span>{% trans %}Add files{% endtrans %}...</span>
+                <input type="file" name="files[]" multiple>
+            </span>
+                <button type="submit" class="start">{% trans %}Start upload{% endtrans %}</button>
+                <button type="reset" class="cancel">{% trans %}Cancel upload{% endtrans %}</button>
+                <button type="button" class="delete">{% trans %}Remove{% endtrans %}</button>
+                <input type="checkbox" class="toggle">
+                <!-- The loading indicator is shown during file processing -->
+                <span class="fileupload-loading"></span>
+            </div>
+            <!-- The global progress information -->
+            <div class="fileupload-progress fade" style="display:none">
+                <!-- The global progress bar -->
+                <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                <!-- The extended global progress information -->
+                <div class="progress-extended">&nbsp;</div>
+            </div>
         </div>
+        <!-- The table listing the files available for upload/download -->
+        <table role="presentation"><tbody class="files"></tbody></table>
     </form>
 
-</div>
+    <!-- The template to display files available for upload -->
+    <script id="template-upload" type="text/x-tmpl">
+        {{ '
+        {% for (var i=0, file; file=o.files[i]; i++) { %}
+        <tr class="template-upload fade" style="display:none">
+        <td>
+            <span class="preview"></span>
+        </td>
+        <td>
+        <p class="name">{%=file.name%}</p>
+        {% if (file.error) { %}
+            <div><span class="error">'|raw }}{% trans %}Error{% endtrans %}:{{ '</span> {%=file.error%}</div>
+            {% } %}
+            </td>
+            <td>
+            <p class="size">{%=o.formatFileSize(file.size)%}</p>
+            {% if (!o.files.error) { %}
+            <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+            {% } %}
+            </td>
+            <td>
+                {% if (!o.files.error && !i && !o.options.autoUpload) { %}
+                <button class="start">'|raw }}{% trans %}Start{% endtrans %}{{ '</button>
+                {% } %}
+                {% if (!i) { %}
+                <button class="cancel">'|raw }}{% trans %}Cancel{% endtrans %}{{ '</button>
+                {% } %}
+            </td>
+            </tr>
+            {% } %}
+        '|raw }}
+    </script>
 
-<script type="text/javascript">
-    $().ready((function() {
+    <!-- The template to display files available for download -->
+    <script id="template-download" type="text/x-tmpl">
+        {{ '
+        {% for (var i=0, file; file=o.files[i]; i++) { %}
+        <tr class="template-download fade" style="display:none">
+        <td>
+        <span class="preview">
+        {% if (file.thumbnailUrl) { %}
+            <img src="{%=file.thumbnailUrl%}">
+        {% } %}
+        </span>
+        </td>
+        <td>
+        <p class="name">
+            <a href="{%=file.url%}" title="{%=file.name%}">{%=file.name%}</a>
+        </p>
+        {% if (file.error) { %}
+            <div><span class="error">Error</span> {%=file.error%}</div>
+            {% } %}
+            </td>
+            <td>
+                <span class="size">{%=o.formatFileSize(file.size)%}</span>
+            </td>
+            <td>
+            <button class="delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields=\'{"withCredentials":true}\'{% } %}>'|raw }}{% trans %}Remove{% endtrans %}{{ '</button>
+            <input type="checkbox" name="delete" value="1" class="toggle">
+            </td>
+            </tr>
+        {% } %}
+    '|raw }}
+    </script>
 
-        $("#uploader").plupload({
-            // General settings
-            runtimes : 'html5,gears,flash,silverlight',
-            url : '{{ url('egzakt_media_backend_media_upload') }}',
-            max_file_size : '20mb',
-            chunk_size : 0, // chunk disabled cause we don't handle it
-            unique_names : true,
-
-            // Flash settings
-            flash_swf_url : '/plupload/js/plupload.flash.swf',
-
-            // Silverlight settings
-            silverlight_xap_url : '/plupload/js/plupload.silverlight.xap'
-        });
-
-        var uploader = $('#uploader').plupload('getUploader');
-
-        uploader.bind('Error', function(up, error){
-            $('.plupload_header_text').html(error.message);
-        });
-
-        uploader.bind('FileUploaded', function(up, file, data){
-            var response = $.parseJSON(data.response);
-            if(response.error){
-                up.trigger('error', response);
-            }
-            $('.plupload_header_text').html(response.message);
-            file.name = '<a href="' + response.url + '">' + file.name  + "</a>";
-        });
-
-        $('form#pluploader-form').submit(function(e) {
-            var uploader = $('#uploader').plupload('getUploader');
-
-            if (uploader.files.length > 0) {
-                uploader.bind('StateChanged', function() {
-                    if (uploader.files.length === (uploader.total.uploaded + uploader.total.failed)) {
-                        $('form')[0].submit();
-                    }
-                });
-
-                uploader.start();
-            } else {
-                alert('{% trans %}You must at least upload one file.{% endtrans %}');
-            }
-
-            return false;
-        });
-    }));
-</script>
+{% endspaceless %}

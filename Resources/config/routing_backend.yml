@@ -17,10 +17,6 @@ egzakt_media_backend_media_list_ajax:
 egzakt_media_backend_media_upload:
     pattern: /upload
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Upload:upload" }
-
-egzakt_media_backend_media_upload_fancybox:
-    pattern:  /upload/ajax
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Upload:fancyboxUpload" }
     options:
         expose: true
 
