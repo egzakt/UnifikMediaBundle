@@ -69,6 +69,10 @@
 
 /* EGZAKT JQUERY UPLOAD */
 
+#fileupload table {
+    width: 80%;
+}
+
 #fileupload tbody.files td {
     padding: 5px 10px;
 }

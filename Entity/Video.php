@@ -5,11 +5,15 @@ namespace Egzakt\MediaBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
+use Egzakt\DoctrineBehaviorsBundle\Model as EgzaktORMBehaviors;
+
 /**
  * Video
  */
 class Video extends Media
 {
+    use EgzaktORMBehaviors\Uploadable\Uploadable;
+
     /**
      * Get id
      *

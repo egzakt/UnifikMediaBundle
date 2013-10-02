@@ -4,11 +4,15 @@ namespace Egzakt\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Egzakt\DoctrineBehaviorsBundle\Model as EgzaktORMBehaviors;
+
 /**
  * Document
  */
 class Document extends Media
 {
+    use EgzaktORMBehaviors\Uploadable\Uploadable;
+
     /**
      * Get type
      *

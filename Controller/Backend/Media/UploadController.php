@@ -21,6 +21,12 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class UploadController extends BaseController
 {
 
+    /**
+     * Upload
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function uploadAction(Request $request)
     {
 
@@ -72,19 +78,18 @@ class UploadController extends BaseController
     private function imageUpload(UploadedFile $file)
     {
         $media = new Image();
-        $media->setMediaFile($file);
+        $media->setMedia($file);
         $media->setName($file->getClientOriginalName());
 
         list($width, $height, $type, $attr) = getimagesize($file->getRealPath());
 
         $media->setWidth($width);
         $media->setHeight($height);
+        $media->setMimeType($file->getClientMimeType());
         $media->setAttr($attr);
+        $media->setSize($file->getClientSize());
 
         $this->getEm()->persist($media);
-
-        $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-        $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
 
         $this->getEm()->flush();
 
@@ -92,7 +97,7 @@ class UploadController extends BaseController
 
         return new JsonResponse(array('files' => array(array(
             'name' => $media->getName(),
-            'size' => $file->getClientSize(),
+            'size' => $media->getSize(),
             'url' => $this->generateUrl($media->getRouteBackend(), $media->getRouteBackendParams()),
             'thumbnailUrl' => $cacheManager->getBrowserPath($media->getThumbnailUrl(), 'media_thumb'),
         ))));
@@ -110,11 +115,10 @@ class UploadController extends BaseController
 
         $media = new Video();
         $media->setContainer($this->container);
-        $media->setMediaFile($file);
+        $media->setMedia($file);
         $media->setName($file->getClientOriginalName());
 
         $this->getEm()->persist($media);
-        $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
 
         //Generate the thumbnail
         $image = new Image();
@@ -125,8 +129,6 @@ class UploadController extends BaseController
         $this->getEm()->persist($image);
 
         $media->setThumbnail($image);
-
-        $uploadableManager->markEntityToUpload($image, new MediaFileInfo($this->getVideoThumbnailPath($file)));
 
         $this->getEm()->flush();
 
@@ -152,11 +154,10 @@ class UploadController extends BaseController
 
         $media = new Document();
         $media->setContainer($this->container);
-        $media->setMediaFile($file);
+        $media->setMedia($file);
         $media->setName($file->getClientOriginalName());
 
         $this->getEm()->persist($media);
-        $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
 
         //Generate the thumbnail
         $image = new Image();
@@ -167,8 +168,6 @@ class UploadController extends BaseController
         $this->getEm()->persist($image);
 
         $media->setThumbnail($image);
-
-        $uploadableManager->markEntityToUpload($image, new MediaFileInfo($this->getThumbnailPath($file)));
 
         $this->getEm()->flush();
 

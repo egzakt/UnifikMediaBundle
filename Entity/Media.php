@@ -3,14 +3,18 @@
 namespace Egzakt\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 use Egzakt\SystemBundle\Lib\BaseEntity;
+
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 /**
  * Media
  */
 class Media extends BaseEntity
 {
+
     /**
      * @var integer
      */
@@ -200,10 +204,10 @@ class Media extends BaseEntity
     public function getMediaPath($absolute = false)
     {
         if ($absolute) {
-            return $this->container->get('kernel')->getRootDir().'/../web/'.$this->mediaPath;
+            return $this->container->get('kernel')->getRootDir().'/../web/uploads'.$this->mediaPath;
         }
 
-        return '/'.$this->mediaPath;
+        return 'uploads/' . $this->mediaPath;
     }
 
     /**
@@ -216,21 +220,23 @@ class Media extends BaseEntity
     }
 
     /**
-     * Get the media file
-     * @return \Symfony\Component\HttpFoundation\File\UploadedFile
+     * Set media
+     *
+     * @param $media
      */
-    public function getMediaFile()
+    public function setMedia($media)
     {
-        return $this->media;
+        $this->setUploadedFile($media, 'media');
     }
 
     /**
-     * Set the media file
-     * @param \Symfony\Component\HttpFoundation\File\UploadedFile
+     * Get media
+     *
+     * @return UploadedFile
      */
-    public function setMediaFile($file)
+    public function getMedia()
     {
-        $this->media = $file;
+        return $this->media;
     }
 
     /**
@@ -467,5 +473,19 @@ class Media extends BaseEntity
             'size' => $this->size,
             'caption' => $this->caption
         );
+    }
+
+    /**
+     * Get the list of uploabable fields and their respective upload directory in a key => value array format.
+     *
+     * @return array
+     */
+    public function getUploadableFields()
+    {
+        $date = new \DateTime();
+
+        return [
+            'media' => 'medias' . '/' . $date->format('Y') . '/' . $date->format('F')
+        ];
     }
 }

@@ -3,12 +3,6 @@ Egzakt\MediaBundle\Entity\Media:
     table: null
     inheritanceType: SINGLE_TABLE
     repositoryClass: Egzakt\MediaBundle\Entity\MediaRepository
-    gedmo:
-        uploadable:
-            allowOverwrite: false
-            appendNumber: true
-            path: 'uploads/medias'
-            filenameGenerator: ALPHANUMERIC
     discriminatorColumn:
         name: type
         type: string
@@ -31,8 +25,6 @@ Egzakt\MediaBundle\Entity\Media:
         mediaPath:
             type: string
             length: 255
-            gedmo:
-                - uploadableFilePath
             nullable: true
         createdAt:
             type: datetime
@@ -54,12 +46,8 @@ Egzakt\MediaBundle\Entity\Media:
         mimeType:
             type: string
             length: 255
-            gedmo:
-                - uploadableFileMimeType
         size:
             type: decimal
-            gedmo:
-                - uploadableFileSize
         hidden:
             type: boolean
     lifecycleCallbacks: {  }
