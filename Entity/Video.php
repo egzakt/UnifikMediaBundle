@@ -66,4 +66,19 @@ class Video extends Media
     {
         return $this->getMediaPath();
     }
+
+    /**
+     * Set Upload Path
+     *
+     * @param $field
+     * @param $uploadPath
+     */
+    public function setUploadPath($field, $uploadPath)
+    {
+        $this->uploadableFieldExists($field);
+
+        $pathArray = $this->getUploadableFields();
+
+        $this->{$field . 'Path'} = $pathArray[$field] . '/' . $uploadPath;
+    }
 }

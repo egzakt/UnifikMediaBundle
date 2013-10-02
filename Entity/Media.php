@@ -204,7 +204,7 @@ class Media extends BaseEntity
     public function getMediaPath($absolute = false)
     {
         if ($absolute) {
-            return $this->container->get('kernel')->getRootDir().'/../web/uploads'.$this->mediaPath;
+            return $this->container->get('kernel')->getRootDir().'/../web/uploads/' . $this->mediaPath;
         }
 
         return 'uploads/' . $this->mediaPath;
