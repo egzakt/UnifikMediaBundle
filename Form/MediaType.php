@@ -12,7 +12,7 @@ class MediaType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('mediaFile', 'advanced_file', array('file_path_method' => 'mediaPath'))
+            ->add('media', 'advanced_file', array('file_path_method' => 'mediaPath'))
             ->add('description', 'ckeditor')
             ->add('caption')
         ;

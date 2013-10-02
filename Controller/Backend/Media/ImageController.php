@@ -43,12 +43,6 @@ class ImageController extends BaseController
             if ($form->isValid()) {
                 $this->getEm()->persist($media);
 
-                //Update the file only if a new one has been uploaded
-                if ($media->getMediaFile()) {
-                    $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-                    $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
-                }
-
                 $this->getEm()->flush();
 
                 $this->get('egzakt_system.router_invalidator')->invalidate();
