@@ -239,8 +239,6 @@ class MediaController extends BaseController
         $newMedia = clone($media);
         $newMedia->setName($media->getName() . ' - copy');
 
-        $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-        $uploadableManager->markEntityToUpload($newMedia, new MediaFileInfo($this->get('kernel')->getRootDir().'/../web'.$media->getMediaPath()));
         $this->getEm()->persist($newMedia);
         $this->getEm()->flush();
 

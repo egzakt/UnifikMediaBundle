@@ -81,4 +81,36 @@ class Video extends Media
 
         $this->{$field . 'Path'} = $pathArray[$field] . '/' . $uploadPath;
     }
+
+    /**
+     * Get Absolute Path
+     *
+     * @param string $field
+     *
+     * @return null|string
+     */
+    public function getAbsolutePath($field)
+    {
+        $this->uploadableFieldExists($field);
+
+        return null === $this->getUploadPath($field)
+            ? null
+            : $this->uploadRootDir . '/' . $this->getUploadPath($field);
+    }
+
+    /**
+     * Get Previous Upload Absolute Path
+     *
+     * @param string $field
+     *
+     * @return null|string
+     */
+    private function getPreviousUploadAbsolutePath($field)
+    {
+        $this->uploadableFieldExists($field);
+
+        return null === $this->previousUploadPaths[$field]
+            ? null
+            : $this->uploadRootDir . '/' . $this->previousUploadPaths[$field];
+    }
 }

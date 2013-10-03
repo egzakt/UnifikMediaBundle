@@ -3,11 +3,12 @@
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
 use Egzakt\SystemBundle\Lib\Backend\BaseController;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-use Egzakt\MediaBundle\Lib\MediaFileInfo;
+use Egzakt\MediaBundle\Lib\MediaFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 use Egzakt\MediaBundle\Entity\Image;
@@ -111,20 +112,32 @@ class UploadController extends BaseController
      */
     private function videoUpload(UploadedFile $file)
     {
-        $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-
         $media = new Video();
         $media->setContainer($this->container);
         $media->setMedia($file);
         $media->setName($file->getClientOriginalName());
+        $media->setMimeType($file->getClientMimeType());
+        $media->setSize($file->getClientSize());
 
         $this->getEm()->persist($media);
 
         //Generate the thumbnail
+
+        $thumbnailFile = new MediaFile($this->getVideoThumbnailPath($file));
+        $thumbnailFile = $thumbnailFile->getUploadedFile();
+
         $image = new Image();
         $image->setName("Preview - ".$file->getClientOriginalName());
         $image->setHidden(true);
         $image->setParentMedia($media);
+
+        list($width, $height, $type, $attr) = getimagesize($thumbnailFile->getRealPath());
+
+        $image->setWidth($width);
+        $image->setHeight($height);
+        $image->setMimeType($thumbnailFile->getClientMimeType());
+        $image->setAttr($attr);
+        $image->setSize($thumbnailFile->getClientSize());
 
         $this->getEm()->persist($image);
 
@@ -150,20 +163,33 @@ class UploadController extends BaseController
      */
     private function documentUpload(UploadedFile $file)
     {
-        $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-
         $media = new Document();
         $media->setContainer($this->container);
         $media->setMedia($file);
         $media->setName($file->getClientOriginalName());
+        $media->setMimeType($file->getClientMimeType());
+        $media->setSize($file->getClientSize());
 
         $this->getEm()->persist($media);
 
         //Generate the thumbnail
+
+        $thumbnailFile = new MediaFile($this->getThumbnailPath($file));
+        $thumbnailFile = $thumbnailFile->getUploadedFile();
+
         $image = new Image();
-        $image->setName("Preview - ".$file->getClientOriginalName());
+        $image->setMedia($thumbnailFile);
+        $image->setName("Preview - " . $file->getClientOriginalName());
         $image->setHidden(true);
         $image->setParentMedia($media);
+
+        list($width, $height, $type, $attr) = getimagesize($thumbnailFile->getRealPath());
+
+        $image->setWidth($width);
+        $image->setHeight($height);
+        $image->setMimeType($thumbnailFile->getClientMimeType());
+        $image->setAttr($attr);
+        $image->setSize($thumbnailFile->getClientSize());
 
         $this->getEm()->persist($image);
 

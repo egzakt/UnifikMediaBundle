@@ -51,9 +51,7 @@ class DocumentController extends BaseController
                 $media->setNeedUpdate(true);
 
                 //Update the file only if a new one has been uploaded or if the name have change
-                if ($media->getMediaFile()) {
-                    $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-                    $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
+                if ($media->getMedia()) {
 
                     $this->getEm()->remove($media->getThumbnail());
 
@@ -65,8 +63,6 @@ class DocumentController extends BaseController
 
                     $this->getEm()->persist($image);
                     $media->setThumbnail($image);
-
-                    $uploadableManager->markEntityToUpload($image, new MediaFileInfo($this->getThumbnailPath($media->getMediaFile())));
                 }
 
                 $this->getEm()->flush();
