@@ -2,10 +2,8 @@
 
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
-use Egzakt\MediaBundle\Entity\Document;
-use Egzakt\MediaBundle\Entity\Image;
+use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\MediaBundle\Form\DocumentType;
-use Egzakt\MediaBundle\Lib\MediaFileInfo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +12,8 @@ use Egzakt\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
- * Document controller
- *
- * @throws \Symfony\Bundle\FrameworkBundle\Controller\NotFoundHttpException
- *
+ * Class DocumentController
+ * @package Egzakt\MediaBundle\Controller\Backend\Media
  */
 class DocumentController extends BaseController
 {
@@ -32,7 +28,7 @@ class DocumentController extends BaseController
     public function editAction($id, Request $request)
     {
 
-        $media = $this->getEm()->getRepository('EgzaktMediaBundle:Document')->find($id);
+        $media = $this->getEm()->getRepository('EgzaktMediaBundle:Media')->find($id);
 
         if (!$media) {
             throw $this->createNotFoundException('Unable to find the media');
@@ -56,9 +52,8 @@ class DocumentController extends BaseController
                     $this->getEm()->remove($media->getThumbnail());
 
                     //Generate the thumbnail
-                    $image = new Image();
-                    $image->setName("Preview - ".$media->getMediaFile()->getClientOriginalName());
-                    $image->setHidden(true);
+                    $image = new Media();
+                    $image->setName("Preview - ".$media->getMedia()->getClientOriginalName());
                     $image->setParentMedia($media);
 
                     $this->getEm()->persist($image);

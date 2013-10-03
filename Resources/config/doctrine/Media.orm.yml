@@ -1,18 +1,7 @@
 Egzakt\MediaBundle\Entity\Media:
     type: entity
     table: null
-    inheritanceType: SINGLE_TABLE
     repositoryClass: Egzakt\MediaBundle\Entity\MediaRepository
-    discriminatorColumn:
-        name: type
-        type: string
-        length: 255
-    discriminatorMap:
-        media: Media
-        image: Image
-        video: Video
-        document: Document
-        embedvideo: EmbedVideo
     fields:
         id:
             type: integer
@@ -22,20 +11,21 @@ Egzakt\MediaBundle\Entity\Media:
         name:
             type: string
             length: 255
+        type:
+            type: string
+            length: 255
         mediaPath:
+            type: string
+            length: 255
+            nullable: true
+        url:
             type: string
             length: 255
             nullable: true
         createdAt:
             type: datetime
-            gedmo:
-                timestampable:
-                  on: create
         updatedAt:
             type: datetime
-            gedmo:
-                timestampable:
-                  on: update
         description:
             type: text
             nullable: true
@@ -46,13 +36,30 @@ Egzakt\MediaBundle\Entity\Media:
         mimeType:
             type: string
             length: 255
+            nullable: true
         size:
             type: decimal
-        hidden:
-            type: boolean
+            nullable: true
+        width:
+            type: integer
+            nullable: true
+        height:
+            type: integer
+            nullable: true
+        attr:
+            type: string
+            length: 50
+            nullable: true
     lifecycleCallbacks: {  }
     oneToOne:
         thumbnail:
-            targetEntity: Egzakt\MediaBundle\Entity\Image
+            targetEntity: Egzakt\MediaBundle\Entity\Media
             mappedBy: parentMedia
-            cascade: [persist]
+            onDelete: cascade
+        parentMedia:
+            targetEntity: Egzakt\MediaBundle\Entity\Media
+            inversedBy: thumbnail
+            joinColumn:
+                name: parentMedia
+                referencedColumnName: id
+                onDelete: cascade

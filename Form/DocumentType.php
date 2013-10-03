@@ -18,7 +18,7 @@ class DocumentType extends MediaType
         parent::setDefaultOptions($resolver);
 
         $resolver->setDefaults(array(
-            'data_class' => 'Egzakt\MediaBundle\Entity\Document'
+            'data_class' => 'Egzakt\MediaBundle\Entity\Media'
         ));
     }
 

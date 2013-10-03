@@ -1,5 +1,0 @@
-Egzakt\MediaBundle\Entity\Video:
-    type: entity
-    table: null
-    fields:
-    lifecycleCallbacks: {  }

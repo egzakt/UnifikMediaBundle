@@ -2,7 +2,7 @@
 
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
-use Egzakt\MediaBundle\Entity\Image;
+use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\MediaBundle\Form\ImageType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +28,7 @@ class ImageController extends BaseController
      */
     public function editAction($id, Request $request)
     {
-        $media = $this->getEm()->getRepository('EgzaktMediaBundle:Image')->find($id);
+        $media = $this->getEm()->getRepository('EgzaktMediaBundle:Media')->find($id);
 
         if (!$media) {
             throw $this->createNotFoundException('Unable to find the media');
@@ -77,8 +77,8 @@ class ImageController extends BaseController
      */
     public function updateImageAction($id, Request $request)
     {
-        /** @var Image $image */
-        $image = $this->getEm()->getRepository('EgzaktMediaBundle:Image')->find($id);
+        /** @var Media $image */
+        $image = $this->getEm()->getRepository('EgzaktMediaBundle:Media')->find($id);
 
         if (!$image) {
             throw $this->createNotFoundException('Unable to find the Media Entity');
@@ -105,10 +105,4 @@ class ImageController extends BaseController
 
         return new JsonResponse(array());
     }
-
-    public function closePixlrAction()
-    {
-        return $this->render('EgzaktMediaBundle:Backend/Media/Image:close_pixlr.html.twig');
-    }
-
 }

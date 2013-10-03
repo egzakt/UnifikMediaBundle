@@ -2,19 +2,13 @@
 
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
-use Egzakt\SystemBundle\Lib\Backend\BaseController;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
-
-use Egzakt\MediaBundle\Lib\MediaFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
-use Egzakt\MediaBundle\Entity\Image;
-use Egzakt\MediaBundle\Entity\Document;
-use Egzakt\MediaBundle\Entity\Video;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Egzakt\SystemBundle\Lib\Backend\BaseController;
+use Egzakt\MediaBundle\Lib\MediaFile;
+use Egzakt\MediaBundle\Entity\Media;
 
 /**
  * Upload Controller
@@ -76,7 +70,8 @@ class UploadController extends BaseController
      */
     private function imageUpload(UploadedFile $file)
     {
-        $media = new Image();
+        $media = new Media();
+        $media->setType('image');
         $media->setMedia($file);
         $media->setName($file->getClientOriginalName());
 
@@ -110,7 +105,8 @@ class UploadController extends BaseController
      */
     private function videoUpload(UploadedFile $file)
     {
-        $media = new Video();
+        $media = new Media();
+        $media->setType('video');
         $media->setContainer($this->container);
         $media->setMedia($file);
         $media->setName($file->getClientOriginalName());
@@ -124,9 +120,10 @@ class UploadController extends BaseController
         $thumbnailFile = new MediaFile($this->getVideoThumbnailPath($file));
         $thumbnailFile = $thumbnailFile->getUploadedFile();
 
-        $image = new Image();
+        $image = new Media();
+        $image->setType('image');
         $image->setName("Preview - ".$file->getClientOriginalName());
-        $image->setHidden(true);
+        $image->setMedia($thumbnailFile);
         $image->setParentMedia($media);
 
         list($width, $height, $type, $attr) = getimagesize($thumbnailFile->getRealPath());
@@ -161,7 +158,8 @@ class UploadController extends BaseController
      */
     private function documentUpload(UploadedFile $file)
     {
-        $media = new Document();
+        $media = new Media();
+        $media->setType('document');
         $media->setContainer($this->container);
         $media->setMedia($file);
         $media->setName($file->getClientOriginalName());
@@ -175,10 +173,10 @@ class UploadController extends BaseController
         $thumbnailFile = new MediaFile($this->getThumbnailPath($file));
         $thumbnailFile = $thumbnailFile->getUploadedFile();
 
-        $image = new Image();
+        $image = new Media();
+        $image->setType('image');
         $image->setMedia($thumbnailFile);
         $image->setName("Preview - " . $file->getClientOriginalName());
-        $image->setHidden(true);
         $image->setParentMedia($media);
 
         list($width, $height, $type, $attr) = getimagesize($thumbnailFile->getRealPath());
@@ -217,16 +215,16 @@ class UploadController extends BaseController
             case 'application/pdf':
                 return $this->createPdfPreview($file->getPathname());
             case 'application/msword':
-                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png', '/tmp/word-icon.png');
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/word-icon.png', '/tmp/word-icon.png');
                 return '/tmp/word-icon.png';
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png', '/tmp/word-icon.png');
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/word-icon.png', '/tmp/word-icon.png');
                 return '/tmp/word-icon.png';
             case 'application/vnd.oasis.opendocument.text':
-                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/writer-icon.jpg', '/tmp/writer-icon.jpg');
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/writer-icon.jpg', '/tmp/writer-icon.jpg');
                 return '/tmp/writer-icon.jpg';
             default:
-                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/file-icon.png', '/tmp/file-icon.png');
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/file-icon.png', '/tmp/file-icon.png');
                 return '/tmp/file-icon.png';
         }
     }
@@ -241,7 +239,7 @@ class UploadController extends BaseController
     {
         switch ($file->getMimeType()) {
             default:
-                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/video-icon.png', '/tmp/video-icon.png');
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/video-icon.png', '/tmp/video-icon.png');
                 return '/tmp/video-icon.png';
         }
     }
@@ -262,7 +260,7 @@ class UploadController extends BaseController
             }
         }
 
-        copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/pdf-icon.png', '/tmp/pdf-icon.png');
+        copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/pdf-icon.png', '/tmp/pdf-icon.png');
         return '/tmp/pdf-icon.png';
     }
 }

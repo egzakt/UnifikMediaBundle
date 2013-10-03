@@ -12,15 +12,21 @@ use Egzakt\SystemBundle\Lib\BaseEntityRepository;
  */
 class MediaRepository extends BaseEntityRepository
 {
+    /**
+     * Get Media by type
+     *
+     * @param $type
+     * @return mixed
+     */
     public function findByType($type)
     {
         $type = ucfirst($type);
         $qb = $this->createQueryBuilder('m')
-            ->select('m,mt')
-            ->leftJoin('m.thumbnail', 'mt')
-            //The discriminator is not an accessible field, we have to use INSTANCE OF
-            ->andWhere('m INSTANCE OF :type')
-            ->andWhere('m.hidden = false')
+            ->select('m')
+
+            ->andWhere('m.type = :type')
+            ->andWhere('m.parentMedia IS NULL')
+
             ->setParameter('type', $type);
 
         return $this->processQuery($qb);

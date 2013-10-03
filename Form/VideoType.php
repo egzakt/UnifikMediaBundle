@@ -18,7 +18,7 @@ class VideoType extends MediaType
         parent::setDefaultOptions($resolver);
 
         $resolver->setDefaults(array(
-            'data_class' => 'Egzakt\MediaBundle\Entity\Video'
+            'data_class' => 'Egzakt\MediaBundle\Entity\Media'
         ));
     }
 

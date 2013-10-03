@@ -2,10 +2,8 @@
 
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
-use Egzakt\MediaBundle\Entity\EmbedVideo;
-use Egzakt\MediaBundle\Entity\Image;
+use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\MediaBundle\Form\EmbedVideoType;
-use Egzakt\MediaBundle\Lib\MediaFileInfo;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -15,12 +13,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Egzakt\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Egzakt\MediaBundle\Lib\MediaParserInterface;
+use Egzakt\MediaBundle\Lib\MediaFile;
 
 /**
- * EmbedVideo Controller
- *
- * @throws \Symfony\Bundle\FrameworkBundle\Controller\NotFoundHttpException
- *
+ * Class EmbedVideoController
+ * @package Egzakt\MediaBundle\Controller\Backend\Media
  */
 class EmbedVideoController extends BaseController
 {
@@ -48,8 +45,8 @@ class EmbedVideoController extends BaseController
             ));
         }
 
-        $video = new EmbedVideo();
-
+        $video = new Media();
+        $video->setType('embedvideo');
         $video->setUrl($request->get('video_url'));
         $video->setName($request->get('video_url'));
         $video->setMimeType('EmbedVideo');
@@ -76,7 +73,7 @@ class EmbedVideoController extends BaseController
      */
     public function editAction($id, Request $request)
     {
-        $media = $this->getEm()->getRepository('EgzaktMediaBundle:EmbedVideo')->find($id);
+        $media = $this->getEm()->getRepository('EgzaktMediaBundle:Media')->find($id);
 
         if (!$media) {
             throw $this->createNotFoundException('Unanble to find the media');
@@ -134,8 +131,7 @@ class EmbedVideoController extends BaseController
         ));
     }
 
-
-    public function updateThumbnail(EmbedVideo $video, MediaParserInterface $mediaParser)
+    public function updateThumbnail(Media $video, MediaParserInterface $mediaParser)
     {
         //The file needs to be download from a remote server and stored temporary on the server to allow doctrine extension to handle it properly
         $tempFile = '/tmp/' . uniqid('EmbedVideoThumbnail-') . '.jpg';
@@ -148,22 +144,22 @@ class EmbedVideoController extends BaseController
 
         file_put_contents($tempFile, file_get_contents($thumbnailUrl));
 
+        $thumbnailFile = new MediaFile($tempFile);
+        $thumbnailFile = $thumbnailFile->getUploadedFile();
+
         if ($video->getThumbnail()) {
             $this->getEm()->remove($video->getThumbnail());
         }
 
         //Generate the thumbnail
-        $image = new Image();
+        $image = new Media();
+        $image->setType('image');
         $image->setName("Preview - " . $video->getName());
-        $image->setHidden(true);
+        $image->setMedia($thumbnailFile);
         $image->setParentMedia($video);
 
         $this->getEm()->persist($image);
 
         $video->setThumbnail($image);
-
-        $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-        $uploadableManager->markEntityToUpload($image, new MediaFileInfo($tempFile));
     }
-
 }

@@ -2,17 +2,15 @@
 
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
-use Egzakt\MediaBundle\Entity\Media;
-use Egzakt\MediaBundle\Lib\MediaFileInfo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Egzakt\MediaBundle\Entity\Media;
 use Egzakt\SystemBundle\Lib\Backend\BaseController;
 use Egzakt\MediaBundle\Entity\MediaRepository;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Egzakt\MediaBundle\Lib\MediaPager;
 
 /**
@@ -258,7 +256,7 @@ class MediaController extends BaseController
             $type = $request->query->get('type');
 
             if ("all" == $type) {
-                $medias = $this->mediaRepository->findByHidden(false);
+                $medias = $this->mediaRepository->findByParentMedia(null);
                 $mediaType = array('image', 'video', 'document', 'embedvideo');
             } else {
                 $medias = $this->mediaRepository->findByType($type);
@@ -293,14 +291,6 @@ class MediaController extends BaseController
      */
     public static function getAssociatedContents(Media $media, ContainerInterface $container)
     {
-        $ignoreClass = array(
-            'Egzakt\MediaBundle\Entity\Media',
-            'Egzakt\MediaBundle\Entity\Image',
-            'Egzakt\MediaBundle\Entity\Document',
-            'Egzakt\MediaBundle\Entity\Video',
-            'Egzakt\MediaBundle\Entity\EmbedVideo'
-        );
-
         $em = $container->get('doctrine')->getManager();
 
         $metadataFactory = $em->getMetadataFactory();
@@ -313,7 +303,7 @@ class MediaController extends BaseController
 
         /* @var $classMetadata ClassMetadata */
         foreach ($metadata as $classMetadata) {
-            if (false == in_array($classMetadata->getName(), $ignoreClass)) {
+            if ('Egzakt\MediaBundle\Entity\Media' != $classMetadata->getName()) {
                 foreach ($classMetadata->getAssociationMappings() as $association) {
 
                     if ('Egzakt\MediaBundle\Entity\Media' == $association['targetEntity']) {

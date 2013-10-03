@@ -37,10 +37,6 @@ egzakt_media_backend_image_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }
 
-egzakt_media_backend_image_close_pixlr:
-    pattern:  /close-pixlr
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:closePixlr" }
-
 # Document
 egzakt_media_backend_document_edit:
     pattern:  /document/{id}/edit

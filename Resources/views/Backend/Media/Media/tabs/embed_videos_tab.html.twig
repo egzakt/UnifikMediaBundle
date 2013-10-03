@@ -53,6 +53,7 @@
                 error: function(){
                     $('#ajax_loader').hide();
                     alert('{% trans %}An internal error occured{% endtrans %}');
+                    $('#embed_ajax_loader').hide();
                 }
             });
 

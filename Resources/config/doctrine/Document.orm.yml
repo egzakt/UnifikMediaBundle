@@ -1,4 +1,0 @@
-Egzakt\MediaBundle\Entity\Document:
-    type: entity
-    table: null
-    lifecycleCallbacks: {  }

@@ -3,17 +3,18 @@
 namespace Egzakt\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
-use Egzakt\SystemBundle\Lib\BaseEntity;
-
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-
+use Egzakt\SystemBundle\Lib\BaseEntity;
+use Egzakt\DoctrineBehaviorsBundle\Model as EgzaktORMBehaviors;
 
 /**
  * Media
  */
 class Media extends BaseEntity
 {
+
+    use EgzaktORMBehaviors\Uploadable\Uploadable;
+    use EgzaktORMBehaviors\Timestampable\Timestampable;
 
     /**
      * @var integer
@@ -41,14 +42,9 @@ class Media extends BaseEntity
     protected $mediaPath;
 
     /**
-     * @var \DateTime
+     * @var string
      */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     */
-    protected $updatedAt;
+    protected $url;
 
     /**
      * @var string
@@ -71,7 +67,27 @@ class Media extends BaseEntity
     protected $size;
 
     /**
-     * @var Image
+     * @var integer
+     */
+    private $width;
+
+    /**
+     * @var integer
+     */
+    private $height;
+
+    /**
+     * @var string
+     */
+    private $attr;
+
+    /**
+     * @var Media
+     */
+    private $parentMedia;
+
+    /**
+     * @var Media
      */
     private $thumbnail;
 
@@ -83,58 +99,11 @@ class Media extends BaseEntity
     protected $needUpdate = false;
 
     /**
-     * Internal field used to hide the media from the list in certain case
-     * @var boolean
-     */
-    protected  $hidden;
-
-    public function __construct()
-    {
-        //The default type is media
-        $this->type = "media";
-        $this->hidden = false;
-    }
-
-    /**
      * @return string
      */
     public function __toString()
     {
-        if(false == $this->id)
-            return "New media";
-        if($this->name)
-            return $this->name;
-        return '';
-    }
-
-    /**
-     * Get the backend route
-     * @param string $action
-     * @return string
-     */
-    public function getRouteBackend($action = null)
-    {
-        if ('list' === $action)
-            return 'egzakt_media_backend_media';
-        return 'egzakt_media_backend_media';
-    }
-
-    /**
-     * Get Backend route params
-     *
-     * @param array $params Array of params to get
-     *
-     * @return array
-     */
-    public function getRouteBackendParams($params = array())
-    {
-        $defaults = array(
-            'id' => $this->id ? $this->id : 0
-        );
-
-        $params = array_merge($defaults, $params);
-
-        return $params;
+        return ($this->name) ?: 'New media' ;
     }
 
     /**
@@ -174,26 +143,30 @@ class Media extends BaseEntity
      * Set type
      *
      * @param string $type
-     * @return Media
      */
     public function setType($type)
     {
         $this->type = $type;
-    
-        return $this;
     }
 
     /**
-     * Get the media type
-     * It needs to be hardcoded becauseDoctrine does not allow to get the discriminator field
+     * Get type
      *
      * @return string 
      */
     public function getType()
     {
-        return 'media';
+        return $this->type;
     }
 
+    /**
+     * Set the media path
+     * @param $path
+     */
+    public function setMediaPath($path)
+    {
+        $this->mediaPath = $path;
+    }
 
     /**
      * Get mediaPath
@@ -207,16 +180,37 @@ class Media extends BaseEntity
             return $this->container->get('kernel')->getRootDir().'/../web/uploads/' . $this->mediaPath;
         }
 
-        return 'uploads/' . $this->mediaPath;
+        $testweb = $this->getWebPath('media');
+        $testabsolute = $this->getAbsolutePath('media');
+        $testupload = $this->getUploadPath('media');
+        $testroot = $this->getUploadRootDir('media');
+
+        switch ($this->type) {
+            case 'embedvideo':
+                return $this->mediaPath;
+            default:
+                return 'uploads/' . $this->mediaPath;
+        }
     }
 
     /**
-     * Set the media path
-     * @param $path
+     * Set url
+     *
+     * @param string $url
      */
-    public function setMediaPath($path)
+    public function setUrl( $url )
     {
-        $this->mediaPath = $path;
+        $this->url = $url;
+    }
+
+    /**
+     * Get url
+     *
+     * @return string
+     */
+    public function getUrl()
+    {
+        return $this->url;
     }
 
     /**
@@ -240,62 +234,13 @@ class Media extends BaseEntity
     }
 
     /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     * @return Media
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime 
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return Media
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-    
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime 
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
      * Set description
      *
      * @param string $description
-     * @return Media
      */
     public function setDescription($description)
     {
         $this->description = $description;
-    
-        return $this;
     }
 
     /**
@@ -309,16 +254,13 @@ class Media extends BaseEntity
     }
 
     /**
-     * Set title
+     * Set caption
      *
-     * @param string $title
-     * @return Media
+     * @param string $caption
      */
     public function setCaption($caption)
     {
         $this->caption = $caption;
-    
-        return $this;
     }
 
     /**
@@ -375,36 +317,63 @@ class Media extends BaseEntity
     }
 
     /**
-     * Set hidden
+     * Set width
      *
-     * @param boolean $hidden
-     * @return Media
+     * @param $width
      */
-    public function setHidden($hidden)
+    public function setWidth($width)
     {
-        $this->hidden = $hidden;
-    
-        return $this;
+        $this->width = $width;
     }
 
     /**
-     * Get hidden
+     * Get width
      *
-     * @return boolean 
+     * @return int
      */
-    public function getHidden()
+    public function getWidth()
     {
-        return $this->hidden;
+        return $this->width;
     }
 
-    public function getReplaceRegex()
+    /**
+     * Set height
+     *
+     * @param $height
+     */
+    public function setHeight($height)
     {
-        return '';
+        $this->height = $height;
     }
 
-    public function getReplaceUrl()
+    /**
+     * Get height
+     *
+     * @return int
+     */
+    public function getHeight()
     {
-        return '';
+        return $this->height;
+    }
+
+    /**
+     * Set attr
+     *
+     * @param $attr
+     */
+    public function setAttr($attr)
+    {
+        $this->attr = $attr;
+    }
+
+    /**
+     * Get attr
+     *
+     * @return string
+     */
+    public function getAttr()
+    {
+        return $this->attr;
     }
 
     /**
@@ -428,12 +397,31 @@ class Media extends BaseEntity
     }
 
     /**
+     * setParentMedia
+     *
+     * @param Media $parentMedia
+     */
+    public function setParentMedia(Media $parentMedia)
+    {
+        $this->parentMedia = $parentMedia;
+    }
+
+    /**
+     * getParentMedia
+     *
+     * @return Media
+     */
+    public function getParentMedia()
+    {
+        return $this->parentMedia;
+    }
+
+    /**
      * Set thumbnail
      *
-     * @param \Egzakt\MediaBundle\Entity\Image $thumbnail
-     * @return Document
+     * @param \Egzakt\MediaBundle\Entity\Media $thumbnail
      */
-    public function setThumbnail(Image $thumbnail = null)
+    public function setThumbnail(Media $thumbnail = null)
     {
         $this->thumbnail = $thumbnail;
     }
@@ -441,10 +429,14 @@ class Media extends BaseEntity
     /**
      * Get thumbnail
      *
-     * @return \Egzakt\MediaBundle\Entity\Image
+     * @return \Egzakt\MediaBundle\Entity\Media
      */
     public function getThumbnail()
     {
+        if ('image' == $this->type) {
+            return $this;
+        }
+
         return $this->thumbnail;
     }
 
@@ -454,15 +446,92 @@ class Media extends BaseEntity
      */
     public function getThumbnailUrl()
     {
+        if ('image' == $this->type) {
+            return $this->getMediaPath();
+        }
+
         return $this->thumbnail->getMediaPath();
     }
 
     /**
+     * Get Backend Route
+     *
+     * @param string $action
+     * @return string
+     */
+    public function getRouteBackend($action = 'edit')
+    {
+        if ('list' === $action) {
+            return 'egzakt_media_backend_media';
+        }
+
+        switch ($this->type) {
+            case 'image':
+                return 'egzakt_media_backend_image_' . $action;
+            case 'video':
+                return 'egzakt_media_backend_video_' . $action;
+            case 'embedvideo':
+                return 'egzakt_media_backend_embed_video_' . $action;
+            default:
+                return 'egzakt_media_backend_document_' . $action;
+        }
+    }
+
+    /**
+     * Get Backend route params
+     *
+     * @param array $params Array of params to get
+     *
+     * @return array
+     */
+    public function getRouteBackendParams($params = array())
+    {
+        $defaults = array(
+            'id' => $this->id ? $this->id : 0
+        );
+
+        $params = array_merge($defaults, $params);
+
+        return $params;
+    }
+
+    /**
+     * getReplaceUrl
+     *
+     * @return string
+     */
+    public function getReplaceUrl()
+    {
+        return $this->getMediaPath();
+    }
+
+    /**
+     * Get Replacement Regex
+     *
+     * @return string
+     */
+    public function getReplaceRegex()
+    {
+        switch ($this->type) {
+            case 'image':
+                return sprintf('/(<img [^>]*data-mediaid="%d"[^>]*src=")[^>]+("[^>]*>)/', $this->getId());
+            case 'video':
+                return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=")[^>]+("[^>]*><\/iframe>)/', $this->getId());
+            case 'embedVideo':
+                return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=")[^>]+("[^>]*><\/iframe>)/', $this->getId());
+            default:
+                return sprintf('/(<a [^>]*data-mediaid="%d"[^>]*href=")[^>]+("[^>]*>)[^<]+(<\/a>)/', $this->getId());
+        }
+    }
+
+    /**
      * Serialize the media to an array
+     *
+     * @return array
      */
     public function toArray()
     {
-        return array(
+        $base = array(
             'name' => $this->getName(),
             'id' => $this->getId(),
             'type' => $this->getType(),
@@ -473,6 +542,27 @@ class Media extends BaseEntity
             'size' => $this->size,
             'caption' => $this->caption
         );
+
+        switch ($this->type) {
+            case 'image':
+                return array_merge(
+                    $base,
+                    array(
+                        'width' => $this->width,
+                        'height' => $this->height,
+                        'attr' => $this->attr
+                    )
+                );
+            case 'embedvideo':
+                return array_merge(
+                    $base,
+                    array(
+                        'embedUrl' => $this->getMediaPath()
+                    )
+                );
+            default:
+                return $base;
+        }
     }
 
     /**
@@ -487,5 +577,82 @@ class Media extends BaseEntity
         return [
             'media' => 'medias' . '/' . $date->format('Y') . '/' . $date->format('F')
         ];
+    }
+
+    /**
+     * Set Upload Path OVERLOAD
+     *
+     * @param $field
+     * @param $uploadPath
+     */
+    public function setUploadPath($field, $uploadPath)
+    {
+        $this->uploadableFieldExists($field);
+
+        $this->{$field . 'Path'} = $this->getUploadableFields()[$field] . '/' . $uploadPath;
+    }
+
+    /**
+     * Get Absolute Path OVERLOAD
+     *
+     * @param string $field
+     *
+     * @return null|string
+     */
+    public function getAbsolutePath($field)
+    {
+        $this->uploadableFieldExists($field);
+
+        return null === $this->getUploadPath($field)
+            ? null
+            : $this->uploadRootDir . '/' . $this->getUploadPath($field);
+    }
+
+    /**
+     * Get Previous Upload Absolute Path OVERLOAD
+     *
+     * @param string $field
+     *
+     * @return null|string
+     */
+    private function getPreviousUploadAbsolutePath($field)
+    {
+        $this->uploadableFieldExists($field);
+
+        return null === $this->previousUploadPaths[$field]
+            ? null
+            : $this->uploadRootDir . '/' . $this->previousUploadPaths[$field];
+    }
+
+    /**
+     * Get Web Path
+     *
+     * @param string $field
+     *
+     * @return null|string
+     */
+    public function getWebPath($field)
+    {
+        $this->uploadableFieldExists($field);
+
+        return null === $this->getUploadPath($field)
+            ? null
+            : '/uploads/' . $this->getUploadPath($field);
+    }
+
+    /**
+     * Get Upload Root Dir
+     *
+     * @param string $field
+     *
+     * @return string
+     */
+    public function getUploadRootDir($field)
+    {
+        $this->uploadableFieldExists($field);
+
+        // the absolute directory path where uploaded
+        // documents should be saved
+        return $this->uploadRootDir . '/' . $this->getUploadableFields()[$field];
     }
 }

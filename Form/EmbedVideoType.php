@@ -20,7 +20,7 @@ class EmbedVideoType extends MediaType
         parent::setDefaultOptions($resolver);
 
         $resolver->setDefaults(array(
-            'data_class' => 'Egzakt\MediaBundle\Entity\EmbedVideo'
+            'data_class' => 'Egzakt\MediaBundle\Entity\Media'
         ));
     }
 

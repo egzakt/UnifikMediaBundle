@@ -2,7 +2,6 @@
 
 namespace Egzakt\MediaBundle\Controller\Backend\Media;
 
-use Egzakt\MediaBundle\Entity\Video;
 use Egzakt\MediaBundle\Form\VideoType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,10 +10,9 @@ use Egzakt\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
- * Video Controller
+ * Class VideoController
  *
- * @throws \Symfony\Bundle\FrameworkBundle\Controller\NotFoundHttpException
- *
+ * @package Egzakt\MediaBundle\Controller\Backend\Media
  */
 class VideoController extends BaseController
 {
@@ -29,7 +27,7 @@ class VideoController extends BaseController
     public function editAction($id, Request $request)
     {
 
-        $media = $this->getEm()->getRepository('EgzaktMediaBundle:Video')->find($id);
+        $media = $this->getEm()->getRepository('EgzaktMediaBundle:Media')->find($id);
 
         if (!$media) {
             throw $this->createNotFoundException('Unable to find the media');
@@ -45,9 +43,7 @@ class VideoController extends BaseController
                 $this->getEm()->persist($media);
 
                 //Update the file only if a new one has been uploaded
-                if ($media->getMediaFile()) {
-                    $uploadableManager = $this->get('stof_doctrine_extensions.uploadable.manager');
-                    $uploadableManager->markEntityToUpload($media, $media->getMediaFile());
+                if ($media->getMedia()) {
                     $media->setNeedUpdate(true);
                 }
 
