@@ -30,8 +30,6 @@ class UploadController extends BaseController
      */
     public function uploadAction(Request $request)
     {
-
-
         if ($request->isXmlHttpRequest() && ( $request->files->has('files') )) {
 
             if ("POST" == $request->getMethod()) {
@@ -219,13 +217,17 @@ class UploadController extends BaseController
             case 'application/pdf':
                 return $this->createPdfPreview($file->getPathname());
             case 'application/msword':
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png';
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png', '/tmp/word-icon.png');
+                return '/tmp/word-icon.png';
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png';
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png', '/tmp/word-icon.png');
+                return '/tmp/word-icon.png';
             case 'application/vnd.oasis.opendocument.text':
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/writer-icon.jpg';
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/writer-icon.jpg', '/tmp/writer-icon.jpg');
+                return '/tmp/writer-icon.jpg';
             default:
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/file-icon.png';
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/file-icon.png', '/tmp/file-icon.png');
+                return '/tmp/file-icon.png';
         }
     }
 
@@ -239,7 +241,8 @@ class UploadController extends BaseController
     {
         switch ($file->getMimeType()) {
             default:
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/video-icon.png';
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/video-icon.png', '/tmp/video-icon.png');
+                return '/tmp/video-icon.png';
         }
     }
 
@@ -259,6 +262,7 @@ class UploadController extends BaseController
             }
         }
 
-        return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/pdf-icon.png';
+        copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/pdf-icon.png', '/tmp/pdf-icon.png');
+        return '/tmp/pdf-icon.png';
     }
 }
