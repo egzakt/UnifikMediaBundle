@@ -189,7 +189,7 @@ class Media extends BaseEntity
             case 'embedvideo':
                 return $this->mediaPath;
             default:
-                return 'uploads/' . $this->mediaPath;
+                return '/uploads/' . $this->mediaPath;
         }
     }
 
@@ -521,47 +521,6 @@ class Media extends BaseEntity
                 return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=")[^>]+("[^>]*><\/iframe>)/', $this->getId());
             default:
                 return sprintf('/(<a [^>]*data-mediaid="%d"[^>]*href=")[^>]+("[^>]*>)[^<]+(<\/a>)/', $this->getId());
-        }
-    }
-
-    /**
-     * Serialize the media to an array
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        $base = array(
-            'name' => $this->getName(),
-            'id' => $this->getId(),
-            'type' => $this->getType(),
-            'path' => $this->container->get('liip_imagine.cache.manager')->getBrowserPath($this->getThumbnailUrl(), 'media_thumb'),
-            'pathLarge' => $this->container->get('liip_imagine.cache.manager')->getBrowserPath($this->getThumbnailUrl(), 'media_thumb_large'),
-            'mediaUrl' => $this->getMediaPath(),
-            'editLink' =>  $this->container->get('router')->generate($this->getRouteBackend(), $this->getRouteBackendParams()),
-            'size' => $this->size,
-            'caption' => $this->caption
-        );
-
-        switch ($this->type) {
-            case 'image':
-                return array_merge(
-                    $base,
-                    array(
-                        'width' => $this->width,
-                        'height' => $this->height,
-                        'attr' => $this->attr
-                    )
-                );
-            case 'embedvideo':
-                return array_merge(
-                    $base,
-                    array(
-                        'embedUrl' => $this->getMediaPath()
-                    )
-                );
-            default:
-                return $base;
         }
     }
 

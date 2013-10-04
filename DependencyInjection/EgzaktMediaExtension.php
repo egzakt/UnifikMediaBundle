@@ -27,6 +27,7 @@ class EgzaktMediaExtension extends Extension implements PrependExtensionInterfac
         $loader->load('services.yml');
 
         $container->setParameter('egzakt_media.resultPerPage', $config['resultPerPage']);
+        $container->setParameter('egzakt_media.media_select.resultPerPage', $config['media_select']['resultPerPage']);
     }
 
     /**

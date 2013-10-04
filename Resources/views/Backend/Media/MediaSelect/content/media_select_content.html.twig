@@ -1,0 +1,57 @@
+{% spaceless %}
+    <div class="item_wrapper">
+        {% for media in medias %}
+            <div id="item_{{ media.id }}" class="media media_{{ media.type }}"
+                 data-media-id="{{ media.id }}"
+                 data-media-name="{{ media.name }}"
+                 data-media-type="{{ media.type }}"
+                 data-media-preview="{{ media.thumbnail.mediaPath }}"
+                 data-media-url="{{ media.mediaPath }}"
+                 data-media-edit="{{ path(media.getRouteBackend(), media.getRouteBackendParams()) }}"
+                 data-media-size="{{ media.size }}"
+                 data-media-caption="{{ media.caption }}"
+                    {% if 'image' == media.type %}
+                data-media-width="{{ media.width }}"
+                data-media-height="{{ media.height }}"
+                    {% endif %}>
+
+                <img src="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb', true) ~ '?' ~ random(9999)}}" title="{{ media.name }}">
+
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if medias|length > 0 %}
+        <div id="pager_wrapper">
+            <div id="{{ type }}_pager">
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            $('#{{ type }}_pager').pagination({
+                pages: {{ pagesTotal }},
+                currentPage: {{ page }},
+                cssStyle: 'light-theme',
+                onPageClick: function(pageNumber, event){
+
+                    event.preventDefault();
+
+                    $('#loading').show();
+
+                    $.ajax({
+                        method: "GET",
+                        url: Routing.generate('egzakt_media_backend_media_select_pager'),
+                        data: {page: pageNumber, type: '{{ type }}', view: '{{ view }}'},
+                        contentType: 'json',
+                        success: function(data) {
+                            $('#media_list div.{{ type }}').html($(data.html));
+                            $('#loading').hide();
+                        }
+                    });
+                }
+            });
+        </script>
+    {% endif %}
+
+{% endspaceless %}
+

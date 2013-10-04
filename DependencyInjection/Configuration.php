@@ -40,6 +40,19 @@ class Configuration implements ConfigurationInterface
                     ->max(100)
                     ->info("Number of items displayed per page.")
                 ->end()
+
+            ->arrayNode('media_select')
+                ->addDefaultsIfNotSet()
+                ->children()
+                    ->integerNode('resultPerPage')
+                        ->defaultValue(30)
+                        ->min(1)
+                        ->max(100)
+                        ->info("Number of items displayed per page in media select dialog.")
+                    ->end()
+                ->end()
+            ->end()
+
             ->end();
     }
 }

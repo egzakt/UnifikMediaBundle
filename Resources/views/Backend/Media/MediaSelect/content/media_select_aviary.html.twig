@@ -1,0 +1,41 @@
+{% spaceless %}
+    <img id='aviary_image'/>
+    <img id="aviary_ajax_loader" src="{{ asset('bundles/egzaktmedia/backend/images/ajax-loader.gif') }}">
+    <p><input id="edit-aviary" type='image' src='http://images.aviary.com/images/edit-photo.png' value='Edit photo' /></p>
+    <input type="hidden" id="aviary_path">
+
+    <script type='text/javascript'>
+        var featherEditor = new Aviary.Feather({
+            apiKey: 'i3kui99ayvje8cix',
+            apiVersion: 2,
+            maxSize: 800, // Output image size (default 800x800 px)
+            displayImageSize: true,
+            tools: 'draw,text,enhance,frames,effects,stickers,crop,resize,warmth,orientation,brightness,focus,warmth,contrast,saturation,sharpness,splash,whiten,redeye,blemish',
+            appendTo: '',
+            onSave: function(imageID, newURL) {
+                $('#aviary_ajax_loader').show();
+                var img = $('#'+imageID);
+                $.get($('#aviary_path').val(), {
+                    image: newURL
+                }, function(data){
+                    img.fadeOut();
+                    img.removeClass();
+                    img.attr('src', img.attr('src')+"?"+new Date().getTime());
+                    $('#aviary_ajax_loader').hide();
+                    img.fadeIn();
+                });
+            },
+            onError: function(errorObj) {
+                alert(errorObj.message);
+            }
+        });
+        function launchEditor(id, src) {
+            featherEditor.launch({
+                image: id
+            });
+            return false;
+        }
+    </script>
+
+    <div id='injection_site'></div>
+{% endspaceless %}

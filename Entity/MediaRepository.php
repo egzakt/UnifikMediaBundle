@@ -13,6 +13,19 @@ use Egzakt\SystemBundle\Lib\BaseEntityRepository;
 class MediaRepository extends BaseEntityRepository
 {
     /**
+     * Get All Uploaded Media
+     *
+     * @return array|mixed
+     */
+    public function findAll()
+    {
+        $qb = $this->createQueryBuilder('m')
+            ->where('m.parentMedia IS NULL');
+
+        return $this->processQuery($qb);
+    }
+
+    /**
      * Get Media by type
      *
      * @param $type
@@ -20,9 +33,7 @@ class MediaRepository extends BaseEntityRepository
      */
     public function findByType($type)
     {
-        $type = ucfirst($type);
         $qb = $this->createQueryBuilder('m')
-            ->select('m')
 
             ->andWhere('m.type = :type')
             ->andWhere('m.parentMedia IS NULL')

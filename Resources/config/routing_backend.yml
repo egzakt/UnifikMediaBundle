@@ -7,9 +7,9 @@ egzakt_media_backend_media_pager:
     pattern:  /media/page
     defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:mediaPager" }
 
-egzakt_media_backend_media_list_ajax:
-    pattern:  /media/select
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:listAjax" }
+egzakt_media_backend_media_select_pager:
+    pattern:  /media-select-pager
+    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:mediaSelectPager" }
     options:
         expose: true
 

@@ -13,6 +13,7 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
                         loader1.addStyle('blueimpgallery', 'http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css');
                         loader1.addStyle('blueimpuploader', '/bundles/egzaktmedia/backend/css/blueimp/jquery.fileupload-ui.css');
                         loader1.addStyle('egzaktmediastyle', '/bundles/egzaktmedia/backend/css/media_select.css');
+                        loader1.addStyle('simplepaginationstyle', '/bundles/egzaktmedia/backend/css/simplePagination.css');
 
 
                         loader1.addScript('blueimptmpl', 'http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js');
@@ -21,6 +22,8 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
                         loader1.addScript('blueimpgallery', 'http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js');
                         loader1.addScript('blueimptransport', '/bundles/egzaktmedia/backend/js/blueimp/jquery.iframe-transport.js');
                         loader1.addScript('blueimpfileupload', '/bundles/egzaktmedia/backend/js/blueimp/jquery.fileupload.js');
+                        loader1.addScript('simplepagination', '/bundles/egzaktmedia/backend/js/jquery.simplePagination.js');
+                        loader1.addScript('aviary', 'http://feather.aviary.com/js/feather.js');
 
                         loader1.load(function(){
 
@@ -42,13 +45,12 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
                                 loader3.addScript('egzaktmediascript', '/bundles/egzaktmedia/backend/js/media_select.js');
 
                                 loader3.load(function(){
-                                    $.mediaManager();
-                                    $.mediaManager.loadCk(editor);
+                                    mediaManagerLoadCk(editor);
                                 });
                             });
                         });
                     }else{
-                        $.mediaManager.loadCk(editor);
+                        mediaManagerLoadCk(editor);
                     }
                 });
 
@@ -69,16 +71,16 @@ CKEDITOR.plugins.add('egzaktmediamanager', {
     insertMedia: function( editor, media ) {
         switch (media.type){
             case 'image':
-                editor.insertHtml('<img data-mediaid="' + media.id + '" src="'+ media.mediaUrl + '">');
+                editor.insertHtml('<img data-mediaid="' + media.id + '" src="'+ media.url + '">');
                 break;
             case 'document':
-                editor.insertHtml('<a data-mediaid="' + media.id + '" href="' + media.mediaUrl + '">' + media.name + '</a>' );
+                editor.insertHtml('<a data-mediaid="' + media.id + '" href="' + media.url + '">' + media.name + '</a>' );
                 break;
             case 'video':
-                editor.insertHtml('<iframe data-mediaid="' + media.id + '" width="560" height="315" frameborder="0"  allowfullscreen src="' + media.mediaUrl + '"></iframe>');
+                editor.insertHtml('<iframe data-mediaid="' + media.id + '" width="560" height="315" frameborder="0"  allowfullscreen src="' + media.url + '"></iframe>');
                 break;
             case 'embedvideo':
-                editor.insertHtml('<iframe data-mediaid="' + media.id + '" width="560" height="315" frameborder="0"  allowfullscreen src="' + media.embedUrl + '"></iframe>');
+                editor.insertHtml('<iframe data-mediaid="' + media.id + '" width="560" height="315" frameborder="0"  allowfullscreen src="' + media.url + '"></iframe>');
                 break;
         }
     }

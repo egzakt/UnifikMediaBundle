@@ -159,6 +159,63 @@ class MediaController extends BaseController
     }
 
     /**
+     * Media Select Pager
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Exception
+     */
+    public function mediaSelectPagerAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest() && $request->query->has('page') && $request->query->has('type')) {
+
+            $this->mediaRepository->setReturnQueryBuilder(true);
+
+            switch ($request->query->get('type')) {
+                case 'image':
+                    $mediaQb = $this->mediaRepository->findByType('image');
+                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:images_content.html.twig';
+                    break;
+                case 'document':
+                    $mediaQb = $this->mediaRepository->findByType('document');
+                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:documents_content.html.twig';
+                    break;
+                case 'video':
+                    $mediaQb = $this->mediaRepository->findByType('video');
+                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:videos_content.html.twig';
+                    break;
+                case 'embedvideo':
+                    $mediaQb = $this->mediaRepository->findByType('embedvideo');
+                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:embed_videos_content.html.twig';
+                    break;
+                default:
+                    throw new \Exception('Error');
+            }
+
+            $mediaPager = new MediaPager(
+                $mediaQb,
+                $request->query->get('page'),
+                $this->container->getParameter('egzakt_media.media_select.resultPerPage', 30)
+            );
+
+            $template = ('true' == $request->query->get('init', 'false')) ? 'EgzaktMediaBundle:Backend/Media/MediaSelect:media_select.html.twig'
+                : 'EgzaktMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig';
+
+            return new JsonResponse(array(
+                'html' => $this->renderView($template, array(
+                        'medias' => $mediaPager->getResult(),
+                        'type' => $request->query->get('type', 'image'),
+                        'view' => $request->query->get('view', 'ckeditor'),
+                        'pagesTotal' => $mediaPager->getPageTotal(),
+                        'page' => $request->get('page', 1)
+                 ))
+            ));
+        }
+
+        return new JsonResponse(array());
+    }
+
+    /**
      * Delete a media (including child entities)
      * @param $id
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
@@ -241,45 +298,6 @@ class MediaController extends BaseController
         $this->getEm()->flush();
 
         return $this->redirect($this->generateUrl($newMedia->getRouteBackend(), $newMedia->getRouteBackendParams()));
-    }
-
-    /**
-     * listAjax
-     *
-     * @param Request $request
-     * @return JsonResponse
-     */
-    public function listAjaxAction(Request $request)
-    {
-        if ($request->isXmlHttpRequest()) {
-
-            $type = $request->query->get('type');
-
-            if ("all" == $type) {
-                $medias = $this->mediaRepository->findByParentMedia(null);
-                $mediaType = array('image', 'video', 'document', 'embedvideo');
-            } else {
-                $medias = $this->mediaRepository->findByType($type);
-                $mediaType = array($type);
-            }
-
-            $mediasOutput = array();
-
-            /* @var $media Media */
-            foreach ($medias as $media) {
-                $mediasOutput[] = $media->toArray();
-            }
-
-            return new JsonResponse(array(
-                'html' => $this->renderView('EgzaktMediaBundle:Backend/Media/Media:media_select.html.twig', array(
-                    'medias' => $medias,
-                    'mediaType' => $mediaType
-                )),
-                'medias' => $mediasOutput
-            ));
-        }
-
-        return new JsonResponse();
     }
 
     /**

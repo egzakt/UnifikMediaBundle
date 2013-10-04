@@ -1,7 +1,7 @@
 {% spaceless %}
 
     <ul id="media_filters">
-        {% if mediaType|length > 1 %}
+        {% if 'ckeditor' == view %}
             <li><a class="media_filter" data-media-type="image">{% trans %}Images{% endtrans %}</a></li>
             <li><a class="media_filter" data-media-type="video">{% trans %}Videos{% endtrans %}</a></li>
             <li><a class="media_filter" data-media-type="document">{% trans %}Documents{% endtrans %}</a></li>
@@ -10,20 +10,21 @@
         <li><a class="upload">+ {% trans %}Upload a new file{% endtrans %}</a></li>
     </ul>
 
-
     <div id="media_wrapper">
 
         <div id="media_container">
 
             <div id="media_list">
 
-                {% for media in medias %}
-                    {% if media.type in mediaType %}
-                        <div id="item_{{ media.id }}" class="media media_{{ media.type }}" data-media-manager-id="{{ loop.index0 }}">
-                            <img src="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb', true) ~ '?' ~ random(9999)}}" title="{{ media.name }}">
-                        </div>
-                    {% endif %}
-                {% endfor %}
+                <div class="image list">
+                    {% include 'EgzaktMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig' %}
+                </div>
+
+                <div class="video list"></div>
+
+                <div class="embedvideo list"></div>
+
+                <div class="document list"></div>
 
             </div>
 
@@ -33,17 +34,17 @@
                 <div id="media_details_inner">
                     <input type="hidden" name="selected-id">
                     <h3></h3>
-                    <img>
+                    {% include 'EgzaktMediaBundle:Backend/Media/MediaSelect/content:media_select_aviary.html.twig' %}
                     <div>
                         <a id="edit_media_link"><span class="media_button blue">{% trans %}Edit{% endtrans %}</span></a>
                     </div>
                     <a id="insert_media"><span class="media_button green">{% trans %}Insert{% endtrans %}</span></a>
 
-                    <p id="file_size"><strong>{% trans %}File size{% endtrans %}:</strong><span></span> {% trans %}kb{% endtrans %}</p>
+                    <p id="file_size"><strong>{% trans %}File size{% endtrans %}: </strong> <span></span> {% trans %}kb{% endtrans %}</p>
 
-                    <p id="image_format"><strong>{% trans %}Image format{% endtrans %}:</strong> <span></span> (px)</p>
+                    <p id="image_format"><strong>{% trans %}Image format{% endtrans %}: </strong> <span></span> (px)</p>
 
-                    <p id="file_caption"><strong>Caption:</strong><br><span></span></p>
+                    <p id="file_caption"><strong>Caption: </strong><br><span></span></p>
 
                 </div>
             </div>
