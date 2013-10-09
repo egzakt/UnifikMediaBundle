@@ -1,11 +1,11 @@
 <?php
 
-namespace Egzakt\MediaBundle\Entity;
+namespace Flexy\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Egzakt\SystemBundle\Lib\BaseEntity;
-use Egzakt\DoctrineBehaviorsBundle\Model as EgzaktORMBehaviors;
+use Flexy\SystemBundle\Lib\BaseEntity;
+use Flexy\DoctrineBehaviorsBundle\Model as FlexyORMBehaviors;
 
 /**
  * Media
@@ -13,8 +13,8 @@ use Egzakt\DoctrineBehaviorsBundle\Model as EgzaktORMBehaviors;
 class Media extends BaseEntity
 {
 
-    use EgzaktORMBehaviors\Uploadable\Uploadable;
-    use EgzaktORMBehaviors\Timestampable\Timestampable;
+    use FlexyORMBehaviors\Uploadable\Uploadable;
+    use FlexyORMBehaviors\Timestampable\Timestampable;
 
     /**
      * @var integer
@@ -419,7 +419,7 @@ class Media extends BaseEntity
     /**
      * Set thumbnail
      *
-     * @param \Egzakt\MediaBundle\Entity\Media $thumbnail
+     * @param \Flexy\MediaBundle\Entity\Media $thumbnail
      */
     public function setThumbnail(Media $thumbnail = null)
     {
@@ -429,7 +429,7 @@ class Media extends BaseEntity
     /**
      * Get thumbnail
      *
-     * @return \Egzakt\MediaBundle\Entity\Media
+     * @return \Flexy\MediaBundle\Entity\Media
      */
     public function getThumbnail()
     {
@@ -462,18 +462,18 @@ class Media extends BaseEntity
     public function getRouteBackend($action = 'edit')
     {
         if ('list' === $action) {
-            return 'egzakt_media_backend_media';
+            return 'flexy_media_backend_media';
         }
 
         switch ($this->type) {
             case 'image':
-                return 'egzakt_media_backend_image_' . $action;
+                return 'flexy_media_backend_image_' . $action;
             case 'video':
-                return 'egzakt_media_backend_video_' . $action;
+                return 'flexy_media_backend_video_' . $action;
             case 'embedvideo':
-                return 'egzakt_media_backend_embed_video_' . $action;
+                return 'flexy_media_backend_embed_video_' . $action;
             default:
-                return 'egzakt_media_backend_document_' . $action;
+                return 'flexy_media_backend_document_' . $action;
         }
     }
 

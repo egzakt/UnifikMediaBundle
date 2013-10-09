@@ -1,12 +1,12 @@
 <?php
 
-namespace Egzakt\MediaBundle;
+namespace Flexy\MediaBundle;
 
-use Egzakt\MediaBundle\DependencyInjection\Compiler\MediaParserCompilerPass;
+use Flexy\MediaBundle\DependencyInjection\Compiler\MediaParserCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class EgzaktMediaBundle extends Bundle
+class FlexyMediaBundle extends Bundle
 {
 	public function build(ContainerBuilder $container)
 	{

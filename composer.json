@@ -1,9 +1,9 @@
 {
-    "name": "egzakt/media-bundle",
+    "name": "flexy/media-bundle",
     "type": "symfony-bundle",
-    "description": "The media bundle of the symfony-egzakt distribution",
-    "keywords": ["egzakt", "media", "cms"],
-    "homepage": "https://github.com/egzakt/symfony-egzakt",
+    "description": "The media bundle of the symfony-flexy distribution",
+    "keywords": ["flexy", "media", "cms"],
+    "homepage": "https://github.com/flexy/symfony-flexy",
     "license": "MIT",
     "authors": [
 				{
@@ -21,13 +21,17 @@
         {
             "name": "Émilie Marchand",
             "email": "emilie.marchand@gmail.com"
+        },
+        {
+            "name": "Pascal Lapointe",
+            "email": "pascal.lapointe@hotmail.com"
         }
     ],
     "require": {
         "symfony/symfony": "2.3.*"
     },
     "autoload": {
-        "psr-0": { "Egzakt\\MediaBundle": "" }
+        "psr-0": { "Flexy\\MediaBundle": "" }
     },
-    "target-dir": "Egzakt/MediaBundle"
+    "target-dir": "Flexy/MediaBundle"
 }

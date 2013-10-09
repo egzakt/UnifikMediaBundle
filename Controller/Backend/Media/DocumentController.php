@@ -1,19 +1,19 @@
 <?php
 
-namespace Egzakt\MediaBundle\Controller\Backend\Media;
+namespace Flexy\MediaBundle\Controller\Backend\Media;
 
-use Egzakt\MediaBundle\Entity\Media;
-use Egzakt\MediaBundle\Form\DocumentType;
+use Flexy\MediaBundle\Entity\Media;
+use Flexy\MediaBundle\Form\DocumentType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use Egzakt\SystemBundle\Lib\Backend\BaseController;
+use Flexy\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
  * Class DocumentController
- * @package Egzakt\MediaBundle\Controller\Backend\Media
+ * @package Flexy\MediaBundle\Controller\Backend\Media
  */
 class DocumentController extends BaseController
 {
@@ -28,7 +28,7 @@ class DocumentController extends BaseController
     public function editAction($id, Request $request)
     {
 
-        $media = $this->getEm()->getRepository('EgzaktMediaBundle:Media')->find($id);
+        $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
 
         if (!$media) {
             throw $this->createNotFoundException('Unable to find the media');
@@ -64,10 +64,10 @@ class DocumentController extends BaseController
 
 
 
-                $this->get('egzakt_system.router_invalidator')->invalidate();
+                $this->get('flexy_system.router_invalidator')->invalidate();
 
                 if ($request->request->has('save')) {
-                    return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+                    return $this->redirect($this->generateUrl('flexy_media_backend_media'));
                 }
 
                 return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
@@ -79,7 +79,7 @@ class DocumentController extends BaseController
 
         $associatedContents = MediaController::getAssociatedContents($media, $this->container);
 
-        return $this->render('EgzaktMediaBundle:Backend/Media/Document:edit.html.twig', array(
+        return $this->render('FlexyMediaBundle:Backend/Media/Document:edit.html.twig', array(
             'form' => $form->createView(),
             'media' => $media,
             'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
@@ -100,13 +100,13 @@ class DocumentController extends BaseController
             case 'application/pdf':
                 return $this->createPdfPreview($file->getPathname());
             case 'application/msword':
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png';
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/word-icon.png';
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/word-icon.png';
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/word-icon.png';
             case 'application/vnd.oasis.opendocument.text':
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/writer-icon.jpg';
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/writer-icon.jpg';
             default:
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/file-icon.png';
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/file-icon.png';
         }
     }
 
@@ -126,6 +126,6 @@ class DocumentController extends BaseController
             }
         }
 
-        return $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/pdf-icon.png';
+        return $this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/pdf-icon.png';
     }
 }

@@ -17,7 +17,7 @@
             <div id="media_list">
 
                 <div class="image list">
-                    {% include 'EgzaktMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig' %}
+                    {% include 'FlexyMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig' %}
                 </div>
 
                 <div class="video list"></div>
@@ -34,7 +34,7 @@
                 <div id="media_details_inner">
                     <input type="hidden" name="selected-id">
                     <h3></h3>
-                    {% include 'EgzaktMediaBundle:Backend/Media/MediaSelect/content:media_select_aviary.html.twig' %}
+                    {% include 'FlexyMediaBundle:Backend/Media/MediaSelect/content:media_select_aviary.html.twig' %}
                     <div>
                         <a id="edit_media_link"><span class="media_button blue">{% trans %}Edit{% endtrans %}</span></a>
                     </div>
@@ -54,7 +54,7 @@
     </div>
 
     <div id="uploader_wrapper">
-        {% include 'EgzaktMediaBundle:Backend/Media/Media/tabs:upload_tab.html.twig' %}
+        {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:upload_tab.html.twig' %}
     </div>
 
 {% endspaceless %}

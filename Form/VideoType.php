@@ -1,6 +1,6 @@
 <?php
 
-namespace Egzakt\MediaBundle\Form;
+namespace Flexy\MediaBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,12 +18,12 @@ class VideoType extends MediaType
         parent::setDefaultOptions($resolver);
 
         $resolver->setDefaults(array(
-            'data_class' => 'Egzakt\MediaBundle\Entity\Media'
+            'data_class' => 'Flexy\MediaBundle\Entity\Media'
         ));
     }
 
     public function getName()
     {
-        return 'egzakt_mediabundle_videotype';
+        return 'flexy_mediabundle_videotype';
     }
 }

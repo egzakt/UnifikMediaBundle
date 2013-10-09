@@ -1,5 +1,5 @@
 <?php
-namespace Egzakt\MediaBundle\Lib;
+namespace Flexy\MediaBundle\Lib;
 
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

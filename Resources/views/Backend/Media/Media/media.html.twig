@@ -1,4 +1,4 @@
-{% extends 'EgzaktMediaBundle:Backend:layout.html.twig' %}
+{% extends 'FlexyMediaBundle:Backend:layout.html.twig' %}
 
 {% block content_header %}
     <a href="#" id="refresh_media">{% trans %}Refresh{% endtrans %}</a>
@@ -16,19 +16,19 @@
             <li id="upload-tab"><a href="#media-tabs-5">+ {% trans %}Upload{% endtrans %}</a></li>
         </ul>
         <div id="media-tabs-1">
-            {% include 'EgzaktMediaBundle:Backend/Media/Media/tabs:images_tab.html.twig' %}
+            {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:images_tab.html.twig' %}
         </div>
         <div id="media-tabs-2">
-            {% include 'EgzaktMediaBundle:Backend/Media/Media/tabs:documents_tab.html.twig' %}
+            {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:documents_tab.html.twig' %}
         </div>
         <div id="media-tabs-3">
-            {% include 'EgzaktMediaBundle:Backend/Media/Media/tabs:videos_tab.html.twig' %}
+            {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:videos_tab.html.twig' %}
         </div>
         <div id="media-tabs-4">
-            {% include 'EgzaktMediaBundle:Backend/Media/Media/tabs:embed_videos_tab.html.twig' %}
+            {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:embed_videos_tab.html.twig' %}
         </div>
         <div id="media-tabs-5">
-            {% include 'EgzaktMediaBundle:Backend/Media/Media/tabs:upload_tab.html.twig' %}
+            {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:upload_tab.html.twig' %}
         </div>
     </div>
 
@@ -90,7 +90,7 @@
 
                     $.ajax({
                         method: "GET",
-                        url: "{{ path('egzakt_media_backend_media_pager') }}",
+                        url: "{{ path('flexy_media_backend_media_pager') }}",
                         data: {page: pageNumber, type: 'image'},
                         contentType: 'json',
                         success: function(data) {
@@ -112,7 +112,7 @@
 
                     $.ajax({
                         method: "GET",
-                        url: "{{ path('egzakt_media_backend_media_pager') }}",
+                        url: "{{ path('flexy_media_backend_media_pager') }}",
                         data: {page: pageNumber, type: 'document'},
                         contentType: 'json',
                         success: function(data) {
@@ -134,7 +134,7 @@
 
                     $.ajax({
                         method: "GET",
-                        url: "{{ path('egzakt_media_backend_media_pager') }}",
+                        url: "{{ path('flexy_media_backend_media_pager') }}",
                         data: {page: pageNumber, type: 'video'},
                         contentType: 'json',
                         success: function(data) {
@@ -156,7 +156,7 @@
 
                     $.ajax({
                         method: "GET",
-                        url: "{{ path('egzakt_media_backend_media_pager') }}",
+                        url: "{{ path('flexy_media_backend_media_pager') }}",
                         data: {page: pageNumber, type: 'embedvideo'},
                         contentType: 'json',
                         success: function(data) {

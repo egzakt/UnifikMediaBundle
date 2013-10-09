@@ -1,5 +1,5 @@
-{% extends 'EgzaktMediaBundle:Backend:layout.html.twig' %}
-{% form_theme form 'EgzaktSystemBundle:Backend/Core:edit_fields.html.twig' %}
+{% extends 'FlexyMediaBundle:Backend:layout.html.twig' %}
+{% form_theme form 'FlexySystemBundle:Backend/Core:edit_fields.html.twig' %}
 
 {% block content_hemediaer %}
     <h1>{{ media.i18nTitle|trans|raw }}</h1>
@@ -10,7 +10,7 @@
     <form novalidate="novalidate" action="{{ path(media.route, media.routeParams) }}" method="post" {{ form_enctype(form) }}>
 
         {% block edit_actions %}
-        {% include 'EgzaktMediaBundle:Backend/Media/Core:edit_actions.html.twig' with {
+        {% include 'FlexyMediaBundle:Backend/Media/Core:edit_actions.html.twig' with {
             'entity': media,
             'delete_route': path(media.route('delete'), media.routeParams()),
             'delete_route_rel': path(media.route('delete'), media.routeParams({'message': true})),
@@ -27,11 +27,11 @@
 
                 {{ form_row(form.media) }}
 
-                {% include 'EgzaktMediaBundle:Backend/Media/Image:edit_image_aviary.html.twig' with {
+                {% include 'FlexyMediaBundle:Backend/Media/Image:edit_image_aviary.html.twig' with {
                     'media': media,
                 } %}
 
-                {% include 'EgzaktSystemBundle:Backend/Core:collapsable_fields.html.twig' with {
+                {% include 'FlexySystemBundle:Backend/Core:collapsable_fields.html.twig' with {
                     'link_name': 'Description',
                     'fields': [form_row(form.description), form_row(form.caption)]
                 } %}

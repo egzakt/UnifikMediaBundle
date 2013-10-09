@@ -1,6 +1,6 @@
 <?php
 
-namespace Egzakt\MediaBundle\Form;
+namespace Flexy\MediaBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
@@ -43,7 +43,7 @@ class MediaSelectType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-           'class' => 'Egzakt\MediaBundle\Entity\Media',
+           'class' => 'Flexy\MediaBundle\Entity\Media',
            'media_method' => null,
            'types' => array('image', 'video', 'document'),
         ));

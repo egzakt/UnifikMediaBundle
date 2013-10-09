@@ -1,46 +1,46 @@
 parameters:
-    egzakt_media.parser.class: Egzakt\MediaBundle\Lib\ExternalMediaParser
+    flexy_media.parser.class: Flexy\MediaBundle\Lib\ExternalMediaParser
 
-    egzakt_media.youtube_parser.class: Egzakt\MediaBundle\Lib\YoutubeVideoParser
-    egzakt_media.vimeo_parser.class: Egzakt\MediaBundle\Lib\VimeoVideoParser
+    flexy_media.youtube_parser.class: Flexy\MediaBundle\Lib\YoutubeVideoParser
+    flexy_media.vimeo_parser.class: Flexy\MediaBundle\Lib\VimeoVideoParser
 
-    egzakt_media.parser_extension.class: Egzakt\MediaBundle\Extensions\ExternalMediaParserExtension
+    flexy_media.parser_extension.class: Flexy\MediaBundle\Extensions\ExternalMediaParserExtension
 
-    egzakt_media.form.type.media_select.class: Egzakt\MediaBundle\Form\MediaSelectType
+    flexy_media.form.type.media_select.class: Flexy\MediaBundle\Form\MediaSelectType
 
-    egzakt_media.listener.media_change.class: Egzakt\MediaBundle\Listener\MediaChangeListener
+    flexy_media.listener.media_change.class: Flexy\MediaBundle\Listener\MediaChangeListener
 
 services:
 
     # Media Parser
-    egzakt_media.parser:
-        class: %egzakt_media.parser.class%
+    flexy_media.parser:
+        class: %flexy_media.parser.class%
 
     # Youtube Media Parser
-    egzakt_media.media_parser.youtube_parser:
-        class: %egzakt_media.youtube_parser.class%
+    flexy_media.media_parser.youtube_parser:
+        class: %flexy_media.youtube_parser.class%
         tags:
-            - { name: egzakt_media.parser }
+            - { name: flexy_media.parser }
 
     # Vimeo Media Parser
-    egzakt_media.media_parser.vimeo_parser:
-        class: %egzakt_media.vimeo_parser.class%
+    flexy_media.media_parser.vimeo_parser:
+        class: %flexy_media.vimeo_parser.class%
         tags:
-            - { name: egzakt_media.parser }
+            - { name: flexy_media.parser }
 
     # Twig Media Parser Extension
-    egzakt_media.parser_extension:
-        class: %egzakt_media.parser_extension.class%
-        arguments: [@egzakt_media.parser]
+    flexy_media.parser_extension:
+        class: %flexy_media.parser_extension.class%
+        arguments: [@flexy_media.parser]
         tags:
             - { name: twig.extension }
 
-    egzakt_system.form.type.media_select:
-            class: %egzakt_media.form.type.media_select.class%
+    flexy_system.form.type.media_select:
+            class: %flexy_media.form.type.media_select.class%
             tags:
               - { name: form.type, alias: media_select }
 
-    egzakt_media.media_change_listener:
-            class: %egzakt_media.listener.media_change.class%
+    flexy_media.media_change_listener:
+            class: %flexy_media.listener.media_change.class%
             tags:
               - { name: doctrine.event_subscriber, connection: default }

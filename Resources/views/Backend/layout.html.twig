@@ -1,12 +1,12 @@
-{% extends 'EgzaktSystemBundle:Backend:layout.html.twig' %}
+{% extends 'FlexySystemBundle:Backend:layout.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}
 
     {# User symlink path cause @ target have a known issue with the css rewrite filter #}
     {% stylesheets filter='cssrewrite'
-        'bundles/egzaktmedia/backend/css/*'
-        'bundles/egzaktmedia/backend/css/blueimp/*'
+        'bundles/flexymedia/backend/css/*'
+        'bundles/flexymedia/backend/css/blueimp/*'
     %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -111,19 +111,19 @@
     <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
 
     {% javascripts
-        '@EgzaktMediaBundle/Resources/public/backend/js/media.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/jquery.simplePagination.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/media.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/jquery.simplePagination.js'
 
-        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.iframe-transport.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-process.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-image.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-audio.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-video.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-validate.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-ui.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-jquery-ui.js'
-        '@EgzaktMediaBundle/Resources/public/backend/js/blueimp/main.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.iframe-transport.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-process.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-image.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-audio.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-video.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-validate.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-ui.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-jquery-ui.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/main.js'
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

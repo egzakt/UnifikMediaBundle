@@ -24,7 +24,7 @@ var mediaManagerLoad = function (type, init, callback) {
     if (-1 == $.inArray(type, mediaManagerTypeLoaded)) {
 
         $.ajax({
-            url: Routing.generate('egzakt_media_backend_media_select_pager'),
+            url: Routing.generate('flexy_media_backend_media_select_pager'),
             data: {
                 type: type,
                 page: 1,
@@ -141,7 +141,7 @@ var mediaManagerBind = function () {
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: Routing.generate('egzakt_media_backend_media_upload')
+        url: Routing.generate('flexy_media_backend_media_upload')
     });
 
     // MEDIA SELECTION SCRIPT
@@ -235,7 +235,7 @@ var mediaManagerInsert = function() {
 };
 
 var mediaManagerInsertCk = function() {
-    CKEDITOR.plugins.get('egzaktmediamanager').insertMedia(mediaManagerTriggeringElement, mediaManagerSelectedMedia);
+    CKEDITOR.plugins.get('flexymediamanager').insertMedia(mediaManagerTriggeringElement, mediaManagerSelectedMedia);
 
     mediaManagerModal.dialog('close');
 

@@ -1,17 +1,17 @@
 <?php
 
-namespace Egzakt\MediaBundle\Controller\Backend\Media;
+namespace Flexy\MediaBundle\Controller\Backend\Media;
 
-use Egzakt\MediaBundle\Entity\Media;
-use Egzakt\MediaBundle\Form\ImageType;
+use Flexy\MediaBundle\Entity\Media;
+use Flexy\MediaBundle\Form\ImageType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use Egzakt\SystemBundle\Lib\Backend\BaseController;
+use Flexy\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Egzakt\MediaBundle\Controller\Backend\Media\MediaController;
+use Flexy\MediaBundle\Controller\Backend\Media\MediaController;
 
 /**
  * Image controller
@@ -28,7 +28,7 @@ class ImageController extends BaseController
      */
     public function editAction($id, Request $request)
     {
-        $media = $this->getEm()->getRepository('EgzaktMediaBundle:Media')->find($id);
+        $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
 
         if (!$media) {
             throw $this->createNotFoundException('Unable to find the media');
@@ -45,10 +45,10 @@ class ImageController extends BaseController
 
                 $this->getEm()->flush();
 
-                $this->get('egzakt_system.router_invalidator')->invalidate();
+                $this->get('flexy_system.router_invalidator')->invalidate();
 
                 if ($request->request->has('save')) {
-                    return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+                    return $this->redirect($this->generateUrl('flexy_media_backend_media'));
                 }
 
                 return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
@@ -60,7 +60,7 @@ class ImageController extends BaseController
 
         $associatedContents = MediaController::getAssociatedContents($media, $this->container);
 
-        return $this->render('EgzaktMediaBundle:Backend/Media/Image:edit.html.twig', array(
+        return $this->render('FlexyMediaBundle:Backend/Media/Image:edit.html.twig', array(
             'form' => $form->createView(),
             'media' => $media,
             'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
@@ -78,7 +78,7 @@ class ImageController extends BaseController
     public function updateImageAction($id, Request $request)
     {
         /** @var Media $image */
-        $image = $this->getEm()->getRepository('EgzaktMediaBundle:Media')->find($id);
+        $image = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
 
         if (!$image) {
             throw $this->createNotFoundException('Unable to find the Media Entity');

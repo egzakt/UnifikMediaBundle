@@ -1,7 +1,7 @@
-Egzakt\MediaBundle\Entity\Media:
+Flexy\MediaBundle\Entity\Media:
     type: entity
     table: null
-    repositoryClass: Egzakt\MediaBundle\Entity\MediaRepository
+    repositoryClass: Flexy\MediaBundle\Entity\MediaRepository
     fields:
         id:
             type: integer
@@ -53,11 +53,11 @@ Egzakt\MediaBundle\Entity\Media:
     lifecycleCallbacks: {  }
     oneToOne:
         thumbnail:
-            targetEntity: Egzakt\MediaBundle\Entity\Media
+            targetEntity: Flexy\MediaBundle\Entity\Media
             mappedBy: parentMedia
             onDelete: cascade
         parentMedia:
-            targetEntity: Egzakt\MediaBundle\Entity\Media
+            targetEntity: Flexy\MediaBundle\Entity\Media
             inversedBy: thumbnail
             joinColumn:
                 name: parentMedia

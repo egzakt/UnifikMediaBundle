@@ -1,8 +1,8 @@
 <?php
 
-namespace Egzakt\MediaBundle\Entity;
+namespace Flexy\MediaBundle\Entity;
 
-use Egzakt\SystemBundle\Lib\BaseEntityRepository;
+use Flexy\SystemBundle\Lib\BaseEntityRepository;
 
 /**
  * MediaRepository

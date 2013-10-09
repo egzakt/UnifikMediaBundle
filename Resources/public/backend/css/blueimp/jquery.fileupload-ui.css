@@ -32,14 +32,14 @@
 }
 .progress-animated .progress-bar,
 .progress-animated .bar {
-  background: url(/bundles/egzaktmedia/backend/images/icons/progressbar.gif) !important;
+  background: url(/bundles/flexymedia/backend/images/icons/progressbar.gif) !important;
   filter: none;
 }
 .fileupload-loading {
   float: right;
   width: 32px;
   height: 32px;
-  background: url(/bundles/egzaktmedia/backend/images/icons/loading.gif) center no-repeat;
+  background: url(/bundles/flexymedia/backend/images/icons/loading.gif) center no-repeat;
   background-size: contain;
   display: none;
 }

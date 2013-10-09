@@ -5,7 +5,7 @@
             <h4 id="message"></h4>
             <input id="video_url" type="text" name="video_url">
             <a id="add_embed_link" href="#">{% trans %}Add</a>{% endtrans %}
-            <img id="embed_ajax_loader" src="{{ asset('bundles/egzaktsystem/backend/images/icons/ajax-loader.gif') }}">
+            <img id="embed_ajax_loader" src="{{ asset('bundles/flexysystem/backend/images/icons/ajax-loader.gif') }}">
         </div>
 
         <div class="bulk_actions">
@@ -39,7 +39,7 @@
 
             $.ajax({
                 method: 'POST',
-                url: "{{ path('egzakt_media_backend_embed_video_create') }}",
+                url: "{{ path('flexy_media_backend_embed_video_create') }}",
                 data: {'video_url': $('#video_url').val() },
                 dataType: "json",
                 success: function(data){

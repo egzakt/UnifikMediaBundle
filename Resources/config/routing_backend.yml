@@ -1,82 +1,82 @@
 # Media
-egzakt_media_backend_media:
+flexy_media_backend_media:
     pattern:  /
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:media" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:media" }
 
-egzakt_media_backend_media_pager:
+flexy_media_backend_media_pager:
     pattern:  /media/page
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:mediaPager" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:mediaPager" }
 
-egzakt_media_backend_media_select_pager:
+flexy_media_backend_media_select_pager:
     pattern:  /media-select-pager
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:mediaSelectPager" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:mediaSelectPager" }
     options:
         expose: true
 
 # Upload
-egzakt_media_backend_media_upload:
+flexy_media_backend_media_upload:
     pattern: /upload
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Upload:upload" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Upload:upload" }
     options:
         expose: true
 
 # Image
-egzakt_media_backend_image_edit:
+flexy_media_backend_image_edit:
     pattern:  /image/{id}/edit
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:edit"}
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Image:edit"}
 
-egzakt_media_backend_image_aviary_edit:
+flexy_media_backend_image_aviary_edit:
     pattern: /image/{id}/update/
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Image:updateImage" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Image:updateImage" }
 
-egzakt_media_backend_image_duplicate:
+flexy_media_backend_image_duplicate:
     pattern:  /{id}/duplicate
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:duplicate" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:duplicate" }
 
-egzakt_media_backend_image_delete:
+flexy_media_backend_image_delete:
     pattern:  /{id}/delete
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:delete" }
 
 # Document
-egzakt_media_backend_document_edit:
+flexy_media_backend_document_edit:
     pattern:  /document/{id}/edit
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Document:edit", id: 0 }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Document:edit", id: 0 }
 
-egzakt_media_backend_document_duplicate:
+flexy_media_backend_document_duplicate:
     pattern:  /{id}/duplicate
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:duplicate" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:duplicate" }
 
-egzakt_media_backend_document_delete:
+flexy_media_backend_document_delete:
     pattern:  /{id}/delete
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:delete" }
 
 # Video
-egzakt_media_backend_video_edit:
+flexy_media_backend_video_edit:
     pattern:  /video/{id}/edit
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Video:edit", id: 0 }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Video:edit", id: 0 }
 
-egzakt_media_backend_video_duplicate:
+flexy_media_backend_video_duplicate:
     pattern:  /{id}/duplicate
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:duplicate" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:duplicate" }
 
-egzakt_media_backend_video_delete:
+flexy_media_backend_video_delete:
     pattern:  /{id}/delete
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:delete" }
 
 # Embed Video
 
-egzakt_media_backend_embed_video_create:
+flexy_media_backend_embed_video_create:
     pattern:  /embedvideo/create
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/EmbedVideo:create", id: 0 }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/EmbedVideo:create", id: 0 }
 
-egzakt_media_backend_embed_video_edit:
+flexy_media_backend_embed_video_edit:
     pattern:  /embedvideo/{id}/edit
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/EmbedVideo:edit", id: 0 }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/EmbedVideo:edit", id: 0 }
 
-egzakt_media_backend_embed_video_duplicate:
+flexy_media_backend_embed_video_duplicate:
     pattern:  /{id}/duplicate
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:duplicate" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:duplicate" }
 
-egzakt_media_backend_embed_video_delete:
+flexy_media_backend_embed_video_delete:
     pattern:  /{id}/delete
-    defaults: { _controller: "EgzaktMediaBundle:Backend/Media/Media:delete" }
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:delete" }

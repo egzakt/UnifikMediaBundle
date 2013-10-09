@@ -42,13 +42,13 @@
             <td class="edit">
                 {% if media.isEditable %}
                     <a href="{{ path(media.route, media.routeParams) }}" title="{% trans %}Edit{% endtrans %}">
-                        <img src="{{ asset('bundles/egzaktsystem/backend/images/buttons/edit.png') }}" width="15" height="15" alt="" />
+                        <img src="{{ asset('bundles/flexysystem/backend/images/buttons/edit.png') }}" width="15" height="15" alt="" />
                     </a>
                 {% endif %}
             </td>
             <td>
                 <a id="media-delete" href="{{ path(media.route('delete'), media.routeParams) }}" rel="{{ path(media.route('delete'), media.routeParams({'message': true})) }}" title="{% trans %}Delete{% endtrans %}">
-                    <img src="{{ asset('bundles/egzaktsystem/backend/images/buttons/delete.png') }}" width="12" height="15" alt="" />
+                    <img src="{{ asset('bundles/flexysystem/backend/images/buttons/delete.png') }}" width="12" height="15" alt="" />
                 </a>
             </td>
         </tr>

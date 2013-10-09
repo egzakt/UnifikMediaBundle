@@ -41,7 +41,7 @@
 
                     $.ajax({
                         method: "GET",
-                        url: Routing.generate('egzakt_media_backend_media_select_pager'),
+                        url: Routing.generate('flexy_media_backend_media_select_pager'),
                         data: {page: pageNumber, type: '{{ type }}', view: '{{ view }}'},
                         contentType: 'json',
                         success: function(data) {

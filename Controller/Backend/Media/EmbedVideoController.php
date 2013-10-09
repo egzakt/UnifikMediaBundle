@@ -1,23 +1,23 @@
 <?php
 
-namespace Egzakt\MediaBundle\Controller\Backend\Media;
+namespace Flexy\MediaBundle\Controller\Backend\Media;
 
-use Egzakt\MediaBundle\Entity\Media;
-use Egzakt\MediaBundle\Form\EmbedVideoType;
+use Flexy\MediaBundle\Entity\Media;
+use Flexy\MediaBundle\Form\EmbedVideoType;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Egzakt\SystemBundle\Lib\Backend\BaseController;
+use Flexy\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
-use Egzakt\MediaBundle\Lib\MediaParserInterface;
-use Egzakt\MediaBundle\Lib\MediaFile;
+use Flexy\MediaBundle\Lib\MediaParserInterface;
+use Flexy\MediaBundle\Lib\MediaFile;
 
 /**
  * Class EmbedVideoController
- * @package Egzakt\MediaBundle\Controller\Backend\Media
+ * @package Flexy\MediaBundle\Controller\Backend\Media
  */
 class EmbedVideoController extends BaseController
 {
@@ -36,7 +36,7 @@ class EmbedVideoController extends BaseController
             throw new Exception('The request method must be post.');
         }
 
-        $mediaParser = $this->get('egzakt_media.parser');
+        $mediaParser = $this->get('flexy_media.parser');
         if (!$mediaParser = $mediaParser->getParser($request->get('video_url'))) {
             return new JsonResponse(array(
                 'error' => array(
@@ -73,7 +73,7 @@ class EmbedVideoController extends BaseController
      */
     public function editAction($id, Request $request)
     {
-        $media = $this->getEm()->getRepository('EgzaktMediaBundle:Media')->find($id);
+        $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
 
         if (!$media) {
             throw $this->createNotFoundException('Unanble to find the media');
@@ -86,7 +86,7 @@ class EmbedVideoController extends BaseController
             $oldUrl = $media->getUrl();
             $form->submit($request);
 
-            $mediaParser = $this->get('egzakt_media.parser');
+            $mediaParser = $this->get('flexy_media.parser');
 
             if ($oldUrl != $media->getUrl() && !$mediaParser = $mediaParser->getParser($form->get('url')->getData())) {
 
@@ -111,10 +111,10 @@ class EmbedVideoController extends BaseController
 
                 $this->getEm()->flush();
 
-                $this->get('egzakt_system.router_invalidator')->invalidate();
+                $this->get('flexy_system.router_invalidator')->invalidate();
 
                 if ($request->request->has('save')) {
-                    return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+                    return $this->redirect($this->generateUrl('flexy_media_backend_media'));
                 }
 
                 return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
@@ -123,7 +123,7 @@ class EmbedVideoController extends BaseController
 
         $associatedContents = MediaController::getAssociatedContents($media, $this->container);
 
-        return $this->render('EgzaktMediaBundle:Backend/Media/EmbedVideo:edit.html.twig', array(
+        return $this->render('FlexyMediaBundle:Backend/Media/EmbedVideo:edit.html.twig', array(
             'form' => $form->createView(),
             'media' => $media,
             'video_url' => $media->getMediaPath(),
@@ -139,7 +139,7 @@ class EmbedVideoController extends BaseController
         $thumbnailUrl = $mediaParser->getThumbnailUrl();
 
         if (null == $thumbnailUrl) {
-            $thumbnailUrl = $this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/video-icon.png';
+            $thumbnailUrl = $this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/video-icon.png';
         }
 
         file_put_contents($tempFile, file_get_contents($thumbnailUrl));

@@ -1,6 +1,6 @@
 <?php
 
-namespace Egzakt\MediaBundle\Form;
+namespace Flexy\MediaBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -21,12 +21,12 @@ class MediaType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Egzakt\MediaBundle\Entity\Media'
+            'data_class' => 'Flexy\MediaBundle\Entity\Media'
         ));
     }
 
     public function getName()
     {
-        return 'egzakt_mediabundle_mediatype';
+        return 'flexy_mediabundle_mediatype';
     }
 }

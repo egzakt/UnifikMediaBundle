@@ -1,6 +1,6 @@
 <?php
 
-namespace Egzakt\MediaBundle\DependencyInjection;
+namespace Flexy\MediaBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -19,7 +19,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('egzakt_media');
+        $rootNode = $treeBuilder->root('flexy_media');
 
         $this->addParameters($rootNode);
         return $treeBuilder;

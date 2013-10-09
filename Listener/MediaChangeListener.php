@@ -1,11 +1,11 @@
 <?php
 
-namespace Egzakt\MediaBundle\Listener;
+namespace Flexy\MediaBundle\Listener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Egzakt\MediaBundle\Entity\Media;
+use Flexy\MediaBundle\Entity\Media;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
 class MediaChangeListener implements EventSubscriber

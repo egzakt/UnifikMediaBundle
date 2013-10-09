@@ -1,6 +1,6 @@
 <?php
 
-namespace Egzakt\MediaBundle\Lib;
+namespace Flexy\MediaBundle\Lib;
 
 /**
  * Class ExternalMediaParser

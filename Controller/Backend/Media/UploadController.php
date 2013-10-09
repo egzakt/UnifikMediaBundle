@@ -1,14 +1,14 @@
 <?php
 
-namespace Egzakt\MediaBundle\Controller\Backend\Media;
+namespace Flexy\MediaBundle\Controller\Backend\Media;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Egzakt\SystemBundle\Lib\Backend\BaseController;
-use Egzakt\MediaBundle\Lib\MediaFile;
-use Egzakt\MediaBundle\Entity\Media;
+use Flexy\SystemBundle\Lib\Backend\BaseController;
+use Flexy\MediaBundle\Lib\MediaFile;
+use Flexy\MediaBundle\Entity\Media;
 
 /**
  * Upload Controller
@@ -215,16 +215,16 @@ class UploadController extends BaseController
             case 'application/pdf':
                 return $this->createPdfPreview($file->getPathname());
             case 'application/msword':
-                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/word-icon.png', '/tmp/word-icon.png');
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/icons/word-icon.png', '/tmp/word-icon.png');
                 return '/tmp/word-icon.png';
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/word-icon.png', '/tmp/word-icon.png');
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/icons/word-icon.png', '/tmp/word-icon.png');
                 return '/tmp/word-icon.png';
             case 'application/vnd.oasis.opendocument.text':
-                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/writer-icon.jpg', '/tmp/writer-icon.jpg');
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/icons/writer-icon.jpg', '/tmp/writer-icon.jpg');
                 return '/tmp/writer-icon.jpg';
             default:
-                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/file-icon.png', '/tmp/file-icon.png');
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/icons/file-icon.png', '/tmp/file-icon.png');
                 return '/tmp/file-icon.png';
         }
     }
@@ -239,7 +239,7 @@ class UploadController extends BaseController
     {
         switch ($file->getMimeType()) {
             default:
-                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/video-icon.png', '/tmp/video-icon.png');
+                copy($this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/icons/video-icon.png', '/tmp/video-icon.png');
                 return '/tmp/video-icon.png';
         }
     }
@@ -260,7 +260,7 @@ class UploadController extends BaseController
             }
         }
 
-        copy($this->container->get('kernel')->getRootDir().'/../web/bundles/egzaktmedia/backend/images/icons/pdf-icon.png', '/tmp/pdf-icon.png');
+        copy($this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/icons/pdf-icon.png', '/tmp/pdf-icon.png');
         return '/tmp/pdf-icon.png';
     }
 }

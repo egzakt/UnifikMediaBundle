@@ -1,6 +1,6 @@
 <?php
 
-namespace Egzakt\MediaBundle\DependencyInjection;
+namespace Flexy\MediaBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class EgzaktMediaExtension extends Extension implements PrependExtensionInterface
+class FlexyMediaExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritDoc}
@@ -26,8 +26,8 @@ class EgzaktMediaExtension extends Extension implements PrependExtensionInterfac
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        $container->setParameter('egzakt_media.resultPerPage', $config['resultPerPage']);
-        $container->setParameter('egzakt_media.media_select.resultPerPage', $config['media_select']['resultPerPage']);
+        $container->setParameter('flexy_media.resultPerPage', $config['resultPerPage']);
+        $container->setParameter('flexy_media.media_select.resultPerPage', $config['media_select']['resultPerPage']);
     }
 
     /**

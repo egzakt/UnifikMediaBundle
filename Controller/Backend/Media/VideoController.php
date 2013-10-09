@@ -1,18 +1,18 @@
 <?php
 
-namespace Egzakt\MediaBundle\Controller\Backend\Media;
+namespace Flexy\MediaBundle\Controller\Backend\Media;
 
-use Egzakt\MediaBundle\Form\VideoType;
+use Flexy\MediaBundle\Form\VideoType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Egzakt\SystemBundle\Lib\Backend\BaseController;
+use Flexy\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
  * Class VideoController
  *
- * @package Egzakt\MediaBundle\Controller\Backend\Media
+ * @package Flexy\MediaBundle\Controller\Backend\Media
  */
 class VideoController extends BaseController
 {
@@ -27,7 +27,7 @@ class VideoController extends BaseController
     public function editAction($id, Request $request)
     {
 
-        $media = $this->getEm()->getRepository('EgzaktMediaBundle:Media')->find($id);
+        $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
 
         if (!$media) {
             throw $this->createNotFoundException('Unable to find the media');
@@ -49,10 +49,10 @@ class VideoController extends BaseController
 
                 $this->getEm()->flush();
 
-                $this->get('egzakt_system.router_invalidator')->invalidate();
+                $this->get('flexy_system.router_invalidator')->invalidate();
 
                 if ($request->request->has('save')) {
-                    return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+                    return $this->redirect($this->generateUrl('flexy_media_backend_media'));
                 }
 
                 return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
@@ -64,7 +64,7 @@ class VideoController extends BaseController
 
         $associatedContents = MediaController::getAssociatedContents($media, $this->container);
 
-        return $this->render('EgzaktMediaBundle:Backend/Media/Video:edit.html.twig', array(
+        return $this->render('FlexyMediaBundle:Backend/Media/Video:edit.html.twig', array(
             'form' => $form->createView(),
             'media' => $media,
             'fileExtension' => MediaController::guessExtension($media->getMediaPath()),

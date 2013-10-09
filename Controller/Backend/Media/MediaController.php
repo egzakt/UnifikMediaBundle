@@ -1,6 +1,6 @@
 <?php
 
-namespace Egzakt\MediaBundle\Controller\Backend\Media;
+namespace Flexy\MediaBundle\Controller\Backend\Media;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Egzakt\MediaBundle\Entity\Media;
-use Egzakt\SystemBundle\Lib\Backend\BaseController;
-use Egzakt\MediaBundle\Entity\MediaRepository;
-use Egzakt\MediaBundle\Lib\MediaPager;
+use Flexy\MediaBundle\Entity\Media;
+use Flexy\SystemBundle\Lib\Backend\BaseController;
+use Flexy\MediaBundle\Entity\MediaRepository;
+use Flexy\MediaBundle\Lib\MediaPager;
 
 /**
  * Media Controller
@@ -29,7 +29,7 @@ class MediaController extends BaseController
     public function init()
     {
         parent::init();
-        $this->mediaRepository = $this->getEm()->getRepository('EgzaktMediaBundle:Media');
+        $this->mediaRepository = $this->getEm()->getRepository('FlexyMediaBundle:Media');
     }
 
     /**
@@ -50,7 +50,7 @@ class MediaController extends BaseController
         $embedVideoQb = $this->mediaRepository->findByType('embedvideo');
 
         // Pagers
-        $resultPerPage = $this->container->getParameter('egzakt_media.resultPerPage');
+        $resultPerPage = $this->container->getParameter('flexy_media.resultPerPage');
         $imagePager = new MediaPager($imageQb, 1, $resultPerPage);
         $documentPager = new MediaPager($documentQb, 1, $resultPerPage);
         $videoPager = new MediaPager($videoQb, 1, $resultPerPage);
@@ -90,22 +90,22 @@ class MediaController extends BaseController
                     $nbMediaRemoved . ' ' . $t->trans('media(s) were removed in the process') . '.'
                 );
 
-                return $this->redirect($this->generateUrl('egzakt_media_backend_media'));
+                return $this->redirect($this->generateUrl('flexy_media_backend_media'));
 
             }
         }
 
-        return $this->render('EgzaktMediaBundle:Backend/Media/Media:media.html.twig', array(
-            'imageView' => $this->renderView('EgzaktMediaBundle:Backend/Media/Media/tabs/content:images_content.html.twig', array('medias' => $imagePager->getResult())),
+        return $this->render('FlexyMediaBundle:Backend/Media/Media:media.html.twig', array(
+            'imageView' => $this->renderView('FlexyMediaBundle:Backend/Media/Media/tabs/content:images_content.html.twig', array('medias' => $imagePager->getResult())),
             'imagePageTotal' => $imagePager->getPageTotal(),
 
-            'documentView' => $this->renderView('EgzaktMediaBundle:Backend/Media/Media/tabs/content:documents_content.html.twig', array('medias' => $documentPager->getResult())),
+            'documentView' => $this->renderView('FlexyMediaBundle:Backend/Media/Media/tabs/content:documents_content.html.twig', array('medias' => $documentPager->getResult())),
             'documentPageTotal' => $documentPager->getPageTotal(),
 
-            'videoView' => $this->renderView('EgzaktMediaBundle:Backend/Media/Media/tabs/content:videos_content.html.twig', array('medias' => $videoPager->getResult())),
+            'videoView' => $this->renderView('FlexyMediaBundle:Backend/Media/Media/tabs/content:videos_content.html.twig', array('medias' => $videoPager->getResult())),
             'videoPageTotal' => $videoPager->getPageTotal(),
 
-            'embedVideoView' => $this->renderView('EgzaktMediaBundle:Backend/Media/Media/tabs/content:embed_videos_content.html.twig', array('medias' => $embedVideoPager->getResult())),
+            'embedVideoView' => $this->renderView('FlexyMediaBundle:Backend/Media/Media/tabs/content:embed_videos_content.html.twig', array('medias' => $embedVideoPager->getResult())),
             'embedVideoPageTotal' => $embedVideoPager->getPageTotal()
         ));
     }
@@ -126,19 +126,19 @@ class MediaController extends BaseController
             switch ($request->query->get('type')) {
                 case 'image':
                     $mediaQb = $this->mediaRepository->findByType('image');
-                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:images_content.html.twig';
+                    $template = 'FlexyMediaBundle:Backend/Media/Media/tabs/content:images_content.html.twig';
                     break;
                 case 'document':
                     $mediaQb = $this->mediaRepository->findByType('document');
-                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:documents_content.html.twig';
+                    $template = 'FlexyMediaBundle:Backend/Media/Media/tabs/content:documents_content.html.twig';
                     break;
                 case 'video':
                     $mediaQb = $this->mediaRepository->findByType('video');
-                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:videos_content.html.twig';
+                    $template = 'FlexyMediaBundle:Backend/Media/Media/tabs/content:videos_content.html.twig';
                     break;
                 case 'embedvideo':
                     $mediaQb = $this->mediaRepository->findByType('embedvideo');
-                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:embed_videos_content.html.twig';
+                    $template = 'FlexyMediaBundle:Backend/Media/Media/tabs/content:embed_videos_content.html.twig';
                     break;
                 default:
                     throw new \Exception('Error');
@@ -147,7 +147,7 @@ class MediaController extends BaseController
             $mediaPager = new MediaPager(
                 $mediaQb,
                 $request->query->get('page'),
-                $this->container->getParameter('egzakt_media.resultPerPage', 20)
+                $this->container->getParameter('flexy_media.resultPerPage', 20)
             );
 
             return new JsonResponse(array(
@@ -191,11 +191,11 @@ class MediaController extends BaseController
             $mediaPager = new MediaPager(
                 $mediaQb,
                 $request->query->get('page'),
-                $this->container->getParameter('egzakt_media.media_select.resultPerPage', 30)
+                $this->container->getParameter('flexy_media.media_select.resultPerPage', 30)
             );
 
-            $template = ('true' == $request->query->get('init', 'false')) ? 'EgzaktMediaBundle:Backend/Media/MediaSelect:media_select.html.twig'
-                : 'EgzaktMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig';
+            $template = ('true' == $request->query->get('init', 'false')) ? 'FlexyMediaBundle:Backend/Media/MediaSelect:media_select.html.twig'
+                : 'FlexyMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig';
 
             return new JsonResponse(array(
                 'html' => $this->renderView($template, array(
@@ -230,7 +230,7 @@ class MediaController extends BaseController
         $associatedContents = $this::getAssociatedContents($media, $this->container);
 
         if ($this->get('request')->get('message')) {
-            $template = $this->renderView('EgzaktMediaBundle:Backend/Media/Core:delete_message.html.twig', array(
+            $template = $this->renderView('FlexyMediaBundle:Backend/Media/Core:delete_message.html.twig', array(
                 'entity' => $media,
                 'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
             ));
@@ -255,7 +255,7 @@ class MediaController extends BaseController
         $this->getEm()->remove($media);
         $this->getEm()->flush();
 
-        $this->get('egzakt_system.router_invalidator')->invalidate();
+        $this->get('flexy_system.router_invalidator')->invalidate();
 
 
         return $this->redirect($this->generateUrl($media->getRouteBackend('list')));
@@ -317,10 +317,10 @@ class MediaController extends BaseController
 
         /* @var $classMetadata ClassMetadata */
         foreach ($metadata as $classMetadata) {
-            if ('Egzakt\MediaBundle\Entity\Media' != $classMetadata->getName()) {
+            if ('Flexy\MediaBundle\Entity\Media' != $classMetadata->getName()) {
                 foreach ($classMetadata->getAssociationMappings() as $association) {
 
-                    if ('Egzakt\MediaBundle\Entity\Media' == $association['targetEntity']) {
+                    if ('Flexy\MediaBundle\Entity\Media' == $association['targetEntity']) {
                         $fieldName = $association['fieldName'];
                         $sourceEntity = $association['sourceEntity'];
 
