@@ -167,25 +167,17 @@ var mediaManagerBind = function () {
         if ('image' == mediaManagerSelectedMedia.type) {
             mediaManagerSelectedMedia.width = div.data('media-width');
             mediaManagerSelectedMedia.height = div.data('media-height');
+            mediaManagerSelectedMedia.aviary = div.data('media-aviary');
         }
-
 
         divDetails.find('h3').html(mediaManagerSelectedMedia.name);
         divDetails.find('a#edit_media_link').attr('href', mediaManagerSelectedMedia.edit);
-        divDetails.find('#aviary_image').attr('src', mediaManagerSelectedMedia.preview);
+        divDetails.find('#aviary_image').attr('src', mediaManagerSelectedMedia.preview + '?' + new Date().getTime());
         divDetails.find('#file_size').find('span').html((mediaManagerSelectedMedia.size / 1024).toFixed(2));
 
         if ('image' == mediaManagerSelectedMedia.type) {
 
             $('#edit-aviary').show();
-
-            $('#media_details').on('click' , '#edit-aviary', function(e) {
-
-                $('#aviary_image').addClass('aviary');
-
-                return launchEditor('aviary_image');
-
-            });
 
             $('#aviary_path').val(mediaManagerSelectedMedia.aviary);
 
@@ -207,6 +199,7 @@ var mediaManagerBind = function () {
 
         $('#welcome_message').hide();
         divDetails.show();
+
     });
 
     $('#insert_media').click(function(e){
@@ -218,12 +211,19 @@ var mediaManagerBind = function () {
         e.preventDefault();
         mediaManagerInsert();
     });
+
+    // AVIARY
+
+    $('#media_details').on('click' , '#edit-aviary', function(e) {
+
+        launchEditor('aviary_image');
+
+    });
 }
 
 var mediaManagerInsert = function() {
     if (mediaManagerIsCk){
         mediaManagerInsertCk();
-        return;
     }
 
     var parent = mediaManagerTriggeringElement.parent();
@@ -241,3 +241,43 @@ var mediaManagerInsertCk = function() {
 
     mediaManagerIsCk = false;
 };
+
+// AVIARY
+
+var featherEditor = new Aviary.Feather({
+    apiKey: 'i3kui99ayvje8cix',
+    apiVersion: 2,
+    maxSize: 800, // Output image size (default 800x800 px)
+    displayImageSize: true,
+    tools: 'draw,text,enhance,frames,effects,stickers,crop,resize,warmth,orientation,brightness,focus,warmth,contrast,saturation,sharpness,splash,whiten,redeye,blemish',
+    appendTo: '',
+    onSave: function(imageID, newURL) {
+        $('#aviary_ajax_loader').show();
+        var img = $('#'+imageID);
+        $.get($('#aviary_path').val(), {
+            image: newURL
+        }, function(data){
+            img.fadeOut();
+            img.attr('src', img.attr('src') + '?' + new Date().getTime());
+            $('#aviary_ajax_loader').hide();
+            img.fadeIn();
+        });
+    },
+    onError: function(errorObj) {
+        alert(errorObj.message);
+    },
+    onClose: function() {
+        var img = $('#aviary_image');
+        img.removeAttr('class');
+        img.removeAttr('sytle');
+    }
+});
+
+function launchEditor(id) {
+
+    $('#aviary_image').addClass('aviary');
+
+    featherEditor.launch({
+        image: id
+    });
+}

@@ -174,19 +174,15 @@ class MediaController extends BaseController
             switch ($request->query->get('type')) {
                 case 'image':
                     $mediaQb = $this->mediaRepository->findByType('image');
-                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:images_content.html.twig';
                     break;
                 case 'document':
                     $mediaQb = $this->mediaRepository->findByType('document');
-                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:documents_content.html.twig';
                     break;
                 case 'video':
                     $mediaQb = $this->mediaRepository->findByType('video');
-                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:videos_content.html.twig';
                     break;
                 case 'embedvideo':
                     $mediaQb = $this->mediaRepository->findByType('embedvideo');
-                    $template = 'EgzaktMediaBundle:Backend/Media/Media/tabs/content:embed_videos_content.html.twig';
                     break;
                 default:
                     throw new \Exception('Error');

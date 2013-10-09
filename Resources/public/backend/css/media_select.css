@@ -114,12 +114,13 @@
 
 #media_details img {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 250px;
 }
 
 #media_details img.aviary {
     display: none;
     position: absolute;
+    max-height: 100%;
 }
 
 .media_button.green {
