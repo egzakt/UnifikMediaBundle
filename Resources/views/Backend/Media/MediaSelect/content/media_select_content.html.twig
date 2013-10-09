@@ -6,6 +6,7 @@
                 data-media-name="{{ media.name }}"
                 data-media-type="{{ media.type }}"
                 data-media-preview="{{ media.thumbnail.mediaPath }}"
+                data-media-thumbnail="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb_large', true) ~ '?' ~ random(9999) }}"
                 data-media-url="{{ media.mediaPath }}"
                 data-media-edit="{{ path(media.getRouteBackend(), media.getRouteBackendParams()) }}"
                 data-media-size="{{ media.size }}"

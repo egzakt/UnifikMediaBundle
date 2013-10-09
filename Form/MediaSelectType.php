@@ -32,7 +32,7 @@ class MediaSelectType extends AbstractType
         }
 
         $view->vars['media'] = $media;
-        $view->vars['types'] = $options['types'];
+        $view->vars['type'] = $options['type'];
     }
 
     /**
@@ -45,7 +45,7 @@ class MediaSelectType extends AbstractType
         $resolver->setDefaults(array(
            'class' => 'Flexy\MediaBundle\Entity\Media',
            'media_method' => null,
-           'types' => array('image', 'video', 'document'),
+           'type' => 'image',
         ));
     }
 

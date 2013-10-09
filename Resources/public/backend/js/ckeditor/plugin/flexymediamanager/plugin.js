@@ -27,14 +27,14 @@ CKEDITOR.plugins.add('flexymediamanager', {
 
                         loader1.load(function(){
 
-                            loader2 = new DynamicLoader();
+                            var loader2 = new DynamicLoader();
 
                             loader2.addScript('blueimpprocess', '/bundles/flexymedia/backend/js/blueimp/jquery.fileupload-process.js');
 
 
                             loader2.load(function(){
 
-                                loader3 = new DynamicLoader();
+                                var loader3 = new DynamicLoader();
 
                                 loader3.addScript('blueimpimage', '/bundles/flexymedia/backend/js/blueimp/jquery.fileupload-image.js');
                                 loader3.addScript('blueimpaudio', '/bundles/flexymedia/backend/js/blueimp/jquery.fileupload-audio.js');

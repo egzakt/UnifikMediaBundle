@@ -143,6 +143,22 @@
     padding: 0 5px;
     border-radius: 3px;
     margin: 2px;
+    cursor: pointer;
+}
+
+.media_button {
+    position: relative;
+    top: 16px;
+    left: -10px;
+}
+
+.media_button.red {
+    border: 2px solid red;
+    background-color: red;
+}
+
+.select_media {
+    cursor: pointer;
 }
 
 /* UPLOAD */

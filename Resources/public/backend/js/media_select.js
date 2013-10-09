@@ -8,7 +8,7 @@ var mediaManagerIsCk = false;
 $('body').append($('<div id="media_select_modal_container"><div id="media_select_modal" title="Medias"></div></div>'));
 var mediaManagerModal = $('#media_select_modal');
 
-$('.select-media').click(function(){
+$('.select_media').click(function(){
     mediaManagerTriggeringElement = $(this);
     mediaManagerLoad($(this).data('media-type'), true, mediaManagerShow);
 });
@@ -159,6 +159,7 @@ var mediaManagerBind = function () {
         mediaManagerSelectedMedia.name = div.data('media-name');
         mediaManagerSelectedMedia.type = div.data('media-type');
         mediaManagerSelectedMedia.preview = div.data('media-preview');
+        mediaManagerSelectedMedia.thumbnail = div.data('media-thumbnail');
         mediaManagerSelectedMedia.url = div.data('media-url');
         mediaManagerSelectedMedia.edit = div.data('media-edit');
         mediaManagerSelectedMedia.size = div.data('media-size');
@@ -226,10 +227,8 @@ var mediaManagerInsert = function() {
         mediaManagerInsertCk();
     }
 
-    var parent = mediaManagerTriggeringElement.parent();
-
-    parent.find('.input_media').val(mediaManagerSelectedMedia.id);
-    parent.find('.image_media').attr('src', mediaManagerSelectedMedia.url);
+    mediaManagerTriggeringElement.parent().find('.input_media').val(mediaManagerSelectedMedia.id);
+    mediaManagerTriggeringElement.attr('src', mediaManagerSelectedMedia.thumbnail);
 
     mediaManagerModal.dialog('close');
 };
