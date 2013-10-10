@@ -25,12 +25,12 @@
 
     {% if medias|length > 0 %}
         <div id="pager_wrapper">
-            <div id="{{ type }}_pager">
+            <div id="media_pager">
             </div>
         </div>
 
         <script type="text/javascript">
-            $('#{{ type }}_pager').pagination({
+            $('#media_pager').pagination({
                 pages: {{ pagesTotal }},
                 currentPage: {{ page }},
                 cssStyle: 'light-theme',
@@ -38,16 +38,16 @@
 
                     event.preventDefault();
 
-                    $('#loading').show();
+                    $('#media_ajax_loader').show();
 
                     $.ajax({
                         method: "GET",
                         url: Routing.generate('flexy_media_backend_media_select_pager'),
-                        data: {page: pageNumber, type: '{{ type }}', view: '{{ view }}'},
+                        data: {folderId: '{{ folderId }}', page: pageNumber, type: '{{ type }}', view: '{{ view }}'},
                         contentType: 'json',
                         success: function(data) {
-                            $('#media_list div.{{ type }}').html($(data.html));
-                            $('#loading').hide();
+                            $('#media_list').html($(data.html));
+                            $('#media_ajax_loader').hide();
                         }
                     });
                 }

@@ -42,4 +42,39 @@ class MediaRepository extends BaseEntityRepository
 
         return $this->processQuery($qb);
     }
+
+    /**
+     * Find by folderId and Type
+     *
+     * @param $folderId
+     * @param string $type
+     * @param string $sort
+     * @return mixed
+     */
+    public function findByFolderType($folderId = 'base', $type = 'any', $sort = 'recent')
+    {
+        $qb = $this->createQueryBuilder('m');
+
+        if('base' != $folderId) {
+            $qb->where('m.folder = :folderId')
+                ->setParameter('folderId', $folderId);
+
+        } else {
+            $qb->where('m.folder IS NULL');
+        }
+
+        if ('any' != $type) {
+            $qb->andWhere('m.type = :type')
+                ->setParameter('type', $type);
+        }
+
+        switch ($sort) {
+            case 'recent':
+                $qb->addOrderBy('m.createdAt', 'DESC');
+        }
+
+        $qb->andWhere('m.parentMedia IS NULL');
+
+        return $this->processQuery($qb);
+    }
 }

@@ -51,11 +51,12 @@ Flexy\MediaBundle\Entity\Media:
             length: 50
             nullable: true
     lifecycleCallbacks: {  }
-    oneToOne:
+    oneToMany:
         thumbnail:
             targetEntity: Flexy\MediaBundle\Entity\Media
             mappedBy: parentMedia
             onDelete: cascade
+    manyToOne:
         parentMedia:
             targetEntity: Flexy\MediaBundle\Entity\Media
             inversedBy: thumbnail
@@ -63,3 +64,6 @@ Flexy\MediaBundle\Entity\Media:
                 name: parentMedia
                 referencedColumnName: id
                 onDelete: cascade
+        folder:
+            targetEntity: Flexy\MediaBundle\Entity\Folder
+            inversedBy: medias

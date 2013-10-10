@@ -1,0 +1,29 @@
+Flexy\MediaBundle\Entity\Folder:
+    type: entity
+    table: MediaFolder
+    repositoryClass: Flexy\MediaBundle\Entity\FolderRepository
+    fields:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+        name:
+            type: string
+            length: 255
+        createdAt:
+            type: datetime
+        updatedAt:
+            type: datetime
+    lifecycleCallbacks: {  }
+    oneToMany:
+        children:
+            targetEntity: Flexy\MediaBundle\Entity\Folder
+            mappedBy: parent
+        medias:
+            targetEntity: Flexy\MediaBundle\Entity\Media
+            mappedBy: folder
+    manyToOne:
+        parent:
+            targetEntity: Flexy\MediaBundle\Entity\Folder
+            inversedBy: children

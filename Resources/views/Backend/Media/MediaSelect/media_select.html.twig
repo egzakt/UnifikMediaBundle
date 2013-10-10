@@ -1,30 +1,32 @@
 {% spaceless %}
 
-    <ul id="media_filters">
-        {% if 'ckeditor' == view %}
-            <li><a class="media_filter" data-media-type="image">{% trans %}Images{% endtrans %}</a></li>
-            <li><a class="media_filter" data-media-type="video">{% trans %}Videos{% endtrans %}</a></li>
-            <li><a class="media_filter" data-media-type="document">{% trans %}Documents{% endtrans %}</a></li>
-            <li><a class="media_filter" data-media-type="embedvideo">{% trans %}Embed videos{% endtrans %}</a></li>
-        {% endif %}
+    <div id="media_ajax_loader">
+        <img  src="{{ asset('bundles/flexymedia/backend/images/icons/ajax-loader.gif') }}" />
+    </div>
+
+    <ul id="media_views">
+        <li><a class="library">{% trans %}Library{% endtrans %}</a></li>
         <li><a class="upload">+ {% trans %}Upload a new file{% endtrans %}</a></li>
     </ul>
+
+    {#{% if 'ckeditor' == view %}#}
+        {#<li><a class="media_filter" data-media-type="image">{% trans %}Images{% endtrans %}</a></li>#}
+        {#<li><a class="media_filter" data-media-type="video">{% trans %}Videos{% endtrans %}</a></li>#}
+        {#<li><a class="media_filter" data-media-type="document">{% trans %}Documents{% endtrans %}</a></li>#}
+        {#<li><a class="media_filter" data-media-type="embedvideo">{% trans %}Embed videos{% endtrans %}</a></li>#}
+    {#{% endif %}#}
 
     <div id="media_wrapper">
 
         <div id="media_container">
 
+            <div id="folder_nav">
+                <div id="folder_tree"></div>
+            </div>
+
             <div id="media_list">
 
-                <div class="image list">
-                    {% include 'FlexyMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig' %}
-                </div>
-
-                <div class="video list"></div>
-
-                <div class="embedvideo list"></div>
-
-                <div class="document list"></div>
+                {% include 'FlexyMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig' %}
 
             </div>
 

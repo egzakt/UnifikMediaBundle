@@ -9,8 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Flexy\MediaBundle\Entity\Media;
+use Flexy\MediaBundle\Entity\Folder;
 use Flexy\SystemBundle\Lib\Backend\BaseController;
 use Flexy\MediaBundle\Entity\MediaRepository;
+use Flexy\MediaBundle\Entity\FolderRepository;
 use Flexy\MediaBundle\Lib\MediaPager;
 
 /**
@@ -24,12 +26,18 @@ class MediaController extends BaseController
     protected $mediaRepository;
 
     /**
+     * @var FolderRepository
+     */
+    private $folderRepository;
+
+    /**
      * Init
      */
     public function init()
     {
         parent::init();
         $this->mediaRepository = $this->getEm()->getRepository('FlexyMediaBundle:Media');
+        $this->folderRepository = $this->getEm()->getRepository('FlexyMediaBundle:Folder');
     }
 
     /**
@@ -167,25 +175,32 @@ class MediaController extends BaseController
      */
     public function mediaSelectPagerAction(Request $request)
     {
-        if ($request->isXmlHttpRequest() && $request->query->has('page') && $request->query->has('type')) {
+        if ($request->isXmlHttpRequest()
+            && $request->query->has('page')
+            && $request->query->has('type')
+            && $request->query->has('folderId')) {
 
             $this->mediaRepository->setReturnQueryBuilder(true);
 
-            switch ($request->query->get('type')) {
-                case 'image':
-                    $mediaQb = $this->mediaRepository->findByType('image');
-                    break;
-                case 'document':
-                    $mediaQb = $this->mediaRepository->findByType('document');
-                    break;
-                case 'video':
-                    $mediaQb = $this->mediaRepository->findByType('video');
-                    break;
-                case 'embedvideo':
-                    $mediaQb = $this->mediaRepository->findByType('embedvideo');
-                    break;
-                default:
-                    throw new \Exception('Error');
+            $mediaQb = $this->mediaRepository->findByFolderType(
+                $request->query->get('folderId', 'base'),
+                $request->query->get('type', 'any'),
+                'recent'
+            );
+
+            $tree = array();
+
+            if ($request->query->get('init', false)) {
+
+                $baseFolders = $this->folderRepository->findBy(
+                    array('parent' => null),
+                    array('name' => 'ASC')
+                );
+
+                /* @var $folder Folder */
+                foreach ($baseFolders as $folder) {
+                    $tree[] = $folder->toArray();
+                }
             }
 
             $mediaPager = new MediaPager(
@@ -200,11 +215,13 @@ class MediaController extends BaseController
             return new JsonResponse(array(
                 'html' => $this->renderView($template, array(
                         'medias' => $mediaPager->getResult(),
+                        'folderId' => $request->query->get('folderId', 'base'),
                         'type' => $request->query->get('type', 'image'),
                         'view' => $request->query->get('view', 'ckeditor'),
                         'pagesTotal' => $mediaPager->getPageTotal(),
                         'page' => $request->get('page', 1)
-                 ))
+                 )),
+                'tree' => $tree
             ));
         }
 

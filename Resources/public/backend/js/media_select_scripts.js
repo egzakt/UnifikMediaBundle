@@ -6,6 +6,7 @@ if ('undefined' === typeof flexymediascript){
     loader1.addStyle('blueimpuploader', '/bundles/flexymedia/backend/css/blueimp/jquery.fileupload-ui.css');
     loader1.addStyle('flexymediastyle', '/bundles/flexymedia/backend/css/media_select.css');
     loader1.addStyle('simplepaginationstyle', '/bundles/flexymedia/backend/css/simplePagination.css');
+    loader1.addStyle('dynatreestyle', '/bundles/flexymedia/backend/css/ui.dynatree.css');
 
 
     loader1.addScript('blueimptmpl', 'http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js');

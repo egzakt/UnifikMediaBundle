@@ -18,7 +18,6 @@ CKEDITOR.plugins.add('flexymediamanager', {
 
                 if ('undefined' !== typeof flexymediaselectscript){
 
-                    $('#loading').show();
                     mediaManagerLoadCk(editor);
                 }
             },

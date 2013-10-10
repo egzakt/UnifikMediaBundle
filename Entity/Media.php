@@ -4,13 +4,12 @@ namespace Flexy\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Flexy\SystemBundle\Lib\BaseEntity;
 use Flexy\DoctrineBehaviorsBundle\Model as FlexyORMBehaviors;
 
 /**
  * Media
  */
-class Media extends BaseEntity
+class Media
 {
 
     use FlexyORMBehaviors\Uploadable\Uploadable;
@@ -92,6 +91,11 @@ class Media extends BaseEntity
     private $thumbnail;
 
     /**
+     * @var \Flexy\MediaBundle\Entity\Folder
+     */
+    private $folder;
+
+    /**
      * Non mapped field
      *
      * @var boolean
@@ -125,8 +129,6 @@ class Media extends BaseEntity
     public function setName($name)
     {
         $this->name = $name;
-    
-        return $this;
     }
 
     /**
@@ -180,10 +182,10 @@ class Media extends BaseEntity
             return $this->container->get('kernel')->getRootDir().'/../web/uploads/' . $this->mediaPath;
         }
 
-        $testweb = $this->getWebPath('media');
-        $testabsolute = $this->getAbsolutePath('media');
-        $testupload = $this->getUploadPath('media');
-        $testroot = $this->getUploadRootDir('media');
+//        $testweb = $this->getWebPath('media');
+//        $testabsolute = $this->getAbsolutePath('media');
+//        $testupload = $this->getUploadPath('media');
+//        $testroot = $this->getUploadRootDir('media');
 
         switch ($this->type) {
             case 'embedvideo':
@@ -417,9 +419,30 @@ class Media extends BaseEntity
     }
 
     /**
+     * Set folder
+     *
+     * @param \Flexy\MediaBundle\Entity\Folder $folder
+     * @return Media
+     */
+    public function setFolder(\Flexy\MediaBundle\Entity\Folder $folder = null)
+    {
+        $this->folder = $folder;
+    }
+
+    /**
+     * Get folder
+     *
+     * @return \Flexy\MediaBundle\Entity\Folder
+     */
+    public function getFolder()
+    {
+        return $this->folder;
+    }
+
+    /**
      * Set thumbnail
      *
-     * @param \Flexy\MediaBundle\Entity\Media $thumbnail
+     * @param Media $thumbnail
      */
     public function setThumbnail(Media $thumbnail = null)
     {

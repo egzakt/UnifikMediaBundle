@@ -1,8 +1,11 @@
+var mediaManagerInit = true;
 var mediaManagerSelectedMedia = {};
 var mediaManagerTriggeringElement;
-var mediaManagerTypeLoaded = [];
 var mediaManagerScriptsBinded = false;
 var mediaManagerIsCk = false;
+var mediaManagerFolderId = 'base';
+var mediaManagerMediaFilter = 'any';
+var mediaManagerAjaxLoader;
 
 // Create the media select container
 $('body').append($('<div id="media_select_modal_container"><div id="media_select_modal" title="Medias"></div></div>'));
@@ -10,7 +13,8 @@ var mediaManagerModal = $('#media_select_modal');
 
 $('.select_media').click(function(){
     mediaManagerTriggeringElement = $(this);
-    mediaManagerLoad($(this).data('media-type'), true, mediaManagerShow);
+    mediaManagerLoad(null, $(this).data('media-type'), mediaManagerInit, mediaManagerShow);
+    mediaManagerInit = false;
 });
 
 $('.media_button.remove').click(function(){
@@ -28,43 +32,45 @@ $('.media_button.remove').click(function(){
 var mediaManagerLoadCk = function (editor) {
     mediaManagerIsCk = true;
     mediaManagerTriggeringElement = editor;
-    mediaManagerLoad('image', true, mediaManagerShow);
+    mediaManagerLoad(mediaManagerFolderId, mediaManagerMediaFilter, mediaManagerInit, mediaManagerShow);
+    mediaManagerInit = false;
 };
 
-var mediaManagerLoad = function (type, init, callback) {
+var mediaManagerLoad = function (folderId, type, init, callback) {
 
-    if (-1 == $.inArray(type, mediaManagerTypeLoaded)) {
+    $.ajax({
+        url: Routing.generate('flexy_media_backend_media_select_pager'),
+        data: {
+            folderId: folderId,
+            type: type,
+            page: 1,
+            view: (mediaManagerIsCk) ? 'ckeditor' : 'mediafield',
+            init: init
+        },
+        async: false,
+        dataType: 'json',
+        success: function (data) {
 
-        $.ajax({
-            url: Routing.generate('flexy_media_backend_media_select_pager'),
-            data: {
-                type: type,
-                page: 1,
-                view: (mediaManagerIsCk) ? 'ckeditor' : 'mediafield',
-                init: init
-            },
-            async: false,
-            dataType: 'json',
-            success: function (data) {
+            // Append html content
+            if (init) {
+                mediaManagerModal.html($(data.html));
 
-                mediaManagerTypeLoaded.push(type);
+                // Load tree nav
+                mediaManagerNavigationLoad(data.tree);
 
-                // Append html content
-                if (init) {
-                    mediaManagerModal.html($(data.html));
-                } else {
-                    $('#media_list div.' + type).html($(data.html));
-                }
-
-            },
-            error: function () {
-
-                // Append html content
-                mediaManagerModal.html($('<h2>Internal Server Error</h2>'));
-
+            } else {
+                $('#media_list').html($(data.html));
+                mediaManagerAjaxLoader.hide();
             }
-        });
-    }
+
+        },
+        error: function () {
+
+            // Append html content
+            mediaManagerModal.html($('<h2>Internal Server Error</h2>'));
+
+        }
+    });
 
     if (false == mediaManagerScriptsBinded) {
         mediaManagerBind();
@@ -74,6 +80,22 @@ var mediaManagerLoad = function (type, init, callback) {
     if (undefined != callback) {
         callback();
     }
+};
+
+var mediaManagerNavigationLoad = function (tree) {
+
+    $("#folder_tree").dynatree({
+        onActivate: function(node) {
+            mediaManagerAjaxLoader.show();
+            mediaManagerFolderId = node.data.id;
+            mediaManagerLoad(mediaManagerFolderId, mediaManagerMediaFilter, mediaManagerInit);
+        },
+        children: [ // Pass an array of nodes.
+            {title: "Medias", activate:true, isFolder: true, id: 'base',
+                children: (tree == {}) ? false : tree
+            }
+        ]
+    });
 };
 
 var mediaManagerShow = function () {
@@ -99,51 +121,45 @@ var mediaManagerShow = function () {
         }
     });
 
-    $('#loading').hide();
+    mediaManagerAjaxLoader = $('#media_ajax_loader');
+
+//    mediaManagerAjaxLoader.hide();
+    mediaManagerAjaxLoader.show();
 
 };
 
 var mediaManagerBind = function () {
 
-    // FILTERS SELECTION SCRIPT
+    // VIEW SELECTION SCRIPT
 
     if (mediaManagerIsCk) {
 
-        $('#media_filters').on('click', '.media_filter', function(e){
+        $('#media_views').on('click', '.library', function(e){
 
             e.preventDefault();
 
-            var loading = $('#loading');
-
-            loading.show();
+            mediaManagerAjaxLoader.show();
 
             $('#uploader_wrapper').hide();
             $('#media_wrapper').show();
 
             var type = $(e.target).data('media-type');
 
-            mediaManagerLoad(type, false);
+            mediaManagerLoad(mediaManagerFolderId, mediaManagerMediaFilter, mediaManagerInit);
 
-            var mediaList = $('#media_list');
-
-            mediaList.find('div.list').hide();
-            mediaList.find('div.' + type).show();
-
-            loading.hide();
+//            mediaManagerAjaxLoader.hide();
 
         });
     }
 
     // UPLOADER BUTTON
 
-    $('#media_filters').on('click', '.upload', function(e){
+    $('#media_views').on('click', '.upload', function(e){
 
         e.preventDefault();
 
         $('#media_wrapper').hide();
         $('#uploader_wrapper').show();
-
-        mediaManagerTypeLoaded = [];
 
     });
 
