@@ -13,6 +13,18 @@ $('.select_media').click(function(){
     mediaManagerLoad($(this).data('media-type'), true, mediaManagerShow);
 });
 
+$('.media_button.remove').click(function(){
+
+    var removeButton = $(this);
+
+    removeButton.parent().parent().find('.input_media').val('');
+
+    var img = removeButton.parent().parent().find('.image_media');
+    img.attr('src', 'http://placehold.it/200x150&text=' + img.data('media-placeholder-trans'));
+
+    removeButton.hide();
+});
+
 var mediaManagerLoadCk = function (editor) {
     mediaManagerIsCk = true;
     mediaManagerTriggeringElement = editor;
@@ -228,6 +240,7 @@ var mediaManagerInsert = function() {
     }
 
     mediaManagerTriggeringElement.parent().find('.input_media').val(mediaManagerSelectedMedia.id);
+    mediaManagerTriggeringElement.parent().find('.remove').show();
     mediaManagerTriggeringElement.attr('src', mediaManagerSelectedMedia.thumbnail);
 
     mediaManagerModal.dialog('close');

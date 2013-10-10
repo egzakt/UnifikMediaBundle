@@ -19,16 +19,16 @@ class MediaSelectType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        if (null == $options['media_method']) {
-            throw new MissingOptionsException('The "media_method" option must be set.');
-        }
-
         $media = null;
         $parentData = $form->getParent()->getData();
 
-        if (null !== $parentData) {
-            $accessor = PropertyAccess::createPropertyAccessor();
-            $media = $accessor->getValue($parentData, $options['media_method']);
+        if (null != $options['media_method']) {
+            if (null !== $parentData) {
+                $accessor = PropertyAccess::createPropertyAccessor();
+                $media = $accessor->getValue($parentData, $options['media_method']);
+            }
+        } else {
+            $media = $form->getData();
         }
 
         $view->vars['media'] = $media;
