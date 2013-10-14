@@ -110,7 +110,7 @@ var mediaManagerLoad = function (callback) {
             view: (mediaManagerIsCk) ? 'ckeditor' : 'mediafield',
             init: mediaManagerInit
         },
-        async: (mediaManagerInit) ? false : true,
+        async: (!mediaManagerInit),
         dataType: 'json',
         success: function (data) {
 
@@ -123,7 +123,20 @@ var mediaManagerLoad = function (callback) {
                 mediaManagerLoadBind();
 
             } else {
-                $('#media_list').html($(data.html));
+
+                var divMediaList = $('#media_list');
+
+                if (divMediaList.hasClass('edit')) {
+                    divMediaList.hide();
+                    divMediaList.removeClass('edit');
+                    divMediaList.html($(data.html));
+
+                    divMediaList.show();
+                    $('#media_details').show();
+                } else {
+                    divMediaList.html($(data.html));
+                }
+
                 mediaManagerAjaxLoader.hide();
                 mediaManagerInitialize();
                 mediaManagerLoadBind();
@@ -218,6 +231,64 @@ var mediaManagerNavigationLoad = function (tree) {
     });
 };
 
+var mediaManagerEdit = function (submit) {
+
+    var route;
+
+    switch (mediaManagerSelectedMedia.type) {
+        case 'image':
+            route = 'flexy_media_backend_image_edit';
+            break;
+        case 'document':
+            route = 'flexy_media_backend_document_edit';
+            break;
+        case 'video':
+            route = 'flexy_media_backend_video_edit';
+            break;
+        case 'embedvideo':
+            route = 'flexy_media_backend_embed_video_edit';
+            break
+    }
+
+    mediaManagerAjaxLoader.show();
+
+    var data = {mediaId: mediaManagerSelectedMedia.id};
+
+    if (submit) {
+        data = $('#edit_form').serialize() + '&mediaId=' + mediaManagerSelectedMedia.id;
+    }
+
+    $.ajax({
+        method: (submit) ? 'POST' : 'GET',
+        url: Routing.generate(route),
+        data: data,
+        dataType: 'json',
+        success: function (data) {
+
+            var divMediaList = $('#media_list');
+
+            divMediaList.html($(data.html));
+            divMediaList.show();
+
+            mediaManagerAjaxLoader.hide();
+
+            $('#edit_form').on('submit', function() {
+
+                mediaManagerEdit(true);
+
+                return false; // j'empêche le navigateur de soumettre lui-même le formulaire
+            });
+
+        },
+        error: function () {
+
+            // Append html content
+            mediaManagerModal.html($('<h2>Internal Server Error</h2>'));
+
+        }
+    });
+};
+
 var mediaManagerShow = function () {
 
 //    $(document).on('click', '.ui-widget-overlay', function(){ mediaManagerModal.dialog('close'); });
@@ -253,25 +324,19 @@ var mediaManagerBind = function () {
 
     // VIEW SELECTION SCRIPT
 
-    if (mediaManagerIsCk) {
+    $('#media_views').on('click', '.library', function(e){
 
-        $('#media_views').on('click', '.library', function(e){
+        e.preventDefault();
+        mediaManagerAjaxLoader.show();
 
-            e.preventDefault();
-            mediaManagerAjaxLoader.show();
+        $('#uploader_wrapper').hide();
+        $('#media_filters').show();
+        $('#media_wrapper').show();
 
-            $('#uploader_wrapper').hide();
-            $('#media_filters').show();
-            $('#media_wrapper').show();
+        mediaManagerLoad();
 
-            var type = $(e.target).data('media-type');
+    });
 
-            mediaManagerLoad();
-
-            mediaManagerAjaxLoader.hide();
-
-        });
-    }
 
     // UPLOADER BUTTON
 
@@ -286,13 +351,6 @@ var mediaManagerBind = function () {
     });
 
     // FILTERS BUTTONS
-    $(function() {
-        $( "#media_type_filters" ).buttonset();
-    });
-
-    $(function() {
-        $( "#media_date_filters" ).buttonset();
-    });
 
     $('#media_text_search').on('keyup', function(e){
 
@@ -304,13 +362,23 @@ var mediaManagerBind = function () {
         }
     });
 
-    $('.type_radio').on('click', function(e){
+    if (mediaManagerIsCk) {
+        $(function() {
+            $( "#media_type_filters" ).buttonset();
+        });
 
-        mediaManagerFilters.type = $(this).val();
+        $('.type_radio').on('click', function(e){
 
-        mediaManagerAjaxLoader.show();
-        mediaManagerLoad();
+            mediaManagerFilters.type = $(this).val();
 
+            mediaManagerAjaxLoader.show();
+            mediaManagerLoad();
+
+        });
+    }
+
+    $(function() {
+        $( "#media_date_filters" ).buttonset();
     });
 
     $('.date_radio').on('click', function(e){
@@ -419,7 +487,6 @@ var mediaManagerBind = function () {
             mediaManagerSelectedMedia.preview = div.data('media-preview');
             mediaManagerSelectedMedia.thumbnail = div.data('media-thumbnail');
             mediaManagerSelectedMedia.url = div.data('media-url');
-            mediaManagerSelectedMedia.edit = div.data('media-edit');
             mediaManagerSelectedMedia.caption = div.data('media-caption');
 
             if ('image' == mediaManagerSelectedMedia.type) {
@@ -427,8 +494,19 @@ var mediaManagerBind = function () {
             }
 
             divDetails.find('h3').html(mediaManagerSelectedMedia.name);
-            divDetails.find('a#edit_media_link').attr('href', mediaManagerSelectedMedia.edit);
             divDetails.find('#aviary_image').attr('src', mediaManagerSelectedMedia.preview + '?' + new Date().getTime());
+
+            divDetails.find('a#edit_media_link').on('click', function(e){
+                e.preventDefault();
+
+                var divMediaList = $('#media_list');
+
+                divMediaList.hide();
+                $('#media_details').hide();
+                divMediaList.addClass('edit');
+
+                mediaManagerEdit();
+            });
 
             var divDetailsImage = $('#media_details_image');
             var divDetailsIframe = $('#media_details_iframe');
@@ -673,7 +751,14 @@ var mediaManagerLoadBind = function(){
                         icon: 'edit',
                         disabled: (mediaManagerSelectedMediaArray.length > 1),
                         callback: function(){
-                           window.location = mediaManagerSelectedMedia.edit;
+
+                            var divMediaList = $('#media_list');
+
+                            divMediaList.hide();
+                            $('#media_details').hide();
+                            divMediaList.addClass('edit');
+
+                            mediaManagerEdit();
                         }
                     },
                     editimage: (mediaManagerSelectedMedia.type != 'image') ? false : {

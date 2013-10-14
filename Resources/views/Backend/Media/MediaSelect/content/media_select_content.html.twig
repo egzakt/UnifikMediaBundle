@@ -10,7 +10,6 @@
                         data-media-preview="{{ media.thumbnail.mediaPath }}"
                         data-media-thumbnail="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb_large', true) ~ '?' ~ random(9999) }}"
                         data-media-url="{{ media.mediaPath }}"
-                        data-media-edit="{{ path(media.getRouteBackend(), media.getRouteBackendParams()) }}"
                         data-media-size="{{ media.size }}"
                         data-media-caption="{{ media.caption }}"
                         {% if 'image' == media.type %}

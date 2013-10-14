@@ -5,6 +5,7 @@ namespace Flexy\MediaBundle\Controller\Backend\Media;
 use Flexy\MediaBundle\Entity\Media;
 use Flexy\MediaBundle\Form\DocumentType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -18,74 +19,76 @@ use Symfony\Component\Routing\Generator\UrlGenerator;
 class DocumentController extends BaseController
 {
     /**
-     * Displays a form to edit an existing document entity.
+     * Edit document detail
      *
-     * @param $id
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return JsonResponse
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function editAction($id, Request $request)
+    public function editAction(Request $request)
     {
+        if ($request->isXmlHttpRequest()) {
 
-        $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
+            $id = ($request->query->has('mediaId')) ? $request->query->get('mediaId') : $request->request->get('mediaId');
 
-        if (!$media) {
-            throw $this->createNotFoundException('Unable to find the media');
-        }
+            $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
 
-        $form = $this->createForm(new DocumentType(), $media);
-
-        if ("POST" == $request->getMethod()) {
-
-            $form->submit($request);
-
-            if ($form->isValid()) {
-                $this->getEm()->persist($media);
-
-                // Update link in text field
-                $media->setNeedUpdate(true);
-
-                //Update the file only if a new one has been uploaded or if the name have change
-                if ($media->getMedia()) {
-
-                    $this->getEm()->remove($media->getThumbnail());
-
-                    //Generate the thumbnail
-                    $image = new Media();
-                    $image->setName("Preview - ".$media->getMedia()->getClientOriginalName());
-                    $image->setParentMedia($media);
-
-                    $this->getEm()->persist($image);
-                    $media->setThumbnail($image);
-                }
-
-                $this->getEm()->flush();
-
-
-
-                $this->get('flexy_system.router_invalidator')->invalidate();
-
-                if ($request->request->has('save')) {
-                    return $this->redirect($this->generateUrl('flexy_media_backend_media'));
-                }
-
-                return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
+            if (!$media) {
+                throw $this->createNotFoundException('Unable to find the media');
             }
+
+            $form = $this->createForm(new DocumentType(), $media);
+
+            if ("POST" == $request->getMethod()) {
+
+                $form->submit($request);
+
+                if ($form->isValid()) {
+                    $this->getEm()->persist($media);
+
+                    // Update link in text field
+                    //$media->setNeedUpdate(true);
+
+                    //Update the file only if a new one has been uploaded or if the name have change
+//                    if ($media->getMedia()) {
+//
+//                        $this->getEm()->remove($media->getThumbnail());
+//
+//                        //Generate the thumbnail
+//                        $image = new Media();
+//                        $image->setName("Preview - ".$media->getMedia()->getClientOriginalName());
+//                        $image->setParentMedia($media);
+//
+//                        $this->getEm()->persist($image);
+//                        $media->setThumbnail($image);
+//                    }
+
+                    $this->getEm()->flush();
+
+
+
+                    $this->get('flexy_system.router_invalidator')->invalidate();
+
+                }
+            }
+
+            $explode = explode('/', $media->getMediaPath());
+            $realName = array_pop($explode);
+
+            $associatedContents = MediaController::getAssociatedContents($media, $this->container);
+
+            return new JsonResponse(array(
+                'html' => $this->renderView('FlexyMediaBundle:Backend/Media/Document:edit.html.twig', array(
+                    'form' => $form->createView(),
+                    'media' => $media,
+                    'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
+                    'realName' => $realName,
+                    'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
+                ))
+            ));
         }
 
-        $explode = explode('/', $media->getMediaPath());
-        $realName = array_pop($explode);
-
-        $associatedContents = MediaController::getAssociatedContents($media, $this->container);
-
-        return $this->render('FlexyMediaBundle:Backend/Media/Document:edit.html.twig', array(
-            'form' => $form->createView(),
-            'media' => $media,
-            'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
-            'realName' => $realName,
-            'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
-        ));
+        return new JsonResponse();
     }
 
     /**

@@ -19,54 +19,56 @@ use Flexy\MediaBundle\Controller\Backend\Media\MediaController;
 class ImageController extends BaseController
 {
     /**
-     * Displays a form to edit an existing image entity.
+     * Edit image detail
      *
-     * @param $id
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return JsonResponse
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function editAction($id, Request $request)
+    public function editAction(Request $request)
     {
-        $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
+        if ($request->isXmlHttpRequest()) {
 
-        if (!$media) {
-            throw $this->createNotFoundException('Unable to find the media');
-        }
+            $id = ($request->query->has('mediaId')) ? $request->query->get('mediaId') : $request->request->get('mediaId');
 
-        $form = $this->createForm(new ImageType(), $media);
+            $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
 
-        if ("POST" == $request->getMethod()) {
-
-            $form->submit($request);
-
-            if ($form->isValid()) {
-                $this->getEm()->persist($media);
-
-                $this->getEm()->flush();
-
-                $this->get('flexy_system.router_invalidator')->invalidate();
-
-                if ($request->request->has('save')) {
-                    return $this->redirect($this->generateUrl('flexy_media_backend_media'));
-                }
-
-                return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
+            if (!$media) {
+                throw $this->createNotFoundException('Unable to find the media');
             }
+
+            $form = $this->createForm(new ImageType(), $media);
+
+            if ("POST" == $request->getMethod()) {
+
+                $form->submit($request);
+
+                if ($form->isValid()) {
+                    $this->getEm()->persist($media);
+
+                    $this->getEm()->flush();
+
+                    $this->get('flexy_system.router_invalidator')->invalidate();
+                }
+            }
+
+            $explode = explode('/', $media->getMediaPath());
+            $realName = array_pop($explode);
+
+            $associatedContents = MediaController::getAssociatedContents($media, $this->container);
+
+            return new JsonResponse(array(
+                'html' => $this->renderView('FlexyMediaBundle:Backend/Media/Image:edit.html.twig', array(
+                    'form' => $form->createView(),
+                    'media' => $media,
+                    'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
+                    'realName' => $realName,
+                    'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
+                ))
+            ));
         }
 
-        $explode = explode('/', $media->getMediaPath());
-        $realName = array_pop($explode);
-
-        $associatedContents = MediaController::getAssociatedContents($media, $this->container);
-
-        return $this->render('FlexyMediaBundle:Backend/Media/Image:edit.html.twig', array(
-            'form' => $form->createView(),
-            'media' => $media,
-            'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
-            'realName' => $realName,
-            'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
-        ));
+        return new JsonResponse();
     }
 
     /**

@@ -62,71 +62,73 @@ class EmbedVideoController extends BaseController
     }
 
     /**
-     * Displays a form to edit an existing ad entity.
+     * Edit embed video detail
      *
-     * @param $id
      * @param Request $request
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     * @return JsonResponse
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function editAction($id, Request $request)
+    public function editAction(Request $request)
     {
-        $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
+        if ($request->isXmlHttpRequest()) {
 
-        if (!$media) {
-            throw $this->createNotFoundException('Unanble to find the media');
-        }
+            $id = ($request->query->has('mediaId')) ? $request->query->get('mediaId') : $request->request->get('mediaId');
 
-        $form = $this->createForm(new EmbedVideoType(), $media);
+            $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
 
-        if ("POST" == $request->getMethod()) {
-
-            $oldUrl = $media->getUrl();
-            $form->submit($request);
-
-            $mediaParser = $this->get('flexy_media.parser');
-
-            if ($oldUrl != $media->getUrl() && !$mediaParser = $mediaParser->getParser($form->get('url')->getData())) {
-
-                $t = $this->get('translator');
-
-                $form->get('url')->addError(new FormError($t->trans('This embed video url is not valid. Try the one in the iframe code if it\'s not already done.')));
-
+            if (!$media) {
+                throw $this->createNotFoundException('Unanble to find the media');
             }
 
-            if ($form->isValid()) {
-                $this->getEm()->persist($media);
+            $form = $this->createForm(new EmbedVideoType(), $media);
 
-                if ($oldUrl != $media->getUrl()) {
+            if ("POST" == $request->getMethod()) {
 
-                    $media->setMediaPath($mediaParser->getEmbedUrl());
+                $oldUrl = $media->getUrl();
+                $form->submit($request);
 
-                    $this->updateThumbnail($media, $mediaParser);
+                $mediaParser = $this->get('flexy_media.parser');
 
-                    $media->setNeedUpdate(true);
+                if ($oldUrl != $media->getUrl() && !$mediaParser = $mediaParser->getParser($form->get('url')->getData())) {
+
+                    $t = $this->get('translator');
+
+                    $form->get('url')->addError(new FormError($t->trans('This embed video url is not valid. Try the one in the iframe code if it\'s not already done.')));
 
                 }
 
-                $this->getEm()->flush();
+                if ($form->isValid()) {
+                    $this->getEm()->persist($media);
 
-                $this->get('flexy_system.router_invalidator')->invalidate();
+                    if ($oldUrl != $media->getUrl()) {
 
-                if ($request->request->has('save')) {
-                    return $this->redirect($this->generateUrl('flexy_media_backend_media'));
+                        $media->setMediaPath($mediaParser->getEmbedUrl());
+
+                        $this->updateThumbnail($media, $mediaParser);
+
+                        $media->setNeedUpdate(true);
+
+                    }
+
+                    $this->getEm()->flush();
+
+                    $this->get('flexy_system.router_invalidator')->invalidate();
                 }
-
-                return $this->redirect($this->generateUrl($media->getRoute(), $media->getRouteParams()));
             }
+
+            $associatedContents = MediaController::getAssociatedContents($media, $this->container);
+
+            return new JsonResponse(array(
+                'html' => $this->renderView('FlexyMediaBundle:Backend/Media/EmbedVideo:edit.html.twig', array(
+                    'form' => $form->createView(),
+                    'media' => $media,
+                    'video_url' => $media->getMediaPath(),
+                    'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
+                ))
+            ));
         }
 
-        $associatedContents = MediaController::getAssociatedContents($media, $this->container);
-
-        return $this->render('FlexyMediaBundle:Backend/Media/EmbedVideo:edit.html.twig', array(
-            'form' => $form->createView(),
-            'media' => $media,
-            'video_url' => $media->getMediaPath(),
-            'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
-        ));
+        return new JsonResponse();
     }
 
     public function updateThumbnail(Media $video, MediaParserInterface $mediaParser)

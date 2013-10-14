@@ -1,0 +1,4 @@
+Flexy\MediaBundle\Entity\Media:
+    properties:
+        name:
+            - NotBlank: ~

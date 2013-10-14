@@ -54,8 +54,10 @@ flexy_media_backend_media_upload:
 
 # Image
 flexy_media_backend_image_edit:
-    pattern:  /image/{id}/edit
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Image:edit"}
+    pattern:  /image-edit
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Image:edit" }
+    options:
+        expose: true
 
 flexy_media_backend_image_aviary_edit:
     pattern: /image/{id}/update/
@@ -63,13 +65,17 @@ flexy_media_backend_image_aviary_edit:
 
 # Document
 flexy_media_backend_document_edit:
-    pattern:  /document/{id}/edit
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Document:edit", id: 0 }
+    pattern:  /document-edit
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Document:edit" }
+    options:
+        expose: true
 
 # Video
 flexy_media_backend_video_edit:
-    pattern:  /video/{id}/edit
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Video:edit", id: 0 }
+    pattern:  /video-edit
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Video:edit" }
+    options:
+        expose: true
 
 # Embed Video
 
@@ -80,5 +86,7 @@ flexy_media_backend_embed_video_create:
         expose: true
 
 flexy_media_backend_embed_video_edit:
-    pattern:  /embedvideo/{id}/edit
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/EmbedVideo:edit", id: 0 }
+    pattern:  /embedvideo-edit
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/EmbedVideo:edit" }
+    options:
+        expose: true
