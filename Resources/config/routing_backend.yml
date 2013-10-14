@@ -3,10 +3,6 @@ flexy_media_backend_media:
     pattern:  /
     defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:media" }
 
-flexy_media_backend_media_pager:
-    pattern:  /media/page
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:mediaPager" }
-
 flexy_media_backend_load:
     pattern:  /load
     defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:load" }
@@ -43,6 +39,12 @@ flexy_media_backend_deleteMedia:
     options:
         expose: true
 
+flexy_media_backend_duplicate:
+    pattern:  /duplicate
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:duplicate" }
+    options:
+        expose: true
+
 # Upload
 flexy_media_backend_media_upload:
     pattern: /upload
@@ -59,39 +61,15 @@ flexy_media_backend_image_aviary_edit:
     pattern: /image/{id}/update/
     defaults: { _controller: "FlexyMediaBundle:Backend/Media/Image:updateImage" }
 
-flexy_media_backend_image_duplicate:
-    pattern:  /{id}/duplicate
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:duplicate" }
-
-flexy_media_backend_image_delete:
-    pattern:  /{id}/delete
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:delete" }
-
 # Document
 flexy_media_backend_document_edit:
     pattern:  /document/{id}/edit
     defaults: { _controller: "FlexyMediaBundle:Backend/Media/Document:edit", id: 0 }
 
-flexy_media_backend_document_duplicate:
-    pattern:  /{id}/duplicate
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:duplicate" }
-
-flexy_media_backend_document_delete:
-    pattern:  /{id}/delete
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:delete" }
-
 # Video
 flexy_media_backend_video_edit:
     pattern:  /video/{id}/edit
     defaults: { _controller: "FlexyMediaBundle:Backend/Media/Video:edit", id: 0 }
-
-flexy_media_backend_video_duplicate:
-    pattern:  /{id}/duplicate
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:duplicate" }
-
-flexy_media_backend_video_delete:
-    pattern:  /{id}/delete
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:delete" }
 
 # Embed Video
 
@@ -104,11 +82,3 @@ flexy_media_backend_embed_video_create:
 flexy_media_backend_embed_video_edit:
     pattern:  /embedvideo/{id}/edit
     defaults: { _controller: "FlexyMediaBundle:Backend/Media/EmbedVideo:edit", id: 0 }
-
-flexy_media_backend_embed_video_duplicate:
-    pattern:  /{id}/duplicate
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:duplicate" }
-
-flexy_media_backend_embed_video_delete:
-    pattern:  /{id}/delete
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:delete" }

@@ -180,7 +180,7 @@ class Media extends BaseEntity
     public function getMediaPath($absolute = false)
     {
         if ($absolute) {
-            return $this->container->get('kernel')->getRootDir().'/../web/uploads/' . $this->mediaPath;
+            return $this->container->get('kernel')->getRootDir().'/../web/uploads/' . $this->getWebPath('media');
         }
 
 //        $testweb = $this->getWebPath('media');
@@ -192,7 +192,7 @@ class Media extends BaseEntity
             case 'embedvideo':
                 return $this->mediaPath;
             default:
-                return '/uploads/' . $this->mediaPath;
+                return '/uploads/' . $this->getWebPath('media');
         }
     }
 
@@ -489,6 +489,14 @@ class Media extends BaseEntity
             return 'flexy_media_backend_media';
         }
 
+        switch ($action) {
+            case 'list':
+                return 'flexy_media_backend_media';
+                break;
+            case 'duplicate':
+                return 'flexy_media_backend_' . $action;
+        }
+
         switch ($this->type) {
             case 'image':
                 return 'flexy_media_backend_image_' . $action;
@@ -555,87 +563,8 @@ class Media extends BaseEntity
      */
     public function getUploadableFields()
     {
-        $date = new \DateTime();
-
         return [
-            'media' => 'medias' . '/' . $date->format('Y') . '/' . $date->format('F')
+            'media' => 'medias'
         ];
-    }
-
-    /**
-     * Set Upload Path OVERLOAD
-     *
-     * @param $field
-     * @param $uploadPath
-     */
-    public function setUploadPath($field, $uploadPath)
-    {
-        $this->uploadableFieldExists($field);
-
-        $this->{$field . 'Path'} = $this->getUploadableFields()[$field] . '/' . $uploadPath;
-    }
-
-    /**
-     * Get Absolute Path OVERLOAD
-     *
-     * @param string $field
-     *
-     * @return null|string
-     */
-    public function getAbsolutePath($field)
-    {
-        $this->uploadableFieldExists($field);
-
-        return null === $this->getUploadPath($field)
-            ? null
-            : $this->uploadRootDir . '/' . $this->getUploadPath($field);
-    }
-
-    /**
-     * Get Previous Upload Absolute Path OVERLOAD
-     *
-     * @param string $field
-     *
-     * @return null|string
-     */
-    private function getPreviousUploadAbsolutePath($field)
-    {
-        $this->uploadableFieldExists($field);
-
-        return null === $this->previousUploadPaths[$field]
-            ? null
-            : $this->uploadRootDir . '/' . $this->previousUploadPaths[$field];
-    }
-
-    /**
-     * Get Web Path
-     *
-     * @param string $field
-     *
-     * @return null|string
-     */
-    public function getWebPath($field)
-    {
-        $this->uploadableFieldExists($field);
-
-        return null === $this->getUploadPath($field)
-            ? null
-            : '/uploads/' . $this->getUploadPath($field);
-    }
-
-    /**
-     * Get Upload Root Dir
-     *
-     * @param string $field
-     *
-     * @return string
-     */
-    public function getUploadRootDir($field)
-    {
-        $this->uploadableFieldExists($field);
-
-        // the absolute directory path where uploaded
-        // documents should be saved
-        return $this->uploadRootDir . '/' . $this->getUploadableFields()[$field];
     }
 }

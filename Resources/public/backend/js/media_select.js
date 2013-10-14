@@ -6,6 +6,8 @@ var mediaManagerScriptsBinded = false;
 var mediaManagerIsCk = false;
 var mediaManagerFolderId = 'base';
 var mediaManagerFilters = {
+    resetPage: true,
+    page: 1,
     type: 'any',
     text: '',
     date: 'newer'
@@ -32,7 +34,7 @@ var mediaManagerLoadLibrary = function(){
 
     mediaManagerIsLibrary = true;
     mediaManagerIsCk = true;
-    mediaManagerLoad(mediaManagerFolderId, mediaManagerInit, mediaManagerInitialize);
+    mediaManagerLoad(mediaManagerInitialize);
     mediaManagerInit = false;
     mediaManagerAjaxLoader = $('#media_ajax_loader');
 
@@ -44,7 +46,7 @@ $('.select_media').click(function(){
 
     if (mediaManagerInit) {
         mediaManagerFilters.type = $(this).data('media-type');
-        mediaManagerLoad(mediaManagerFolderId, mediaManagerInit, mediaManagerShow);
+        mediaManagerLoad(mediaManagerShow);
     } else {
         mediaManagerShow();
     }
@@ -68,6 +70,12 @@ var mediaManagerInitialize = function(){
     mediaManagerSelectedMediaArray = [];
     mediaManagerSelectedMedia = {};
 
+    if (mediaManagerFilters.resetPage) {
+        mediaManagerFilters.page = 1;
+    }
+
+    mediaManagerFilters.resetPage = true;
+
     $('#media_details_inner').hide();
     $('#selection_count').hide();
     $('#welcome_message').show();
@@ -79,7 +87,7 @@ var mediaManagerLoadCk = function (editor) {
     mediaManagerTriggeringElement = editor;
 
     if (mediaManagerInit) {
-        mediaManagerLoad(mediaManagerFolderId, mediaManagerInit, mediaManagerShow);
+        mediaManagerLoad(mediaManagerShow);
     } else {
         mediaManagerShow();
     }
@@ -87,27 +95,27 @@ var mediaManagerLoadCk = function (editor) {
     mediaManagerInit = false;
 };
 
-var mediaManagerLoad = function (folderId, init, callback) {
+var mediaManagerLoad = function (callback) {
 
     mediaManagerSelectedMediaArray = [];
 
     $.ajax({
         url: Routing.generate('flexy_media_backend_load'),
         data: {
-            folderId: folderId,
+            folderId: mediaManagerFolderId,
             type: mediaManagerFilters.type,
             text: mediaManagerFilters.text,
             date: mediaManagerFilters.date,
-            page: 1,
+            page: (mediaManagerFilters.resetPage) ? 1 : mediaManagerFilters.page,
             view: (mediaManagerIsCk) ? 'ckeditor' : 'mediafield',
-            init: init
+            init: mediaManagerInit
         },
-        async: (init) ? false : true,
+        async: (mediaManagerInit) ? false : true,
         dataType: 'json',
         success: function (data) {
 
             // Append html content
-            if (init) {
+            if (mediaManagerInit) {
                 mediaManagerModal.html($(data.html));
 
                 // Load tree nav
@@ -146,7 +154,7 @@ var mediaManagerNavigationLoad = function (tree) {
         onActivate: function(node) {
             mediaManagerAjaxLoader.show();
             mediaManagerFolderId = node.data.key;
-            mediaManagerLoad(mediaManagerFolderId, mediaManagerInit);
+            mediaManagerLoad();
         },
         generateIds: true,
         idPrefix: "dynatree-id-",
@@ -258,7 +266,7 @@ var mediaManagerBind = function () {
 
             var type = $(e.target).data('media-type');
 
-            mediaManagerLoad(mediaManagerFolderId, mediaManagerInit);
+            mediaManagerLoad();
 
             mediaManagerAjaxLoader.hide();
 
@@ -292,7 +300,7 @@ var mediaManagerBind = function () {
 
         if (e.keyCode == 13) {
             mediaManagerAjaxLoader.show();
-            mediaManagerLoad(mediaManagerFolderId, mediaManagerInit);
+            mediaManagerLoad();
         }
     });
 
@@ -301,7 +309,7 @@ var mediaManagerBind = function () {
         mediaManagerFilters.type = $(this).val();
 
         mediaManagerAjaxLoader.show();
-        mediaManagerLoad(mediaManagerFolderId, mediaManagerInit);
+        mediaManagerLoad();
 
     });
 
@@ -310,7 +318,9 @@ var mediaManagerBind = function () {
         mediaManagerFilters.date = $(this).val();
 
         mediaManagerAjaxLoader.show();
-        mediaManagerLoad(mediaManagerFolderId, mediaManagerInit);
+
+        mediaManagerFilters.resetPage = false;
+        mediaManagerLoad();
 
     });
 
@@ -674,6 +684,31 @@ var mediaManagerLoadBind = function(){
                             launchEditor('aviary_image');
                         }
                     },
+                    duplicate: {
+                        name: 'Duplicate',
+                        icon: 'copy',
+                        disabled: (mediaManagerSelectedMediaArray.length > 1),
+                        callback: function(){
+
+                            mediaManagerAjaxLoader.show();
+
+                            var mediaIds;
+
+                            mediaIds = mediaManagerSelectedMediaArray;
+
+                            $.ajax({
+                                url: Routing.generate('flexy_media_backend_duplicate'),
+                                data: {
+                                    mediaIds: mediaIds
+                                },
+                                dataType: 'json',
+                                success: function (data) {
+                                    mediaManagerFilters.resetPage = false;
+                                    mediaManagerLoad();
+                                }
+                            });
+                        }
+                    },
                     separator2: '---------',
                     delete: {name: 'Delete', icon: 'delete', callback: function(){
 
@@ -689,7 +724,6 @@ var mediaManagerLoadBind = function(){
                             data: {
                                 mediaIds: mediaIds
                             },
-                            async: true,
                             dataType: 'json',
                             success: function (data) {
 

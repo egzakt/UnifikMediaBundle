@@ -39,7 +39,7 @@
                 {% endfor %}
             </table>
         {% else %}
-            <h1 class="empty_folder">{% trans %}Empty folder{% endtrans %}</h1>
+            <h1 class="empty_folder">{% trans %}No result{% endtrans %}</h1>
         {% endif %}
     </div>
 
@@ -77,6 +77,7 @@
                         $('#media_list').html($(data.html));
                         mediaManagerAjaxLoader.hide();
                         mediaManagerInitialize();
+                        mediaManagerFilters.page = pageNumber;
                         mediaManagerLoadBind();
 
                     },

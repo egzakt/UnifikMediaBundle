@@ -367,25 +367,66 @@ class MediaController extends BaseController
 
     /**
      * Duplicate a media
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     *
+     * @param Request $request
+     * @return JsonResponse
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
      */
-    public function duplicateAction($id)
+    public function duplicateAction(Request $request)
     {
-        /** @var Media $media */
-        $media = $this->mediaRepository->find($id);
-        if (!$media) {
-            throw $this->createNotFoundException('Unable to find Media entity.');
+        if ($request->isXmlHttpRequest() && $request->query->has('mediaIds')) {
+
+            /** @var Media $media */
+            $media = $this->mediaRepository->find($request->query->get('mediaIds')[0]);
+
+            if ($media) {
+                $newMedia = clone($media);
+                $newMedia->setName($media->getName() . ' - copy');
+
+                $date = new \DateTime();
+
+                $newMedia->setCreatedAt($date);
+                $newMedia->setUpdatedAt($date);
+
+                $thumbnailFile = $media->getThumbnail()->getMediaPath(true);
+
+                $explodePath = explode('/', $thumbnailFile);
+                $filename = $explodePath[count($explodePath) - 1];
+
+                array_pop($explodePath);
+
+                $path = implode('/', $explodePath) . '/';
+
+                $increment = 0;
+
+                do {
+                    $increment++;
+                    $newThumbnailFileName = 'Copy' . $increment . '-' . $filename;
+                    $newThumbnailFile = $path . $newThumbnailFileName;
+                } while (file_exists($newThumbnailFile));
+
+                copy($thumbnailFile, $newThumbnailFile);
+
+                if ('image' == $media->getType()) {
+
+                    $newMedia->setMediaPath($newThumbnailFileName);
+
+                } else {
+
+                    $newThumbnail = clone $media->getThumbnail();
+                    $newThumbnail->setMediaPath($newThumbnailFileName);
+
+                    $this->getEm()->persist($newThumbnail);
+                    $newMedia->setThumbnail($newThumbnail);
+
+                }
+
+                $this->getEm()->persist($newMedia);
+                $this->getEm()->flush();
+            }
         }
 
-        $newMedia = clone($media);
-        $newMedia->setName($media->getName() . ' - copy');
-
-        $this->getEm()->persist($newMedia);
-        $this->getEm()->flush();
-
-        return $this->redirect($this->generateUrl($newMedia->getRouteBackend(), $newMedia->getRouteBackendParams()));
+        return new JsonResponse();
     }
 
     /**
