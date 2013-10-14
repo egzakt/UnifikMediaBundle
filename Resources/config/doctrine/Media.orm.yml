@@ -50,20 +50,31 @@ Flexy\MediaBundle\Entity\Media:
             type: string
             length: 50
             nullable: true
+        hidden:
+            type: boolean
     lifecycleCallbacks: {  }
-    oneToMany:
+    oneToOne:
         thumbnail:
             targetEntity: Flexy\MediaBundle\Entity\Media
-            mappedBy: parentMedia
-            onDelete: cascade
-    manyToOne:
-        parentMedia:
-            targetEntity: Flexy\MediaBundle\Entity\Media
-            inversedBy: thumbnail
+            fetch: EAGER
             joinColumn:
-                name: parentMedia
+                name: thumbnail_id
                 referencedColumnName: id
-                onDelete: cascade
+                onDelete: CASCADE
+
+#    oneToMany:
+#        thumbnail:
+#            targetEntity: Flexy\MediaBundle\Entity\Media
+#            mappedBy: parentMedia
+#            onDelete: cascade
+    manyToOne:
+#        parentMedia:
+#            targetEntity: Flexy\MediaBundle\Entity\Media
+#            inversedBy: thumbnail
+#            joinColumn:
+#                name: parentMedia
+#                referencedColumnName: id
+#                onDelete: cascade
         folder:
             targetEntity: Flexy\MediaBundle\Entity\Folder
             inversedBy: medias

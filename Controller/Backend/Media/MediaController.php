@@ -167,17 +167,19 @@ class MediaController extends BaseController
     }
 
     /**
-     * Media Select Pager
+     * Load Media
      *
      * @param Request $request
      * @return JsonResponse
      * @throws \Exception
      */
-    public function mediaSelectPagerAction(Request $request)
+    public function loadAction(Request $request)
     {
         if ($request->isXmlHttpRequest()
             && $request->query->has('page')
             && $request->query->has('type')
+            && $request->query->has('text')
+            && $request->query->has('date')
             && $request->query->has('folderId')) {
 
             $this->mediaRepository->setReturnQueryBuilder(true);
@@ -185,7 +187,8 @@ class MediaController extends BaseController
             $mediaQb = $this->mediaRepository->findByFolderType(
                 $request->query->get('folderId', 'base'),
                 $request->query->get('type', 'any'),
-                'recent'
+                $request->query->get('date', 'newer'),
+                $request->query->get('text', '')
             );
 
             $tree = array();
@@ -226,6 +229,241 @@ class MediaController extends BaseController
         }
 
         return new JsonResponse(array());
+    }
+
+    /**
+     * Move folder or media
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function moveAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()
+            && $request->query->has('type')
+            && $request->query->has('sourceIds')
+            && $request->query->has('targetId')) {
+
+            if ('folder' == $request->query->get('type')) {
+                $folderSource = $this->folderRepository->find($request->query->get('sourceIds')[0]);
+
+                if ('base' == $request->query->get('targetId')) {
+                    $folderSource->setParent();
+                } else {
+                    $folderTarget = $this->folderRepository->find($request->query->get('targetId'));
+                    $folderSource->setParent($folderTarget);
+                }
+
+            } else {
+
+                $folderTarget = $this->folderRepository->find($request->query->get('targetId'));
+
+                foreach ($request->query->get('sourceIds') as $sourceId) {
+                    $media = $this->mediaRepository->find($sourceId);
+                    $media->setFolder($folderTarget);
+                }
+            }
+
+            $this->getEm()->flush();
+        }
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Create New Folder
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function createFolderAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest() && $request->query->has('parentFolderId')) {
+
+            $newFolder = new Folder();
+            $newFolder->setName('New Folder');
+
+            if ('base' != $request->query->get('parentFolderId')) {
+
+                $parentFolder = $this->folderRepository->find($request->query->get('parentFolderId'));
+
+                if ($parentFolder) {
+                    $newFolder->setParent($parentFolder);
+                }
+
+            }
+
+            $this->getEm()->persist($newFolder);
+            $this->getEm()->flush();
+
+            return new JsonResponse(array('key' => $newFolder->getId()));
+        }
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Delete a folder
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteFolderAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest() && $request->query->has('folderId')) {
+
+            $t = $this->get('translator');
+
+            if ('base' != $request->query->get('folderId')) {
+
+                $folder = $this->folderRepository->find($request->query->get('folderId'));
+
+                if ($folder) {
+
+                    if (count($folder->getMedias()) || count($folder->getChildren())) {
+
+                        return new JsonResponse(array(
+                            'removed' => false,
+                            'message' => $t->trans('This folder is not empty.')
+                        ));
+                    } else {
+
+                        $this->getEm()->remove($folder);
+                        $this->getEm()->flush();
+
+
+                        return new JsonResponse(array(
+                            'removed' => true
+                        ));
+                    }
+                }
+
+            } else {
+                return new JsonResponse(array(
+                    'removed' => false,
+                    'message' => $t->trans('This folder cannot be removed.')
+                ));
+            }
+        }
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Rename a folder
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function renameFolderAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest()
+            && $request->query->has('folderId')
+            && $request->query->has('folderTitle')) {
+
+            $t = $this->get('translator');
+
+            if ('base' != $request->query->get('folderId')) {
+
+                if ('' == $request->query->get('folderTitle')) {
+
+                    return new JsonResponse(array(
+                        'renamed' => false,
+                        'message' => $t->trans('You must enter a name.')
+                    ));
+
+                } else {
+                    $folder = $this->folderRepository->find($request->query->get('folderId'));
+
+                    if ($folder) {
+
+                        $folder->setName($request->query->get('folderTitle'));
+
+                        $this->getEm()->flush();
+
+                        return new JsonResponse(array(
+                            'renamed' => true
+                        ));
+
+                    }
+
+                }
+
+            } else {
+                return new JsonResponse(array(
+                    'removed' => false,
+                    'message' => $t->trans('This folder cannot be renamed.')
+                ));
+            }
+        }
+
+        return new JsonResponse();
+    }
+
+    /**
+     * Delete medias
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deleteMediaAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest() && $request->query->has('mediaIds')) {
+
+            $medias = array();
+
+            foreach ($request->query->get('mediaIds') as $id) {
+
+                /** @var Media $media */
+                $media = $this->mediaRepository->find($id);
+
+                if ($media) {
+                    $associatedContents = $this::getAssociatedContents($media, $this->container);
+
+                    if ($request->query->has('delete')) {
+
+                        // Unlink content in case 'onDelete set null' hasn't been set
+                        $this->removeMediaRelation($associatedContents['field']);
+
+                        // Remove the file from all texts where it is used
+                        $this->removeMediaFromTexts($media, $associatedContents['text']);
+
+                        if ('image' != $media->getType()) {
+                            $thumbnail = $media->getThumbnail();
+                            $this->getEm()->remove($thumbnail);
+                            $this->getEm()->flush();
+                        }
+
+                        $this->getEm()->remove($media);
+                        $this->getEm()->flush();
+
+                    } else {
+
+                        $medias[$media->getId()] = array(
+                            'name' => $media->getName(),
+                            'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
+                        );
+                    }
+                }
+
+            }
+
+            if ($request->query->has('delete')) {
+
+                $this->get('flexy_system.router_invalidator')->invalidate();
+
+            } else {
+
+                return new JsonResponse(array(
+                    'message' => $this->renderView('FlexyMediaBundle:Backend/Media/Core:delete_message.html.twig', array(
+                        'medias' => $medias
+                    ))
+                ));
+            }
+
+        }
+
+        return new JsonResponse();
     }
 
     /**
@@ -337,7 +575,7 @@ class MediaController extends BaseController
             if ('Flexy\MediaBundle\Entity\Media' != $classMetadata->getName()) {
                 foreach ($classMetadata->getAssociationMappings() as $association) {
 
-                    if ('Flexy\MediaBundle\Entity\Media' == $association['targetEntity']) {
+                    if ('Flexy\MediaBundle\Entity\Media' == $association['targetEntity'] && $association['isOwningSide']) {
                         $fieldName = $association['fieldName'];
                         $sourceEntity = $association['sourceEntity'];
 

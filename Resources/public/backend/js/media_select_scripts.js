@@ -7,6 +7,7 @@ if ('undefined' === typeof flexymediascript){
     loader1.addStyle('flexymediastyle', '/bundles/flexymedia/backend/css/media_select.css');
     loader1.addStyle('simplepaginationstyle', '/bundles/flexymedia/backend/css/simplePagination.css');
     loader1.addStyle('dynatreestyle', '/bundles/flexymedia/backend/css/ui.dynatree.css');
+    loader1.addStyle('jquerycontextmenustyle', '/bundles/flexymedia/backend/css/jquery.contextMenu.css');
 
 
     loader1.addScript('blueimptmpl', 'http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js');
@@ -19,6 +20,8 @@ if ('undefined' === typeof flexymediascript){
     loader1.addScript('jquerycookiescript', '/bundles/flexymedia/backend/js/jquery.cookie.js');
     loader1.addScript('dynatreescript', '/bundles/flexymedia/backend/js/jquery.dynatree.js');
     loader1.addScript('aviaryscript', 'http://feather.aviary.com/js/feather.js');
+    loader1.addScript('jqueryuipositionscript', '/bundles/flexymedia/backend/js/jquery.ui.position.js');
+    loader1.addScript('jquerycontextmenuscript', '/bundles/flexymedia/backend/js/jquery.contextMenu.js');
 
     loader1.load(function(){
 

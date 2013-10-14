@@ -7,9 +7,39 @@ flexy_media_backend_media_pager:
     pattern:  /media/page
     defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:mediaPager" }
 
-flexy_media_backend_media_select_pager:
-    pattern:  /media-select-pager
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:mediaSelectPager" }
+flexy_media_backend_load:
+    pattern:  /load
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:load" }
+    options:
+        expose: true
+
+flexy_media_backend_move:
+    pattern:  /move
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:move" }
+    options:
+        expose: true
+
+flexy_media_backend_createFolder:
+    pattern:  /create-folder
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:createFolder" }
+    options:
+        expose: true
+
+flexy_media_backend_deleteFolder:
+    pattern:  /delete-folder
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:deleteFolder" }
+    options:
+        expose: true
+
+flexy_media_backend_renameFolder:
+    pattern:  /rename-folder
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:renameFolder" }
+    options:
+        expose: true
+
+flexy_media_backend_deleteMedia:
+    pattern:  /delete-media
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:deleteMedia" }
     options:
         expose: true
 

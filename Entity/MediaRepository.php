@@ -20,7 +20,7 @@ class MediaRepository extends BaseEntityRepository
     public function findAll()
     {
         $qb = $this->createQueryBuilder('m')
-            ->where('m.parentMedia IS NULL');
+            ->where('m.hidden = false');
 
         return $this->processQuery($qb);
     }
@@ -34,9 +34,8 @@ class MediaRepository extends BaseEntityRepository
     public function findByType($type)
     {
         $qb = $this->createQueryBuilder('m')
-
             ->andWhere('m.type = :type')
-            ->andWhere('m.parentMedia IS NULL')
+            ->andWhere('m.hidden = false')
 
             ->setParameter('type', $type);
 
@@ -44,14 +43,15 @@ class MediaRepository extends BaseEntityRepository
     }
 
     /**
-     * Find by folderId and Type
+     * Find by folderId and Filters
      *
-     * @param $folderId
+     * @param string $folderId
      * @param string $type
      * @param string $sort
+     * @param string $text
      * @return mixed
      */
-    public function findByFolderType($folderId = 'base', $type = 'any', $sort = 'recent')
+    public function findByFolderType($folderId = 'base', $type = 'any', $sort = 'newer', $text = '')
     {
         $qb = $this->createQueryBuilder('m');
 
@@ -69,11 +69,19 @@ class MediaRepository extends BaseEntityRepository
         }
 
         switch ($sort) {
-            case 'recent':
+            case 'newer':
                 $qb->addOrderBy('m.createdAt', 'DESC');
+                break;
+            default:
+                $qb->addOrderBy('m.createdAt', 'ASC');
         }
 
-        $qb->andWhere('m.parentMedia IS NULL');
+        $qb->andWhere('m.hidden = false');
+
+        if ('' != trim($text)) {
+            $qb->andWhere('m.name LIKE :text')
+                ->setParameter('text', '%' . trim($text) . '%');
+        }
 
         return $this->processQuery($qb);
     }

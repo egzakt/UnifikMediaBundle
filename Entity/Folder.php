@@ -186,7 +186,7 @@ class Folder
         }
 
         return array(
-            'id' => $this->id,
+            'key' => $this->id,
             'title' => $this->name,
             'isFolder' => true,
             'children' => $children

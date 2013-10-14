@@ -1,26 +1,42 @@
 {% spaceless %}
     <div class="item_wrapper">
-        {% for media in medias %}
-            <div id="item_{{ media.id }}" class="media media_{{ media.type }}"
-                data-media-id="{{ media.id }}"
-                data-media-name="{{ media.name }}"
-                data-media-type="{{ media.type }}"
-                data-media-preview="{{ media.thumbnail.mediaPath }}"
-                data-media-thumbnail="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb_large', true) ~ '?' ~ random(9999) }}"
-                data-media-url="{{ media.mediaPath }}"
-                data-media-edit="{{ path(media.getRouteBackend(), media.getRouteBackendParams()) }}"
-                data-media-size="{{ media.size }}"
-                data-media-caption="{{ media.caption }}"
-                {% if 'image' == media.type %}
-                    data-media-width="{{ media.width }}"
-                    data-media-height="{{ media.height }}"
-                    data-media-aviary="{{ path(media.getRouteBackend('aviary_edit'), media.getRouteBackendParams()) }}"
-                {% endif %}>
+        <table>
+            {% for media in medias %}
+                <tr id="media_item_{{ media.id }}" class="media media_{{ media.type }}"
+                    data-media-id="{{ media.id }}"
+                    data-media-name="{{ media.name }}"
+                    data-media-type="{{ media.type }}"
+                    data-media-preview="{{ media.thumbnail.mediaPath }}"
+                    data-media-thumbnail="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb_large', true) ~ '?' ~ random(9999) }}"
+                    data-media-url="{{ media.mediaPath }}"
+                    data-media-edit="{{ path(media.getRouteBackend(), media.getRouteBackendParams()) }}"
+                    data-media-size="{{ media.size }}"
+                    data-media-caption="{{ media.caption }}"
+                    {% if 'image' == media.type %}
+                        data-media-aviary="{{ path(media.getRouteBackend('aviary_edit'), media.getRouteBackendParams()) }}"
+                    {% endif %}>
 
-                <img src="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb', true) ~ '?' ~ random(9999)}}" title="{{ media.name }}">
-
-            </div>
-        {% endfor %}
+                    <td class="image">
+                        <img src="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb', true) ~ '?' ~ random(9999)}}" title="{{ media.name }}">
+                    </td>
+                    <td class="detail">
+                        <h3>{{ media.name }}</h3>
+                        <p>{% if media.type == 'embedvideo' %}{% trans %}Embed Video{% endtrans %}{% else %}{{ media.type }}{% endif %}</p>
+                        {% if media.type == 'image' %}
+                            <p class="format">{{ media.width }} X {{ media.height }}</p>
+                        {% endif %}
+                    </td>
+                    <td class="date">
+                        <p>
+                            <strong>{{ media.createdAt|date('Y-m-d') }}</strong>
+                            <br>
+                            <strong>{{ media.createdAt|date('H:i') }}</strong>
+                        </p>
+                        <p class="size">{{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}</p>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
 
     {% if medias|length > 0 %}

@@ -1,34 +1,20 @@
-{% if entity.isDeletable %}
-    {% if associatedContents|length > 0 %}
-        {% trans %}If you delete this entity the following contents will be affected{% endtrans %}:<br>
+<h3>{% trans %}You are about to delete{% endtrans %} <strong>{{ medias|length }} {% trans %}media{% endtrans %}{% if medias|length > 1 %}s{% endif %}</strong></h3>
+{% trans %}If you continue the following contents will be affected{% endtrans %}:<br>
+
+{% for media in medias %}
+
+    <h4>{{ media.name }}{% if media.associatedContents|length > 0 %} :{% endif %}</h4>
+
+    {% if media.associatedContents|length > 0 %}
         <ul>
-            {% for entityName,methodGroup in associatedContents %}
+            {% for entityName,methodGroup in media.associatedContents %}
                 {% for methodName,entities in methodGroup %}
                     <li>{{ entities|length }} {{ entityName }} {% trans %}with this file as{% endtrans %} {{ methodName }}</li>
                 {% endfor %}
             {% endfor %}
         </ul>
     {% endif %}
-    <br>
-    {% trans %}Are you sure you want to delete{% endtrans %} "{% include 'FlexySystemBundle:Backend/Core:entity_title.html.twig' with { 'entity': entity } %}"?.
-{% else %}
-    "{% include 'FlexySystemBundle:Backend/Core:entity_title.html.twig' with { 'entity': entity } %}" {% trans %}cannot be deleted because of these restrictions:{% endtrans %}
-    <ul>
-        {% for restriction in entity.deleteRestrictions %}
-            {% set result = attribute(entity, restriction) %}
+{% endfor %}
 
-            {% if result is sameas(true)  %}
-                <li>{{ restriction|trans }}</li>
-
-            {% elseif result is not sameas(false) %}
-                {% set count = result|length %}
-                {% if count != 0 %}
-                    {% set message = "{1} 1 %name% restriction|]1,Inf] %count% %name% restriction" %}
-                    <li>
-                        {{ message|trans({'%name%': restriction })|transchoice(count) }}
-                    </li>
-                {% endif %}
-            {% endif %}
-        {% endfor %}
-    </ul>
-{% endif %}
+<br>
+{% trans %}Are you sure you want to continue{% endtrans %}?

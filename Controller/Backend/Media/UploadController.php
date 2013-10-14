@@ -122,9 +122,9 @@ class UploadController extends BaseController
 
         $image = new Media();
         $image->setType('image');
+        $image->setHidden(true);
         $image->setName("Preview - ".$file->getClientOriginalName());
         $image->setMedia($thumbnailFile);
-        $image->setParentMedia($media);
 
         list($width, $height, $type, $attr) = getimagesize($thumbnailFile->getRealPath());
 
@@ -175,9 +175,9 @@ class UploadController extends BaseController
 
         $image = new Media();
         $image->setType('image');
+        $image->setHidden(true);
         $image->setMedia($thumbnailFile);
         $image->setName("Preview - " . $file->getClientOriginalName());
-        $image->setParentMedia($media);
 
         list($width, $height, $type, $attr) = getimagesize($thumbnailFile->getRealPath());
 

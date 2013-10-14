@@ -154,9 +154,9 @@ class EmbedVideoController extends BaseController
         //Generate the thumbnail
         $image = new Media();
         $image->setType('image');
+        $image->setHidden(true);
         $image->setName("Preview - " . $video->getName());
         $image->setMedia($thumbnailFile);
-        $image->setParentMedia($video);
 
         $this->getEm()->persist($image);
 

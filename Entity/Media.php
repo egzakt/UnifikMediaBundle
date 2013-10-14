@@ -3,13 +3,14 @@
 namespace Flexy\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Flexy\SystemBundle\Lib\BaseEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Flexy\DoctrineBehaviorsBundle\Model as FlexyORMBehaviors;
 
 /**
  * Media
  */
-class Media
+class Media extends BaseEntity
 {
 
     use FlexyORMBehaviors\Uploadable\Uploadable;
@@ -83,11 +84,6 @@ class Media
     /**
      * @var Media
      */
-    private $parentMedia;
-
-    /**
-     * @var Media
-     */
     private $thumbnail;
 
     /**
@@ -101,6 +97,11 @@ class Media
      * @var boolean
      */
     protected $needUpdate = false;
+
+    /**
+     * @var bool
+     */
+    private $hidden = false;
 
     /**
      * @return string
@@ -399,23 +400,23 @@ class Media
     }
 
     /**
-     * setParentMedia
+     * Set hidden
      *
-     * @param Media $parentMedia
+     * @param $hidden
      */
-    public function setParentMedia(Media $parentMedia)
+    public function setHidden($hidden)
     {
-        $this->parentMedia = $parentMedia;
+        $this->hidden = $hidden;
     }
 
     /**
-     * getParentMedia
+     * Get hidden
      *
-     * @return Media
+     * @return bool
      */
-    public function getParentMedia()
+    public function getHidden()
     {
-        return $this->parentMedia;
+        return $this->hidden;
     }
 
     /**
