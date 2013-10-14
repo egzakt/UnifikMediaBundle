@@ -44,6 +44,7 @@
 
 #media_delete_modal {
     padding: 20px;
+    overflow-y: scroll;
 }
 
 #media_delete_modal ul li {
@@ -281,6 +282,44 @@ a:focus {
 
 #uploader_wrapper {
     display: none;
+}
+
+div.add_embed {
+    margin: 20px 0;
+}
+
+#embed_ajax_loader {
+    width: 20px;
+    position: relative;
+    top: 6px;
+}
+
+#video_url {
+    height: 20px;
+    width: 500px;
+}
+
+#add_embed_link {
+    text-decoration: none;
+    display: inline-block;
+    color: #fff;
+    padding: 0 5px;
+    border-radius: 3px;
+    margin: 2px;
+    border: 2px solid #39b54a;
+    background-color: #39b54a;
+}
+
+#invalid_embed_url {
+    padding: 0 10px;
+    color: #ff0000;
+    font-size: 1.2em;
+}
+
+#valid_embed_url {
+    padding: 0 10px;
+    color: #008000;
+    font-size: 1.2em;
 }
 
 /* AVIARY */

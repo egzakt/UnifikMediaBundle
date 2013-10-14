@@ -98,6 +98,8 @@ flexy_media_backend_video_delete:
 flexy_media_backend_embed_video_create:
     pattern:  /embedvideo/create
     defaults: { _controller: "FlexyMediaBundle:Backend/Media/EmbedVideo:create", id: 0 }
+    options:
+        expose: true
 
 flexy_media_backend_embed_video_edit:
     pattern:  /embedvideo/{id}/edit

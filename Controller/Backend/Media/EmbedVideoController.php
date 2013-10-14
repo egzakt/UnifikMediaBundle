@@ -39,9 +39,7 @@ class EmbedVideoController extends BaseController
         $mediaParser = $this->get('flexy_media.parser');
         if (!$mediaParser = $mediaParser->getParser($request->get('video_url'))) {
             return new JsonResponse(array(
-                'error' => array(
-                    'message' => $t->trans('Unable to parse the video url')
-                )
+                'error' => true
             ));
         }
 

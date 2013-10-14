@@ -238,6 +238,7 @@ var mediaManagerBind = function () {
             mediaManagerAjaxLoader.show();
 
             $('#uploader_wrapper').hide();
+            $('#media_filters').show();
             $('#media_wrapper').show();
 
             var type = $(e.target).data('media-type');
@@ -256,6 +257,7 @@ var mediaManagerBind = function () {
         e.preventDefault();
 
         $('#media_wrapper').hide();
+        $('#media_filters').hide();
         $('#uploader_wrapper').show();
 
     });
@@ -304,6 +306,39 @@ var mediaManagerBind = function () {
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
         url: Routing.generate('flexy_media_backend_media_upload')
+    });
+
+    // EMBED VIDEO ADD SCRIPT
+
+    var validEmbedMessage = $('#valid_embed_url');
+    var invalidEmbedMessage = $('#invalid_embed_url');
+    var embedAjaxLoader = $('#embed_ajax_loader');
+
+    validEmbedMessage.hide();
+    invalidEmbedMessage.hide();
+    embedAjaxLoader.hide();
+
+
+    $('#add_embed_link').on('click', function(e){
+
+        $('#embed_ajax_loader').show();
+
+        $.ajax({
+            method: 'POST',
+            url: Routing.generate('flexy_media_backend_embed_video_create'),
+            data: {'video_url': $('#video_url').val() },
+            dataType: "json",
+            success: function(data){
+                if (data.error != undefined) {
+                    invalidEmbedMessage.fadeIn(500).delay(3000).fadeOut();
+                } else {
+                    validEmbedMessage.fadeIn(500).delay(3000).fadeOut();
+                }
+                $('#embed_ajax_loader').hide();
+            }
+        });
+
+        e.preventDefault();
     });
 
     // MEDIA SELECTION SCRIPT
@@ -570,10 +605,34 @@ var mediaManagerLoadBind = function(){
                 items: {
                     insert: {
                         name: 'Insert',
-                        icon: 'paste',
+                        icon: 'add',
                         disabled: (mediaManagerSelectedMediaArray.length > 1),
                         callback: function(){
                             mediaManagerInsert();
+                        }
+                    },
+                    selectall: {
+                        name: 'Select All',
+                        callback: function(){
+
+                            mediaManagerSelectedMediaArray = [];
+
+                            var medias = $trigger.parent().find('.media');
+
+                            medias.each(function(){
+                                var media = $(this);
+                                media.addClass('media_selected');
+                                mediaManagerSelectedMediaArray.push(media.data('media-id'));
+
+
+                                var selectionCountDiv = $('#selection_count');
+                                selectionCountDiv.find('span').html(mediaManagerSelectedMediaArray.length);
+
+                                $('#media_details_inner').hide();
+                                $('#welcome_message').hide();
+                                selectionCountDiv.show();
+
+                            });
                         }
                     },
                     separator1: '---------',
@@ -593,7 +652,7 @@ var mediaManagerLoadBind = function(){
                             launchEditor('aviary_image');
                         }
                     },
-                    separator1: '---------',
+                    separator2: '---------',
                     delete: {name: 'Delete', icon: 'delete', callback: function(){
 
                         mediaManagerAjaxLoader.show();
@@ -632,6 +691,8 @@ var mediaManagerLoadBind = function(){
                                                 for (i = 0; i < mediaIds.length; i++) {
                                                     $('#media_item_' + mediaIds[i]).remove();
                                                 }
+
+                                                mediaManagerInitialize();
 
                                                 mediaManagerAjaxLoader.hide();
 
@@ -754,6 +815,9 @@ var mediaManagerDeleteModalShow = function (message, callback) {
 
     mediaManagerDeleteModal.dialog({
         modal: true,
+        width: 'auto',
+        maxWidth: 800,
+        maxHeight: 500,
         dialogClass: 'media_delete',
         buttons: {
             Delete: function() {
