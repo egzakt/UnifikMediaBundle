@@ -400,12 +400,12 @@ div.dynatree-drop-reject span.dynatree-drag-helper-img
 	background-position: 0 -128px;
 	margin: 0;
 }
-#dynatree-drop-marker.dynatree-drop-after,
-#dynatree-drop-marker.dynatree-drop-before
-{
-	width:64px;
-	background-position: 0 -144px;
-}
+/*#dynatree-drop-marker.dynatree-drop-after,*/
+/*#dynatree-drop-marker.dynatree-drop-before*/
+/*{*/
+	/*width:64px;*/
+	/*background-position: 0 -144px;*/
+/*}*/
 #dynatree-drop-marker.dynatree-drop-copy
 {
 	background-position: -64px -128px;
