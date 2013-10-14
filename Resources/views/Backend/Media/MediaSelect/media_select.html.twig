@@ -1,13 +1,8 @@
 {% spaceless %}
 
-    <div id="media_ajax_loader">
-        <img  src="{{ asset('bundles/flexymedia/backend/images/icons/ajax-loader.gif') }}" />
-    </div>
-
     <ul id="media_views">
         <li><a class="library">{% trans %}Library{% endtrans %}</a></li>
         <li><a class="upload">+ {% trans %}Upload a new file{% endtrans %}</a></li>
-
     </ul>
 
     <ul id="media_filters">
@@ -38,6 +33,7 @@
         <div id="media_container">
 
             <div id="folder_nav">
+                <img id="media_ajax_loader" src="{{ asset('bundles/flexymedia/backend/images/icons/ajax-loader.gif') }}" />
                 <div id="folder_tree"></div>
             </div>
 
@@ -75,7 +71,7 @@
     </div>
 
     <div id="uploader_wrapper">
-        {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:upload_tab.html.twig' %}
+        {% include 'FlexyMediaBundle:Backend/Media/MediaSelect/content:media_select_upload.html.twig' %}
     </div>
 
 {% endspaceless %}

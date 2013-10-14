@@ -12,11 +12,13 @@ var mediaManagerFilters = {
 };
 var mediaManagerAjaxLoader;
 var mediaManagerEditValue;
+var mediaManagerModal;
+var mediaManagerIsLibrary = false;
 
 // Create the media select container
 
 $('body').append($('<div id="media_select_modal_container"><div id="media_select_modal" title="Medias"></div></div>'));
-var mediaManagerModal = $('#media_select_modal');
+mediaManagerModal = $('#media_select_modal');
 $('body').append($('<div id="media_notice_modal_container"><div id="media_notice_modal"></div></div>'));
 var mediaManagerNoticeModal = $('#media_notice_modal');
 $('body').append($('<div id="media_edit_modal_container"><div id="media_edit_modal"><input id="media_edit_value" type=text></div></div>'));
@@ -24,12 +26,25 @@ var mediaManagerEditModal = $('#media_edit_modal');
 $('body').append($('<div id="media_delete_modal_container"><div id="media_delete_modal"></div></div>'));
 var mediaManagerDeleteModal = $('#media_delete_modal');
 
+var mediaManagerLoadLibrary = function(){
+
+    mediaManagerModal = $('#mediaManager');
+
+    mediaManagerIsLibrary = true;
+    mediaManagerIsCk = true;
+    mediaManagerLoad(mediaManagerFolderId, mediaManagerInit, mediaManagerInitialize);
+    mediaManagerInit = false;
+    mediaManagerAjaxLoader = $('#media_ajax_loader');
+
+    mediaManagerAjaxLoader.hide();
+};
+
 $('.select_media').click(function(){
     mediaManagerTriggeringElement = $(this);
 
     if (mediaManagerInit) {
         mediaManagerFilters.type = $(this).data('media-type');
-        mediaManagerLoad(null, mediaManagerFilters, mediaManagerInit, mediaManagerShow);
+        mediaManagerLoad(mediaManagerFolderId, mediaManagerInit, mediaManagerShow);
     } else {
         mediaManagerShow();
     }
@@ -459,15 +474,22 @@ var mediaManagerBind = function () {
 
     });
 
-    $('#insert_media').click(function(e){
-        e.preventDefault();
-        mediaManagerInsert();
-    });
+    if (false == mediaManagerIsLibrary) {
 
-    $('#media_list').on('dblclick' , '.media', function(e) {
-        e.preventDefault();
-        mediaManagerInsert();
-    });
+        $('#insert_media').click(function(e){
+            e.preventDefault();
+            mediaManagerInsert();
+        });
+
+        $('#media_list').on('dblclick' , '.media', function(e) {
+            e.preventDefault();
+            mediaManagerInsert();
+        });
+    } else {
+
+        $('#insert_media').hide();
+
+    }
 
     // AVIARY
 
@@ -603,7 +625,7 @@ var mediaManagerLoadBind = function(){
         build: function($trigger, e){
             return {
                 items: {
-                    insert: {
+                    insert: (mediaManagerIsLibrary) ? {disabled: true} : {
                         name: 'Insert',
                         icon: 'add',
                         disabled: (mediaManagerSelectedMediaArray.length > 1),
@@ -644,10 +666,10 @@ var mediaManagerLoadBind = function(){
                            window.location = mediaManagerSelectedMedia.edit;
                         }
                     },
-                    editimage: {
+                    editimage: (mediaManagerSelectedMedia.type != 'image') ? false : {
                         name: 'Edit Image',
                         icon: 'edit',
-                        disabled: (mediaManagerSelectedMediaArray.length > 1 || mediaManagerSelectedMedia.type != 'image'),
+                        disabled: (mediaManagerSelectedMediaArray.length > 1),
                         callback: function(){
                             launchEditor('aviary_image');
                         }

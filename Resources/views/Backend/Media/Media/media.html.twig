@@ -1,173 +1,17 @@
 {% extends 'FlexyMediaBundle:Backend:layout.html.twig' %}
 
 {% block content_header %}
-    <a href="#" id="refresh_media">{% trans %}Refresh{% endtrans %}</a>
     <h1>{% trans %}Medias library{% endtrans %}</h1>
 {% endblock %}
 
 {% block content_main %}
 
-    <div id="media-tabs">
-        <ul>
-            <li><a href="#media-tabs-1">{% trans %}Images{% endtrans %}</a></li>
-            <li><a href="#media-tabs-2">{% trans %}Documents{% endtrans %}</a></li>
-            <li><a href="#media-tabs-3">{% trans %}Videos{% endtrans %}</a></li>
-            <li><a href="#media-tabs-4">{% trans %}Embed video{% endtrans %}</a></li>
-            <li id="upload-tab"><a href="#media-tabs-5">+ {% trans %}Upload{% endtrans %}</a></li>
-        </ul>
-        <div id="media-tabs-1">
-            {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:images_tab.html.twig' %}
-        </div>
-        <div id="media-tabs-2">
-            {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:documents_tab.html.twig' %}
-        </div>
-        <div id="media-tabs-3">
-            {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:videos_tab.html.twig' %}
-        </div>
-        <div id="media-tabs-4">
-            {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:embed_videos_tab.html.twig' %}
-        </div>
-        <div id="media-tabs-5">
-            {% include 'FlexyMediaBundle:Backend/Media/Media/tabs:upload_tab.html.twig' %}
-        </div>
-    </div>
+    <div id="mediaManager"></div>
 
     <script type="text/javascript">
 
-        // Tabs
-        $('#media-tabs').tabs();
-
-        // Bulk actions
-        $('input.submit_action').click(function(e){
-
-            var select = $(this).closest('form').find('select');
-
-            if (select.val() != 'choose' ) {
-                var count = $(this).closest('form').find('tbody').find(':checked').length;
-
-                $('#delete_dialog').html('{% trans %}You are about to remove{% endtrans %} ' + count + ' {% trans %}medias{% endtrans %}.');
-
-                $('#delete_dialog').dialog({
-                    modal: true,
-                    title: "{% trans %}Delete confirmation{% endtrans %}",
-                    buttons: {
-                        "{% trans %}Delete{% endtrans %}": function() {
-                            $(select).closest('form').submit();
-                            $(this).dialog("close");
-                        },
-                        "{% trans %}Cancel{% endtrans %}": function() {
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-            } else {
-                $('#delete_dialog').html('{% trans %}Yous must select an action{% endtrans %}.');
-
-                $('#delete_dialog').dialog({
-                    modal: true,
-                    title: "{% trans %}Notice{% endtrans %}",
-                    buttons: {
-                        "{% trans %}Ok{% endtrans %}": function() {
-                            $(this).dialog("close");
-                        }
-                    }
-                });
-            }
-
-            e.preventDefault();
-
-        });
-
         $(function(){
-
-            // Image Pager
-            $('#image_pager').pagination({
-                pages: {{ imagePageTotal }},
-                cssStyle: 'light-theme',
-                onPageClick: function(pageNumber, event){
-
-                    $('#loading').show();
-
-                    $.ajax({
-                        method: "GET",
-                        url: "{{ path('flexy_media_backend_media_pager') }}",
-                        data: {page: pageNumber, type: 'image'},
-                        contentType: 'json',
-                        success: function(data) {
-                            $('#image_container').html($(data.html));
-                            bindScripts();
-                            $('#loading').hide();
-                        }
-                    });
-                }
-            });
-
-            // Document Pager
-            $('#document_pager').pagination({
-                pages: {{ documentPageTotal }},
-                cssStyle: 'light-theme',
-                onPageClick: function(pageNumber, event){
-
-                    $('#loading').show();
-
-                    $.ajax({
-                        method: "GET",
-                        url: "{{ path('flexy_media_backend_media_pager') }}",
-                        data: {page: pageNumber, type: 'document'},
-                        contentType: 'json',
-                        success: function(data) {
-                            $('#document_container').html($(data.html));
-                            bindScripts();
-                            $('#loading').hide();
-                        }
-                    });
-                }
-            });
-
-            // Video Pager
-            $('#video_pager').pagination({
-                pages: {{ videoPageTotal }},
-                cssStyle: 'light-theme',
-                onPageClick: function(pageNumber, event){
-
-                    $('#loading').show();
-
-                    $.ajax({
-                        method: "GET",
-                        url: "{{ path('flexy_media_backend_media_pager') }}",
-                        data: {page: pageNumber, type: 'video'},
-                        contentType: 'json',
-                        success: function(data) {
-                            $('#video_container').html($(data.html));
-                            bindScripts();
-                            $('#loading').hide();
-                        }
-                    });
-                }
-            });
-
-            // EmbedVideo Pager
-            $('#embed_video_pager').pagination({
-                pages: {{ videoPageTotal }},
-                cssStyle: 'light-theme',
-                onPageClick: function(pageNumber, event){
-
-                    $('#loading').show();
-
-                    $.ajax({
-                        method: "GET",
-                        url: "{{ path('flexy_media_backend_media_pager') }}",
-                        data: {page: pageNumber, type: 'embedvideo'},
-                        contentType: 'json',
-                        success: function(data) {
-                            $('#embed_video_container').html($(data.html));
-                            bindScripts();
-                            $('#loading').hide();
-                        }
-                    });
-                }
-            });
-
+            mediaManagerLoadLibrary();
         });
 
     </script>

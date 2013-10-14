@@ -3,10 +3,15 @@
 {% block stylesheets %}
     {{ parent() }}
 
-    {# User symlink path cause @ target have a known issue with the css rewrite filter #}
+    <link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
+
+    {# Use symlink path cause @ target have a known issue with the css rewrite filter #}
     {% stylesheets filter='cssrewrite'
-        'bundles/flexymedia/backend/css/*'
-        'bundles/flexymedia/backend/css/blueimp/*'
+        'bundles/flexymedia/backend/css/blueimp/jquery.fileupload-ui.css'
+        'bundles/flexymedia/backend/css/media_select.css'
+        'bundles/flexymedia/backend/css/simplePagination.css'
+        'bundles/flexymedia/backend/css/ui.dynatree.css'
+        'bundles/flexymedia/backend/css/jquery.contextMenu.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -39,69 +44,12 @@
 
     {% block content_main '' %}
 
-    <div id="delete_dialog"></div>
-
-    {# Script not in external file cause it need translations, triggered in media.js  #}
-    <script type="text/javascript">
-        function deleteScript() {
-
-            $('a#media-delete').click(function(e){
-                if ($(this).attr('rel')) {
-                    var linkObj = $(this);
-
-                    $.ajax({
-                        type: "GET",
-                        dataType: 'json',
-                        url: $(this).attr('rel'),
-                        beforeSend: function(){
-                            $('#loading').show();
-                        },
-                        success: function(response){
-
-                            $('#loading').hide();
-                            $('#delete_dialog').html(response.template);
-
-                            if (response.isDeletable) {
-                                $('#delete_dialog').dialog({
-                                    modal: true,
-                                    width: 600,
-                                    title: "{% trans %}Delete confirmation{% endtrans %}",
-                                    buttons: {
-                                        "{% trans %}Delete{% endtrans %}": function() {
-                                            window.location = linkObj.attr('href');
-                                            $(this).dialog("close");
-                                        },
-                                        "{% trans %}Cancel{% endtrans %}": function() {
-                                            $(this).dialog("close");
-                                        }
-                                    }
-                                });
-
-                            } else {
-                                $('#delete_dialog').dialog({
-                                    modal: true,
-                                    title: "{% trans %}Notice{% endtrans %}",
-                                    buttons: {
-                                        Ok: function() {
-                                            $(this).dialog("close");
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    });
-
-                    e.preventDefault();
-                }
-            });
-
-        }
-    </script>
-
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
+
+    <script src="http://feather.aviary.com/js/feather.js"></script>
 
     <!-- The Templates plugin is included to render the upload/download listings -->
     <script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
@@ -110,9 +58,9 @@
     <!-- The Canvas to Blob plugin is included for image resizing functionality -->
     <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
 
+    <script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
+
     {% javascripts
-        '@FlexyMediaBundle/Resources/public/backend/js/media.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/jquery.simplePagination.js'
 
         '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.iframe-transport.js'
         '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload.js'
@@ -124,6 +72,14 @@
         '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-ui.js'
         '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-jquery-ui.js'
         '@FlexyMediaBundle/Resources/public/backend/js/blueimp/main.js'
+
+        '@FlexyMediaBundle/Resources/public/backend/js/jquery.simplePagination.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/jquery.cookie.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/jquery.dynatree.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/jquery.ui.position.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/jquery.contextMenu.js'
+        '@FlexyMediaBundle/Resources/public/backend/js/media_select.js'
+
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
