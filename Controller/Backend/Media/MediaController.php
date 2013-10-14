@@ -105,6 +105,8 @@ class MediaController extends BaseController
                         'medias' => $mediaPager->getResult(),
                         'folderId' => $request->query->get('folderId', 'base'),
                         'type' => $request->query->get('type', 'image'),
+                        'text' => $request->query->get('text', ''),
+                        'date' => $request->query->get('date', 'newer'),
                         'view' => $request->query->get('view', 'ckeditor'),
                         'pagesTotal' => $mediaPager->getPageTotal(),
                         'page' => $request->get('page', 1)

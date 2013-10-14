@@ -221,6 +221,12 @@ a:focus {
 
 }
 
+#media_list h1.empty_folder {
+    text-align: center;
+    padding: 180px 0;
+    color: #D7D7D7;
+}
+
 /* DETAILS DIV */
 
 #media_details {
@@ -337,6 +343,11 @@ div.add_embed {
     padding: 0 10px;
     color: #008000;
     font-size: 1.2em;
+}
+
+#upload_body {
+    overflow-y: scroll;
+    height: 400px;
 }
 
 /* AVIARY */
