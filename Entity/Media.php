@@ -192,7 +192,7 @@ class Media extends BaseEntity
             case 'embedvideo':
                 return $this->mediaPath;
             default:
-                return '/uploads/' . $this->getWebPath('media');
+                return $this->getWebPath('media');
         }
     }
 

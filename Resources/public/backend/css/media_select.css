@@ -112,14 +112,33 @@ a:focus {
 
 #media_filters li {
     display: inline-block;
-    margin: 0 10px;
+    margin: 0 2%;
 }
 
 #media_filters input[type="text"] {
     padding: 0 5px;
     height: 18px;
-    width: 235px;
+    width: 80%;
     border: 2px solid #cdcdcd;
+}
+
+#media_filters div.filter1 {
+    display: inline-block;
+    width: 20%;
+}
+
+#media_filters div.filter2 {
+    display: inline-block;
+    width: 50%;
+}
+
+#media_type_filters {
+    display: inline-block;
+    margin-right: 30px;
+}
+
+#media_date_filters {
+    display: inline-block;
 }
 
 /* PAGINATION */
@@ -160,7 +179,7 @@ a:focus {
 }
 
 #media_list.edit {
-    width: 80%;
+    width: 79%;
 }
 
 #media_list .item_wrapper {

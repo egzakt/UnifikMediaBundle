@@ -153,6 +153,12 @@ class EmbedVideoController extends BaseController
 
         //Generate the thumbnail
         $image = new Media();
+
+        // Temporary Fix BEGIN
+        $image->setUploadRootDir($this->container->getParameter('flexy_doctrine_behaviors.uploadable.upload_root_dir'));
+        $image->setUploadWebDir($this->container->getParameter('flexy_doctrine_behaviors.uploadable.upload_web_dir'));
+        // Temporary Fix END
+
         $image->setType('image');
         $image->setHidden(true);
         $image->setName("Preview - " . $video->getName());
