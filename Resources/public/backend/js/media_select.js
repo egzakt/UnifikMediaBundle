@@ -44,7 +44,10 @@ var mediaManagerLoadLibrary = function(){
 $('.select_media').click(function(){
     mediaManagerTriggeringElement = $(this);
 
-    if (mediaManagerInit) {
+    if (mediaManagerInit || mediaManagerIsCk) {
+        mediaManagerInit = true;
+        mediaManagerIsCk = false;
+        mediaManagerScriptsBinded = false;
         mediaManagerFilters.type = $(this).data('media-type');
         mediaManagerLoad(mediaManagerShow);
     } else {
@@ -83,10 +86,13 @@ var mediaManagerInitialize = function(){
 };
 
 var mediaManagerLoadCk = function (editor) {
-    mediaManagerIsCk = true;
+
     mediaManagerTriggeringElement = editor;
 
-    if (mediaManagerInit) {
+    if (mediaManagerInit || !mediaManagerIsCk) {
+        mediaManagerInit = true;
+        mediaManagerScriptsBinded = false;
+        mediaManagerIsCk = true;
         mediaManagerLoad(mediaManagerShow);
     } else {
         mediaManagerShow();
