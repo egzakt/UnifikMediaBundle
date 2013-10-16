@@ -116,14 +116,11 @@ class EmbedVideoController extends BaseController
                 }
             }
 
-            $associatedContents = MediaController::getAssociatedContents($media, $this->container);
-
             return new JsonResponse(array(
                 'html' => $this->renderView('FlexyMediaBundle:Backend/Media/EmbedVideo:edit.html.twig', array(
                     'form' => $form->createView(),
                     'media' => $media,
-                    'video_url' => $media->getMediaPath(),
-                    'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
+                    'video_url' => $media->getMediaPath()
                 ))
             ));
         }
@@ -153,11 +150,6 @@ class EmbedVideoController extends BaseController
 
         //Generate the thumbnail
         $image = new Media();
-
-        // Temporary Fix BEGIN
-        $image->setUploadRootDir($this->container->getParameter('flexy_doctrine_behaviors.uploadable.upload_root_dir'));
-        $image->setUploadWebDir($this->container->getParameter('flexy_doctrine_behaviors.uploadable.upload_web_dir'));
-        // Temporary Fix END
 
         $image->setType('image');
         $image->setHidden(true);

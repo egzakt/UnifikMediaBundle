@@ -66,8 +66,7 @@ class VideoController extends BaseController
                     'form' => $form->createView(),
                     'media' => $media,
                     'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
-                    'realName' => $realName,
-                    'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
+                    'realName' => $realName
                 ))
             ));
         }

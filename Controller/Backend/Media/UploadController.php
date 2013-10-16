@@ -72,11 +72,6 @@ class UploadController extends BaseController
     {
         $media = new Media();
 
-        // Temporary Fix BEGIN
-        $media->setUploadRootDir($this->container->getParameter('flexy_doctrine_behaviors.uploadable.upload_root_dir'));
-        $media->setUploadWebDir($this->container->getParameter('flexy_doctrine_behaviors.uploadable.upload_web_dir'));
-        // Temporary Fix END
-
         $media->setType('image');
         $media->setMedia($file);
         $media->setName($file->getClientOriginalName());
@@ -127,11 +122,6 @@ class UploadController extends BaseController
         $thumbnailFile = $thumbnailFile->getUploadedFile();
 
         $image = new Media();
-
-        // Temporary Fix BEGIN
-        $image->setUploadRootDir($this->container->getParameter('flexy_doctrine_behaviors.uploadable.upload_root_dir'));
-        $image->setUploadWebDir($this->container->getParameter('flexy_doctrine_behaviors.uploadable.upload_web_dir'));
-        // Temporary Fix END
 
         $image->setType('image');
         $image->setHidden(true);
@@ -186,11 +176,6 @@ class UploadController extends BaseController
         $thumbnailFile = $thumbnailFile->getUploadedFile();
 
         $image = new Media();
-
-        // Temporary Fix BEGIN
-        $image->setUploadRootDir($this->container->getParameter('flexy_doctrine_behaviors.uploadable.upload_root_dir'));
-        $image->setUploadWebDir($this->container->getParameter('flexy_doctrine_behaviors.uploadable.upload_web_dir'));
-        // Temporary Fix END
 
         $image->setType('image');
         $image->setHidden(true);

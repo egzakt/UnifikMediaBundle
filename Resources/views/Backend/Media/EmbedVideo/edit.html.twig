@@ -40,30 +40,6 @@
                                 {{ media.createdAt|date }}
                             </td>
                         </tr>
-                        {% if associatedContents|length > 0 %}
-                            <tr>
-                                <th>
-                                    {% trans %}Associated contents{% endtrans %} :
-                                </th>
-                                <td id="association_list">
-                                    <ul>
-                                        {% for entityName,methodGroup in associatedContents %}
-                                            {% for methodName,entities in methodGroup %}
-                                                <li>
-                                                    {{ entities|length }} {{ entityName }} {% trans %}with this file include in{% endtrans %} {{ methodName }} {% trans %}field{% endtrans %}.
-                                                    <ul>
-                                                        {% for entity in entities %}
-                                                            - {{ entity }}
-                                                        {% endfor %}
-                                                    </ul>
-                                                </li>
-                                            {% endfor %}
-                                        {% endfor %}
-                                    </ul>
-                                </td>
-                            </tr>
-                        {% endif %}
-                    {% endif %}
                 </table>
             </div>
 

@@ -1,0 +1,34 @@
+<h1>{{ media.name }}</h1>
+
+{% if associatedContents|length > 0 %}
+
+    <h2>
+        {% trans %}Associated contents{% endtrans %} :
+    </h2>
+
+    <ul>
+        {% for entityName,methodGroup in associatedContents %}
+            {% for methodName,entities in methodGroup %}
+                <li>
+                    {{ entities|length }} {{ entityName }} {% trans %}with this file as{% endtrans %} {{ methodName }}
+                    <ul>
+                        {% for entity in entities %}
+                            <li> -
+                                {% set targetEntity = (entity.translatable is defined) ? entity.translatable : entity %}
+                                {% set targetEntity2str = (targetEntity.toString is defined) %}
+                                {% set targetEntityRoute = (targetEntity.routeBackend is defined) ? path(targetEntity.routeBackend, targetEntity.routeBackendParams({'sectionId': 3})) : false %}
+
+                                {% if targetEntityRoute %}
+                                    <a href="{{ targetEntityRoute }}">{{ (targetEntity2str) ? targetEntity : '<em>(' ~ entityName ~ ')</em>' }}</a>
+                                {% else %}
+                                    {{ (targetEntity2str) ? targetEntity : '<em>(' ~ entityName ~ ')</em>' }}
+                                {% endif %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        {% endfor %}
+    </ul>
+
+{% endif %}

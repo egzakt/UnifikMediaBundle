@@ -45,6 +45,12 @@ flexy_media_backend_duplicate:
     options:
         expose: true
 
+flexy_media_backend_associations:
+    pattern:  /associations
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:associations" }
+    options:
+        expose: true
+
 # Upload
 flexy_media_backend_media_upload:
     pattern: /upload

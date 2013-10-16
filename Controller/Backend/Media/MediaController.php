@@ -2,6 +2,7 @@
 
 namespace Flexy\MediaBundle\Controller\Backend\Media;
 
+use Flexy\ComposerManagerBundle\Lib\Json\JsonFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -275,6 +276,27 @@ class MediaController extends BackendController
                 return new JsonResponse(array(
                     'removed' => false,
                     'message' => $t->trans('This folder cannot be renamed.')
+                ));
+            }
+        }
+
+        return new JsonResponse();
+    }
+
+    public function associationsAction(Request $request)
+    {
+        if ($request->isXmlHttpRequest() && $request->query->has('mediaId')) {
+
+            $media = $this->mediaRepository->find($request->query->get('mediaId'));
+
+            if ($media) {
+                $associatedContents = $this::getAssociatedContents($media, $this->container);
+
+                return new JsonResponse(array(
+                    'html' => $this->renderView('FlexyMediaBundle:Backend/Media/MediaSelect/content:media_select_associations.html.twig', array(
+                        'media' => $media,
+                        'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
+                    ))
                 ));
             }
         }

@@ -55,15 +55,12 @@ class ImageController extends BaseController
             $explode = explode('/', $media->getMediaPath());
             $realName = array_pop($explode);
 
-            $associatedContents = MediaController::getAssociatedContents($media, $this->container);
-
             return new JsonResponse(array(
                 'html' => $this->renderView('FlexyMediaBundle:Backend/Media/Image:edit.html.twig', array(
                     'form' => $form->createView(),
                     'media' => $media,
                     'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
-                    'realName' => $realName,
-                    'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
+                    'realName' => $realName
                 ))
             ));
         }
