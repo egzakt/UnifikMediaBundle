@@ -10,15 +10,15 @@
             <input id="media_text_search" type="text" placeholder="{% trans %}Media name filter{% endtrans %}">
         </div>
         <div class="filter2">
-            {% if 'ckeditor' == view %}
-                    <div id="media_type_filters">
-                        <input class="type_radio" type="radio" id="radio1" value="any" name="typeradio" checked="checked" /><label for="radio1">{% trans %}Any{% endtrans %}</label>
-                        <input class="type_radio" type="radio" id="radio2" value="image" name="typeradio" /><label for="radio2">{% trans %}Images{% endtrans %}</label>
-                        <input class="type_radio" type="radio" id="radio3" value="document" name="typeradio" /><label for="radio3">{% trans %}Documents{% endtrans %}</label>
-                        <input class="type_radio" type="radio" id="radio4" value="video" name="typeradio" /><label for="radio4">{% trans %}Videos{% endtrans %}</label>
-                        <input class="type_radio" type="radio" id="radio5" value="embedvideo" name="typeradio" /><label for="radio5">{% trans %}Embed Videos{% endtrans %}</label>
-                    </div>
-            {% endif %}
+
+            <div id="media_type_filters">
+                <input class="type_radio" type="radio" id="radio1" value="any" name="typeradio" checked="checked"{% if type not in ['any'] %} disabled{% endif %}/><label for="radio1">{% trans %}Any{% endtrans %}</label>
+                <input class="type_radio" type="radio" id="radio2" value="image" name="typeradio"{% if type not in ['any', 'image'] %} disabled{% endif %}/><label for="radio2">{% trans %}Images{% endtrans %}</label>
+                <input class="type_radio" type="radio" id="radio3" value="document" name="typeradio"{% if type not in ['any', 'document'] %} disabled{% endif %}/><label for="radio3">{% trans %}Documents{% endtrans %}</label>
+                <input class="type_radio" type="radio" id="radio4" value="video" name="typeradio"{% if type not in ['any', 'video'] %} disabled{% endif %}/><label for="radio4">{% trans %}Videos{% endtrans %}</label>
+                <input class="type_radio" type="radio" id="radio5" value="embedvideo" name="typeradio"{% if type not in ['any', 'embedvideo'] %} disabled{% endif %}/><label for="radio5">{% trans %}Embed Videos{% endtrans %}</label>
+            </div>
+
             <div id="media_date_filters">
                 <input class="date_radio" type="radio" id="radio6" value="newer" name="dateradio" checked="checked" /><label for="radio6">{% trans %}Newer{% endtrans %}</label>
                 <input class="date_radio" type="radio" id="radio7" value="older" name="dateradio" /><label for="radio7">{% trans %}Older{% endtrans %}</label>

@@ -44,7 +44,7 @@ var mediaManagerLoadLibrary = function(){
 $('.select_media').click(function(){
     mediaManagerTriggeringElement = $(this);
 
-    if (mediaManagerInit || mediaManagerIsCk) {
+    if (mediaManagerInit || mediaManagerIsCk || $(this).data('media-type') != mediaManagerFilters.type) {
         mediaManagerInit = true;
         mediaManagerIsCk = false;
         mediaManagerScriptsBinded = false;
@@ -385,20 +385,18 @@ var mediaManagerBind = function () {
         }
     });
 
-    if (mediaManagerIsCk) {
-        $(function() {
-            $( "#media_type_filters" ).buttonset();
-        });
+    $(function() {
+        $( "#media_type_filters" ).buttonset();
+    });
 
-        $('.type_radio').on('click', function(e){
+    $('.type_radio').on('click', function(e){
 
-            mediaManagerFilters.type = $(this).val();
+        mediaManagerFilters.type = $(this).val();
 
-            mediaManagerAjaxLoader.show();
-            mediaManagerLoad();
+        mediaManagerAjaxLoader.show();
+        mediaManagerLoad();
 
-        });
-    }
+    });
 
     $(function() {
         $( "#media_date_filters" ).buttonset();

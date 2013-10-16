@@ -141,6 +141,11 @@ a:focus {
     display: inline-block;
 }
 
+#media_filters .ui-state-disabled {
+    opacity: 1;
+    color: #cdcdcd;
+}
+
 /* PAGINATION */
 
 #pager_wrapper {
