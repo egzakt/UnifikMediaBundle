@@ -180,7 +180,7 @@ class Media extends BaseEntity
     public function getMediaPath($absolute = false)
     {
         if ($absolute) {
-            return $this->container->get('kernel')->getRootDir().'/../web/uploads/' . $this->getWebPath('media');
+            return $this->container->get('kernel')->getRootDir().'/../web' . $this->getWebPath('media');
         }
 
 //        $testweb = $this->getWebPath('media');
@@ -549,7 +549,7 @@ class Media extends BaseEntity
                 return sprintf('/(<img [^>]*data-mediaid="%d"[^>]*src=")[^>]+("[^>]*>)/', $this->getId());
             case 'video':
                 return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=")[^>]+("[^>]*><\/iframe>)/', $this->getId());
-            case 'embedVideo':
+            case 'embedvideo':
                 return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=")[^>]+("[^>]*><\/iframe>)/', $this->getId());
             default:
                 return sprintf('/(<a [^>]*data-mediaid="%d"[^>]*href=")[^>]+("[^>]*>)[^<]+(<\/a>)/', $this->getId());

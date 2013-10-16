@@ -1,5 +1,5 @@
 {% spaceless %}
-    <div class="item_wrapper">
+    <div class="item_wrapper{% if pagesTotal == 1 %} full{% endif %}">
         {% if medias|length > 0 %}
             <table>
                 {% for media in medias %}
@@ -42,54 +42,56 @@
         {% endif %}
     </div>
 
-    <div id="pager_wrapper">
-        <div id="media_pager">
+    {% if pagesTotal > 1 %}
+        <div id="pager_wrapper">
+            <div id="media_pager">
+            </div>
         </div>
-    </div>
 
-    <script type="text/javascript">
-        $('#media_pager').pagination({
-            pages: {{ pagesTotal }},
-            currentPage: {{ page }},
-            cssStyle: 'light-theme',
-            onPageClick: function(pageNumber, event){
+        <script type="text/javascript">
+            $('#media_pager').pagination({
+                pages: {{ pagesTotal }},
+                currentPage: {{ page }},
+                cssStyle: 'light-theme',
+                onPageClick: function(pageNumber, event){
 
-                event.preventDefault();
+                    event.preventDefault();
 
-                mediaManagerAjaxLoader.show();
+                    mediaManagerAjaxLoader.show();
 
-                $.ajax({
-                    url: Routing.generate('flexy_media_backend_load'),
-                    data: {
-                        folderId: '{{ folderId }}',
-                        type: '{{ type }}',
-                        text: '{{ text }}',
-                        date: '{{ date }}',
-                        page: pageNumber,
-                        view: (mediaManagerIsCk) ? 'ckeditor' : 'mediafield',
-                        init: false
-                    },
-                    dataType: 'json',
-                    success: function (data) {
+                    $.ajax({
+                        url: Routing.generate('flexy_media_backend_load'),
+                        data: {
+                            folderId: '{{ folderId }}',
+                            type: '{{ type }}',
+                            text: '{{ text }}',
+                            date: '{{ date }}',
+                            page: pageNumber,
+                            view: (mediaManagerIsCk) ? 'ckeditor' : 'mediafield',
+                            init: false
+                        },
+                        dataType: 'json',
+                        success: function (data) {
 
-                        // Append html content
-                        $('#media_list').html($(data.html));
-                        mediaManagerAjaxLoader.hide();
-                        mediaManagerInitialize();
-                        mediaManagerFilters.page = pageNumber;
-                        mediaManagerLoadBind();
+                            // Append html content
+                            $('#media_list').html($(data.html));
+                            mediaManagerAjaxLoader.hide();
+                            mediaManagerInitialize();
+                            mediaManagerFilters.page = pageNumber;
+                            mediaManagerLoadBind();
 
-                    },
-                    error: function () {
+                        },
+                        error: function () {
 
-                        // Append html content
-                        mediaManagerModal.html($('<h2>Internal Server Error</h2>'));
+                            // Append html content
+                            mediaManagerModal.html($('<h2>Internal Server Error</h2>'));
 
-                    }
-                });
-            }
-        });
-    </script>
+                        }
+                    });
+                }
+            });
+        </script>
+    {% endif %}
 
 {% endspaceless %}
 

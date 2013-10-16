@@ -48,7 +48,13 @@ $('.select_media').click(function(){
         mediaManagerInit = true;
         mediaManagerIsCk = false;
         mediaManagerScriptsBinded = false;
-        mediaManagerFilters.type = $(this).data('media-type');
+        mediaManagerFilters = {
+            resetPage: true,
+            page: 1,
+            type: $(this).data('media-type'),
+            text: '',
+            date: 'newer'
+        };
         mediaManagerLoad(mediaManagerShow);
     } else {
         mediaManagerShow();
@@ -93,6 +99,13 @@ var mediaManagerLoadCk = function (editor) {
         mediaManagerInit = true;
         mediaManagerScriptsBinded = false;
         mediaManagerIsCk = true;
+        mediaManagerFilters = {
+            resetPage: true,
+            page: 1,
+            type: 'any',
+            text: '',
+            date: 'newer'
+        };
         mediaManagerLoad(mediaManagerShow);
     } else {
         mediaManagerShow();
@@ -358,7 +371,11 @@ var mediaManagerBind = function () {
 
     // FILTERS BUTTONS
 
-    $('#media_text_search').on('keyup', function(e){
+    var mediaTextSearch = $('#media_text_search');
+
+    mediaTextSearch.clearable();
+
+    mediaTextSearch.on('keyup', function(e){
 
         mediaManagerFilters.text = $(this).val();
 
@@ -871,10 +888,6 @@ var mediaManagerInsert = function() {
 
 var mediaManagerInsertCk = function() {
     CKEDITOR.plugins.get('flexymediamanager').insertMedia(mediaManagerTriggeringElement, mediaManagerSelectedMedia);
-
-    mediaManagerModal.dialog('close');
-
-    mediaManagerIsCk = false;
 };
 
 // AVIARY
@@ -979,3 +992,23 @@ var mediaManagerDeleteModalShow = function (message, callback) {
         }
     });
 };
+
+jQuery.fn.clearable = function() {
+
+    $(this).css({'border-width': '0px', 'outline': 'none'})
+        .wrap('<div id="media_text_search_container" class="divclearable"></div>')
+        .parent()
+        .attr('class', $(this).attr('class') + ' divclearable')
+        .append('<a class="clearlink" href="javascript:"></a>');
+
+    $('.clearlink').click(function() {
+
+        if ('' != $(this).prev().val()) {
+            $(this).prev().val('').focus();
+            mediaManagerFilters.text = '';
+            mediaManagerAjaxLoader.show();
+            mediaManagerLoad();
+        }
+
+    });
+}

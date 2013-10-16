@@ -527,6 +527,7 @@ class MediaController extends BaseController
                 $setMethod = 'set' . ucfirst($fieldName);
 
                 foreach ($entities as $entity) {
+
                     $entity->$setMethod(preg_replace($media->getReplaceRegex(), '', $entity->$getMethod()));
 
                 }
