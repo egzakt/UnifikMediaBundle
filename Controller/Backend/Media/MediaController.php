@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Flexy\MediaBundle\Entity\Media;
 use Flexy\MediaBundle\Entity\Folder;
-use Flexy\SystemBundle\Lib\Backend\BaseController;
+use Flexy\SystemBundle\Lib\Backend\BackendController;
 use Flexy\MediaBundle\Entity\MediaRepository;
 use Flexy\MediaBundle\Entity\FolderRepository;
 use Flexy\MediaBundle\Lib\MediaPager;
@@ -18,7 +18,7 @@ use Flexy\MediaBundle\Lib\MediaPager;
 /**
  * Media Controller
  */
-class MediaController extends BaseController
+class MediaController extends BackendController
 {
     /**
      * @var MediaRepository
@@ -207,22 +207,17 @@ class MediaController extends BaseController
 
                 if ($folder) {
 
-                    if (count($folder->getMedias()) || count($folder->getChildren())) {
+                    $deletable = $this->checkDeletable($folder);
 
-                        return new JsonResponse(array(
-                            'removed' => false,
-                            'message' => $t->trans('This folder is not empty.')
-                        ));
-                    } else {
-
+                    if ($deletable->isSuccess()) {
                         $this->getEm()->remove($folder);
                         $this->getEm()->flush();
-
-
-                        return new JsonResponse(array(
-                            'removed' => true
-                        ));
                     }
+
+                    return new JsonResponse(array(
+                        'removed' => $deletable->isSuccess(),
+                        'message' => $deletable->getErrors()[0]
+                    ));
                 }
 
             } else {
@@ -317,12 +312,17 @@ class MediaController extends BaseController
 
                         if ('image' != $media->getType()) {
                             $thumbnail = $media->getThumbnail();
-                            $this->getEm()->remove($thumbnail);
-                            $this->getEm()->flush();
+
+                            if ($this->checkDeletable($thumbnail)->isSuccess()) {
+                                $this->getEm()->remove($thumbnail);
+                                $this->getEm()->flush();
+                            }
                         }
 
-                        $this->getEm()->remove($media);
-                        $this->getEm()->flush();
+                        if ($this->checkDeletable($media)->isSuccess()) {
+                            $this->getEm()->remove($media);
+                            $this->getEm()->flush();
+                        }
 
                     } else {
 
