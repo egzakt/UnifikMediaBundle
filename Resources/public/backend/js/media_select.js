@@ -190,6 +190,7 @@ var mediaManagerNavigationLoad = function (tree) {
         },
         generateIds: true,
         idPrefix: "dynatree-id-",
+        autoCollapse: false,
         dnd: {
             revert: true, // true: slide helper back to source if drop is rejected
             onDragStart: function(node) {
@@ -323,9 +324,8 @@ var mediaManagerAssociationsLoad = function () {
             var divMediaList = $('#media_list');
 
             divMediaList.html($(data.html));
-            divMediaList.show();
 
-            mediaManagerAssociationsBind();
+            mediaManagerAssociationsBind(data.tree);
 
             mediaManagerAjaxLoader.hide();
 
@@ -641,7 +641,7 @@ var mediaManagerBind = function () {
 
     // CONTEXT MENU
 
-    $.contextMenu( {selector: '.dynatree-node',
+    $.contextMenu( {selector: '#folder_tree .dynatree-node',
         build: function($trigger, e){
             return {
                 items: {
@@ -852,12 +852,6 @@ var mediaManagerLoadBind = function(){
                         disabled: (mediaManagerSelectedMediaArray.length > 1),
                         callback: function(){
 
-                            var divMediaList = $('#media_list');
-
-                            divMediaList.hide();
-                            $('#media_details').hide();
-                            divMediaList.addClass('edit');
-
                             mediaManagerAssociationsLoad();
                         }
                     },
@@ -917,8 +911,20 @@ var mediaManagerLoadBind = function(){
     });
 };
 
-var mediaManagerAssociationsBind = function (){
+var mediaManagerAssociationsBind = function (tree){
 
+    $('#association_tree').dynatree({
+        onActivate: function(node) {
+            if( node.data.href ){
+                window.open(node.data.href, '_blank');
+            }
+        },
+        generateIds: true,
+        checkbox: true,
+        selectMode: 3,
+        children: tree,
+        debugLevel: 0 // 0:quiet, 1:normal, 2:debug
+    });
 };
 
 var mediaManagerInsert = function() {

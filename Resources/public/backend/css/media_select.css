@@ -279,6 +279,32 @@ a:focus {
     color: #D7D7D7;
 }
 
+#media_list #association_nav {
+    overflow-y: scroll;
+    height: 418px;
+}
+
+#media_list #association_nav ul.dynatree-container {
+    border: none;
+}
+
+#media_list #association_nav span.entity a {
+    font-weight: 700;
+}
+
+#media_list #association_nav span.field a {
+    font-weight: 700;
+    font-size: 0.875em;
+}
+
+#media_list h2.association {
+    margin: 10px;
+}
+
+span.dynatree-title {
+    padding: 0 10px;
+}
+
 /* DETAILS DIV */
 
 #media_details {

@@ -292,11 +292,61 @@ class MediaController extends BackendController
             if ($media) {
                 $associatedContents = $this::getAssociatedContents($media, $this->container);
 
+                $associatedContents = array_merge($associatedContents['text'], $associatedContents['field']);
+
+                $tree = array();
+
+                foreach ($associatedContents as $entity => $fields) {
+
+                    $entityNodes = array(
+                        'title' => $entity,
+                        'expand' => true,
+                        'addClass' => 'entity',
+                        'noLink' => true,
+                        'unselectable' => true,
+                        'children' => array()
+                    );
+
+                    foreach ($fields as $field => $contents) {
+
+                        $fieldNodes = array(
+                            'title' => '« ' . $field . ' » field',
+                            'expand' => true,
+                            'addClass' => 'field',
+                            'noLink' => true,
+                            'children' => array()
+                        );
+
+                        foreach ($contents as $content) {
+
+                            $targetEntity = (method_exists($content, 'getTranslatable'))
+                                ? $content->getTranslatable() : $content;
+
+                            $targetEntity2str = (method_exists($targetEntity, '__toString'));
+                            $targetEntityRoute = (method_exists($targetEntity, 'getRouteBackend'))
+                                ? $this->generateUrl($targetEntity->getRouteBackend(), $targetEntity->getRouteBackendParams()) : false;
+
+                            $contentNode = array(
+                                'title' => ($targetEntity2str) ?  $targetEntity->__toString() : ' ( '. $entity . ' ) ',
+                                'href' => ($targetEntityRoute) ?: null
+                            );
+
+                            $fieldNodes['children'][] = $contentNode;
+
+                        }
+
+                        $entityNodes['children'][] = $fieldNodes;
+                    }
+
+                    $tree[] = $entityNodes;
+                }
+
                 return new JsonResponse(array(
                     'html' => $this->renderView('FlexyMediaBundle:Backend/Media/MediaSelect/content:media_select_associations.html.twig', array(
                         'media' => $media,
-                        'associatedContents' => array_merge($associatedContents['field'], $associatedContents['text'])
-                    ))
+                        'associatedContents' => $associatedContents
+                    )),
+                    'tree' => $tree
                 ));
             }
         }
