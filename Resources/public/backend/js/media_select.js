@@ -16,6 +16,7 @@ var mediaManagerAjaxLoader;
 var mediaManagerEditValue;
 var mediaManagerModal;
 var mediaManagerIsLibrary = false;
+var mediaManagerAssociationSelection = [];
 
 // Create the media select container
 
@@ -913,17 +914,64 @@ var mediaManagerLoadBind = function(){
 
 var mediaManagerAssociationsBind = function (tree){
 
-    $('#association_tree').dynatree({
-        onActivate: function(node) {
+    var associationTree = $('#association_tree');
+    var selectButton = $('button.select');
+    var unselectButton = $('button.unselect');
+
+    associationTree.dynatree({
+        onDblClick: function(node) {
             if( node.data.href ){
                 window.open(node.data.href, '_blank');
             }
+        },
+        onSelect: function(select, node) {
+            // Display list of selected nodes
+            var selNodes = node.tree.getSelectedNodes();
+            // convert to title/key array
+            mediaManagerAssociationSelection = $.map(selNodes, function(node){
+                return node.data.class + ':' + node.data.id;
+            });
         },
         generateIds: true,
         checkbox: true,
         selectMode: 3,
         children: tree,
         debugLevel: 0 // 0:quiet, 1:normal, 2:debug
+    });
+
+    selectButton.click(function(){
+
+        selectButton.hide();
+        unselectButton.show();
+
+        associationTree.dynatree("getRoot").visit(function(node){
+            node.select(true);
+        });
+    });
+
+    unselectButton.click(function(){
+
+        unselectButton.hide();
+        selectButton.show();
+
+        associationTree.dynatree("getRoot").visit(function(node){
+            node.select(false);
+        });
+    });
+
+    $('button.unlink').click(function(){
+        $.ajax({
+            url: Routing.generate('flexy_media_backend_associations_unlink'),
+            //data: ,
+            dataType: 'json',
+            success: function (data) {
+//                var selectedNodes = associationTree.dynatree('getTree').getSelectedNodes();
+//
+//                selectedNodes.each(function(node){
+//                    node.remove();
+//                });
+            }
+        });
     });
 };
 

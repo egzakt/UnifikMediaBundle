@@ -281,18 +281,18 @@ a:focus {
 
 #media_list #association_nav {
     overflow-y: scroll;
-    height: 418px;
+    height: 370px;
 }
 
 #media_list #association_nav ul.dynatree-container {
     border: none;
 }
 
-#media_list #association_nav span.entity a {
+#media_list #association_nav span.entity span.dynatree-title {
     font-weight: 700;
 }
 
-#media_list #association_nav span.field a {
+#media_list #association_nav span.field span.dynatree-title {
     font-weight: 700;
     font-size: 0.875em;
 }
@@ -303,6 +303,18 @@ a:focus {
 
 span.dynatree-title {
     padding: 0 10px;
+}
+
+#media_list #association_nav a:hover {
+    text-decoration: underline;
+}
+
+#association_controls {
+    margin: 5px;
+}
+
+#association_controls button.unselect {
+    display: none;
 }
 
 /* DETAILS DIV */

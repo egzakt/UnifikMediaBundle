@@ -283,6 +283,12 @@ class MediaController extends BackendController
         return new JsonResponse();
     }
 
+    /**
+     * Return all associated contents
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function associationsAction(Request $request)
     {
         if ($request->isXmlHttpRequest() && $request->query->has('mediaId')) {
@@ -328,7 +334,9 @@ class MediaController extends BackendController
 
                             $contentNode = array(
                                 'title' => ($targetEntity2str) ?  $targetEntity->__toString() : ' ( '. $entity . ' ) ',
-                                'href' => ($targetEntityRoute) ?: null
+                                'href' => ($targetEntityRoute) ?: null,
+                                'class' => get_class($content),
+                                'id' => $content->getId()
                             );
 
                             $fieldNodes['children'][] = $contentNode;
@@ -351,6 +359,11 @@ class MediaController extends BackendController
             }
         }
 
+        return new JsonResponse();
+    }
+
+    public function associationsUnlinkAction(Request $request)
+    {
         return new JsonResponse();
     }
 

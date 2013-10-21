@@ -51,6 +51,12 @@ flexy_media_backend_associations:
     options:
         expose: true
 
+flexy_media_backend_associations_unlink:
+    pattern:  /associations-unlink
+    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:associationsUnlink" }
+    options:
+        expose: true
+
 # Upload
 flexy_media_backend_media_upload:
     pattern: /upload

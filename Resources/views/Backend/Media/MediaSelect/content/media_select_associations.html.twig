@@ -4,13 +4,23 @@
         "{{ media.name }}" {% trans %}associated contents{% endtrans %} :
     </h2>
 
+    <div id="association_controls">
+        <button class="select">{% trans %}Select all{% endtrans %}</button>
+        <button class="unselect">{% trans %}Unselect all{% endtrans %}</button>
+        <button class="replace">{% trans %}Replace{% endtrans %}</button>
+        <button class="unlink">{% trans %}Unlink{% endtrans %}</button>
+    </div>
+
     {% if associatedContents|length > 0 %}
         <div id="association_nav">
-
-
-
             <div id="association_tree"></div>
         </div>
 
     {% endif %}
+
+    <script type="text/javascript">
+
+        $('#association_controls button').button();
+
+    </script>
 {% endspaceless %}
