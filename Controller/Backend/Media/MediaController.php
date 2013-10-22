@@ -310,6 +310,7 @@ class MediaController extends BackendController
                         'addClass' => 'entity',
                         'noLink' => true,
                         'unselectable' => true,
+                        'hideCheckbox' => true,
                         'children' => array()
                     );
 
@@ -336,6 +337,7 @@ class MediaController extends BackendController
                                 'title' => ($targetEntity2str) ?  $targetEntity->__toString() : ' ( '. $entity . ' ) ',
                                 'href' => ($targetEntityRoute) ?: null,
                                 'class' => get_class($content),
+                                'field' => $field,
                                 'id' => $content->getId()
                             );
 
@@ -362,8 +364,46 @@ class MediaController extends BackendController
         return new JsonResponse();
     }
 
+    /**
+     * Unlink media associations
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function associationsUnlinkAction(Request $request)
     {
+        if ($request->isXmlHttpRequest()
+            && $request->query->has('entities')
+            && $request->query->has('mediaId')) {
+
+            $metadataFactory = $this->getEm()->getMetadataFactory();
+
+            $media = $this->mediaRepository->find($request->query->get('mediaId'));
+
+            if ($media) {
+
+                foreach ($request->query->get('entities') as $entityString) {
+
+                    $explode = explode(':', $entityString);
+
+                    $repository = $this->getEm()->getRepository($explode[0]);
+
+                    if ($repository && $entity = $repository->find($explode[2])) {
+
+                        $metadata = $metadataFactory->getMetadataFor($explode[0]);
+
+                        $fieldType = $metadata->getTypeOfField($explode[1]);
+
+                        if ($fieldType == 'text') {
+                            $this->removeMediaFromTexts($media, array(array($explode[1] => array($entity))));
+                        } else {
+                            $this->removeMediaRelation(array(array($explode[1] => array($entity))));
+                        }
+                    }
+                }
+            }
+        }
+
         return new JsonResponse();
     }
 
@@ -595,6 +635,8 @@ class MediaController extends BackendController
                 }
             }
         }
+
+        $this->getEm()->flush();
     }
 
     /**

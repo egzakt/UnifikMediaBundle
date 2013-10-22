@@ -929,7 +929,9 @@ var mediaManagerAssociationsBind = function (tree){
             var selNodes = node.tree.getSelectedNodes();
             // convert to title/key array
             mediaManagerAssociationSelection = $.map(selNodes, function(node){
-                return node.data.class + ':' + node.data.id;
+                if (node.data.class != undefined) {
+                    return node.data.class + ':' + node.data.field + ':' + node.data.id;
+                }
             });
         },
         generateIds: true,
@@ -962,14 +964,21 @@ var mediaManagerAssociationsBind = function (tree){
     $('button.unlink').click(function(){
         $.ajax({
             url: Routing.generate('flexy_media_backend_associations_unlink'),
-            //data: ,
+            data: {
+                mediaId: mediaManagerSelectedMedia.id,
+                entities: mediaManagerAssociationSelection
+            },
             dataType: 'json',
             success: function (data) {
-//                var selectedNodes = associationTree.dynatree('getTree').getSelectedNodes();
-//
-//                selectedNodes.each(function(node){
-//                    node.remove();
-//                });
+                var selectedNodes = associationTree.dynatree('getTree').getSelectedNodes();
+
+                if (selectedNodes) {
+
+                    for (i = selectedNodes.length; i > 0 ; i--) {
+
+                        selectedNodes[i-1].remove();
+                    }
+                }
             }
         });
     });
