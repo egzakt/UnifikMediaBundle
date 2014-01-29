@@ -1,6 +1,6 @@
 <?php
 
-namespace Flexy\MediaBundle\DependencyInjection;
+namespace Unifik\MediaBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -19,7 +19,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('flexy_media');
+        $rootNode = $treeBuilder->root('unifik_media');
 
         $this->addParameters($rootNode);
         return $treeBuilder;

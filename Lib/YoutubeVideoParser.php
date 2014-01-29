@@ -1,6 +1,6 @@
 <?php
 
-namespace Flexy\MediaBundle\Lib;
+namespace Unifik\MediaBundle\Lib;
 
 /**
  * Class YoutubeVideoParser

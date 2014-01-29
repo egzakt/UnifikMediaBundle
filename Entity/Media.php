@@ -1,11 +1,11 @@
 <?php
 
-namespace Flexy\MediaBundle\Entity;
+namespace Unifik\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Flexy\SystemBundle\Lib\BaseEntity;
+use Unifik\SystemBundle\Lib\BaseEntity;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Flexy\DoctrineBehaviorsBundle\Model as FlexyORMBehaviors;
+use Unifik\DoctrineBehaviorsBundle\Model as UnifikORMBehaviors;
 
 /**
  * Media
@@ -13,8 +13,8 @@ use Flexy\DoctrineBehaviorsBundle\Model as FlexyORMBehaviors;
 class Media extends BaseEntity
 {
 
-    use FlexyORMBehaviors\Uploadable\Uploadable;
-    use FlexyORMBehaviors\Timestampable\Timestampable;
+    use UnifikORMBehaviors\Uploadable\Uploadable;
+    use UnifikORMBehaviors\Timestampable\Timestampable;
 
     /**
      * @var integer
@@ -87,7 +87,7 @@ class Media extends BaseEntity
     private $thumbnail;
 
     /**
-     * @var \Flexy\MediaBundle\Entity\Folder
+     * @var \Unifik\MediaBundle\Entity\Folder
      */
     private $folder;
 
@@ -422,10 +422,10 @@ class Media extends BaseEntity
     /**
      * Set folder
      *
-     * @param \Flexy\MediaBundle\Entity\Folder $folder
+     * @param \Unifik\MediaBundle\Entity\Folder $folder
      * @return Media
      */
-    public function setFolder(\Flexy\MediaBundle\Entity\Folder $folder = null)
+    public function setFolder(\Unifik\MediaBundle\Entity\Folder $folder = null)
     {
         $this->folder = $folder;
     }
@@ -433,7 +433,7 @@ class Media extends BaseEntity
     /**
      * Get folder
      *
-     * @return \Flexy\MediaBundle\Entity\Folder
+     * @return \Unifik\MediaBundle\Entity\Folder
      */
     public function getFolder()
     {
@@ -453,7 +453,7 @@ class Media extends BaseEntity
     /**
      * Get thumbnail
      *
-     * @return \Flexy\MediaBundle\Entity\Media
+     * @return \Unifik\MediaBundle\Entity\Media
      */
     public function getThumbnail()
     {
@@ -486,26 +486,26 @@ class Media extends BaseEntity
     public function getRouteBackend($action = 'edit')
     {
         if ('list' === $action) {
-            return 'flexy_media_backend_media';
+            return 'unifik_media_backend_media';
         }
 
         switch ($action) {
             case 'list':
-                return 'flexy_media_backend_media';
+                return 'unifik_media_backend_media';
                 break;
             case 'duplicate':
-                return 'flexy_media_backend_' . $action;
+                return 'unifik_media_backend_' . $action;
         }
 
         switch ($this->type) {
             case 'image':
-                return 'flexy_media_backend_image_' . $action;
+                return 'unifik_media_backend_image_' . $action;
             case 'video':
-                return 'flexy_media_backend_video_' . $action;
+                return 'unifik_media_backend_video_' . $action;
             case 'embedvideo':
-                return 'flexy_media_backend_embed_video_' . $action;
+                return 'unifik_media_backend_embed_video_' . $action;
             default:
-                return 'flexy_media_backend_document_' . $action;
+                return 'unifik_media_backend_document_' . $action;
         }
     }
 

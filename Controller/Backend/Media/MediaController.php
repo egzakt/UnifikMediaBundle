@@ -1,20 +1,20 @@
 <?php
 
-namespace Flexy\MediaBundle\Controller\Backend\Media;
+namespace Unifik\MediaBundle\Controller\Backend\Media;
 
-use Flexy\ComposerManagerBundle\Lib\Json\JsonFile;
+use Unifik\ComposerManagerBundle\Lib\Json\JsonFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Flexy\MediaBundle\Entity\Media;
-use Flexy\MediaBundle\Entity\Folder;
-use Flexy\SystemBundle\Lib\Backend\BackendController;
-use Flexy\MediaBundle\Entity\MediaRepository;
-use Flexy\MediaBundle\Entity\FolderRepository;
-use Flexy\MediaBundle\Lib\MediaPager;
+use Unifik\MediaBundle\Entity\Media;
+use Unifik\MediaBundle\Entity\Folder;
+use Unifik\SystemBundle\Lib\Backend\BackendController;
+use Unifik\MediaBundle\Entity\MediaRepository;
+use Unifik\MediaBundle\Entity\FolderRepository;
+use Unifik\MediaBundle\Lib\MediaPager;
 
 /**
  * Media Controller
@@ -37,8 +37,8 @@ class MediaController extends BackendController
     public function init()
     {
         parent::init();
-        $this->mediaRepository = $this->getEm()->getRepository('FlexyMediaBundle:Media');
-        $this->folderRepository = $this->getEm()->getRepository('FlexyMediaBundle:Folder');
+        $this->mediaRepository = $this->getEm()->getRepository('UnifikMediaBundle:Media');
+        $this->folderRepository = $this->getEm()->getRepository('UnifikMediaBundle:Folder');
     }
 
     /**
@@ -49,7 +49,7 @@ class MediaController extends BackendController
      */
     public function mediaAction(Request $request)
     {
-        return $this->render('FlexyMediaBundle:Backend/Media/Media:media.html.twig');
+        return $this->render('UnifikMediaBundle:Backend/Media/Media:media.html.twig');
     }
 
     /**
@@ -95,11 +95,11 @@ class MediaController extends BackendController
             $mediaPager = new MediaPager(
                 $mediaQb,
                 $request->query->get('page'),
-                $this->container->getParameter('flexy_media.media_select.resultPerPage', 30)
+                $this->container->getParameter('unifik_media.media_select.resultPerPage', 30)
             );
 
-            $template = ('true' == $request->query->get('init', 'false')) ? 'FlexyMediaBundle:Backend/Media/MediaSelect:media_select.html.twig'
-                : 'FlexyMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig';
+            $template = ('true' == $request->query->get('init', 'false')) ? 'UnifikMediaBundle:Backend/Media/MediaSelect:media_select.html.twig'
+                : 'UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig';
 
             return new JsonResponse(array(
                 'html' => $this->renderView($template, array(
@@ -352,7 +352,7 @@ class MediaController extends BackendController
                 }
 
                 return new JsonResponse(array(
-                    'html' => $this->renderView('FlexyMediaBundle:Backend/Media/MediaSelect/content:media_select_associations.html.twig', array(
+                    'html' => $this->renderView('UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_associations.html.twig', array(
                         'media' => $media,
                         'associatedContents' => $associatedContents
                     )),
@@ -462,12 +462,12 @@ class MediaController extends BackendController
 
             if ($request->query->has('delete')) {
 
-                $this->get('flexy_system.router_invalidator')->invalidate();
+                $this->get('unifik_system.router_invalidator')->invalidate();
 
             } else {
 
                 return new JsonResponse(array(
-                    'message' => $this->renderView('FlexyMediaBundle:Backend/Media/Core:delete_message.html.twig', array(
+                    'message' => $this->renderView('UnifikMediaBundle:Backend/Media/Core:delete_message.html.twig', array(
                         'medias' => $medias
                     ))
                 ));
@@ -575,10 +575,10 @@ class MediaController extends BackendController
 
         /* @var $classMetadata ClassMetadata */
         foreach ($metadata as $classMetadata) {
-            if ('Flexy\MediaBundle\Entity\Media' != $classMetadata->getName()) {
+            if ('Unifik\MediaBundle\Entity\Media' != $classMetadata->getName()) {
                 foreach ($classMetadata->getAssociationMappings() as $association) {
 
-                    if ('Flexy\MediaBundle\Entity\Media' == $association['targetEntity'] && $association['isOwningSide']) {
+                    if ('Unifik\MediaBundle\Entity\Media' == $association['targetEntity'] && $association['isOwningSide']) {
                         $fieldName = $association['fieldName'];
                         $sourceEntity = $association['sourceEntity'];
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace Flexy\MediaBundle\Listener;
+namespace Unifik\MediaBundle\Listener;
 
-use Flexy\SystemBundle\Lib\BaseDeletableListener;
+use Unifik\SystemBundle\Lib\BaseDeletableListener;
 use Symfony\Component\Translation\TranslatorInterface;
-use Flexy\MediaBundle\Entity\Folder;
+use Unifik\MediaBundle\Entity\Folder;
 
 class FolderDeletableListener extends BaseDeletableListener
 {

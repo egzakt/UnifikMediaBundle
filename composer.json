@@ -1,9 +1,9 @@
 {
-    "name": "flexy/media-bundle",
+    "name": "unifik/media-bundle",
     "type": "symfony-bundle",
-    "description": "The media bundle of the symfony-flexy distribution",
-    "keywords": ["flexy", "media", "cms"],
-    "homepage": "https://github.com/flexy/symfony-flexy",
+    "description": "The media bundle of the symfony-unifik distribution",
+    "keywords": ["unifik", "media", "cms"],
+    "homepage": "https://github.com/unifik/symfony-unifik",
     "license": "MIT",
     "authors": [
 				{
@@ -31,7 +31,7 @@
         "symfony/symfony": "2.3.*"
     },
     "autoload": {
-        "psr-0": { "Flexy\\MediaBundle": "" }
+        "psr-0": { "Unifik\\MediaBundle": "" }
     },
-    "target-dir": "Flexy/MediaBundle"
+    "target-dir": "Unifik/MediaBundle"
 }

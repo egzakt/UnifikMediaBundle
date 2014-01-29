@@ -1,50 +1,50 @@
 parameters:
-    flexy_media.parser.class: Flexy\MediaBundle\Lib\ExternalMediaParser
-    flexy_media.youtube_parser.class: Flexy\MediaBundle\Lib\YoutubeVideoParser
-    flexy_media.vimeo_parser.class: Flexy\MediaBundle\Lib\VimeoVideoParser
-    flexy_media.parser_extension.class: Flexy\MediaBundle\Extensions\ExternalMediaParserExtension
-    flexy_media.form.type.media_select.class: Flexy\MediaBundle\Form\MediaSelectType
-    flexy_media.listener.media_change.class: Flexy\MediaBundle\Listener\MediaChangeListener
-    flexy_media.listener.folder_deletable.class: Flexy\MediaBundle\Listener\FolderDeletableListener
+    unifik_media.parser.class: Unifik\MediaBundle\Lib\ExternalMediaParser
+    unifik_media.youtube_parser.class: Unifik\MediaBundle\Lib\YoutubeVideoParser
+    unifik_media.vimeo_parser.class: Unifik\MediaBundle\Lib\VimeoVideoParser
+    unifik_media.parser_extension.class: Unifik\MediaBundle\Extensions\ExternalMediaParserExtension
+    unifik_media.form.type.media_select.class: Unifik\MediaBundle\Form\MediaSelectType
+    unifik_media.listener.media_change.class: Unifik\MediaBundle\Listener\MediaChangeListener
+    unifik_media.listener.folder_deletable.class: Unifik\MediaBundle\Listener\FolderDeletableListener
 
 
 services:
 
     # Media Parser
-    flexy_media.parser:
-        class: %flexy_media.parser.class%
+    unifik_media.parser:
+        class: %unifik_media.parser.class%
 
     # Youtube Media Parser
-    flexy_media.media_parser.youtube_parser:
-        class: %flexy_media.youtube_parser.class%
+    unifik_media.media_parser.youtube_parser:
+        class: %unifik_media.youtube_parser.class%
         tags:
-            - { name: flexy_media.parser }
+            - { name: unifik_media.parser }
 
     # Vimeo Media Parser
-    flexy_media.media_parser.vimeo_parser:
-        class: %flexy_media.vimeo_parser.class%
+    unifik_media.media_parser.vimeo_parser:
+        class: %unifik_media.vimeo_parser.class%
         tags:
-            - { name: flexy_media.parser }
+            - { name: unifik_media.parser }
 
     # Twig Media Parser Extension
-    flexy_media.parser_extension:
-        class: %flexy_media.parser_extension.class%
-        arguments: [@flexy_media.parser]
+    unifik_media.parser_extension:
+        class: %unifik_media.parser_extension.class%
+        arguments: [@unifik_media.parser]
         tags:
             - { name: twig.extension }
 
-    flexy_system.form.type.media_select:
-        class: %flexy_media.form.type.media_select.class%
+    unifik_system.form.type.media_select:
+        class: %unifik_media.form.type.media_select.class%
         tags:
           - { name: form.type, alias: media_select }
 
-    flexy_media.media_change_listener:
-        class: %flexy_media.listener.media_change.class%
+    unifik_media.media_change_listener:
+        class: %unifik_media.listener.media_change.class%
         tags:
           - { name: doctrine.event_subscriber, connection: default }
 
     mynamespacebundle.entitylistener:
-        class: %flexy_media.listener.folder_deletable.class%
+        class: %unifik_media.listener.folder_deletable.class%
         arguments: [ @translator ]
         tags:
-          - { name: flexy_system.deletable, entity: Flexy\MediaBundle\Entity\Folder }
+          - { name: unifik_system.deletable, entity: Unifik\MediaBundle\Entity\Folder }

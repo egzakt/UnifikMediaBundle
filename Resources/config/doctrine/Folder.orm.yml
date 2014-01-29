@@ -1,7 +1,7 @@
-Flexy\MediaBundle\Entity\Folder:
+Unifik\MediaBundle\Entity\Folder:
     type: entity
     table: MediaFolder
-    repositoryClass: Flexy\MediaBundle\Entity\FolderRepository
+    repositoryClass: Unifik\MediaBundle\Entity\FolderRepository
     fields:
         id:
             type: integer
@@ -18,12 +18,12 @@ Flexy\MediaBundle\Entity\Folder:
     lifecycleCallbacks: {  }
     oneToMany:
         children:
-            targetEntity: Flexy\MediaBundle\Entity\Folder
+            targetEntity: Unifik\MediaBundle\Entity\Folder
             mappedBy: parent
         medias:
-            targetEntity: Flexy\MediaBundle\Entity\Media
+            targetEntity: Unifik\MediaBundle\Entity\Media
             mappedBy: folder
     manyToOne:
         parent:
-            targetEntity: Flexy\MediaBundle\Entity\Folder
+            targetEntity: Unifik\MediaBundle\Entity\Folder
             inversedBy: children

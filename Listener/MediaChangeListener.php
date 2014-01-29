@@ -1,11 +1,11 @@
 <?php
 
-namespace Flexy\MediaBundle\Listener;
+namespace Unifik\MediaBundle\Listener;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-use Flexy\MediaBundle\Entity\Media;
+use Unifik\MediaBundle\Entity\Media;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
 class MediaChangeListener implements EventSubscriber

@@ -1,6 +1,6 @@
 <?php
 
-namespace Flexy\MediaBundle\Form;
+namespace Unifik\MediaBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
@@ -43,7 +43,7 @@ class MediaSelectType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-           'class' => 'Flexy\MediaBundle\Entity\Media',
+           'class' => 'Unifik\MediaBundle\Entity\Media',
            'media_method' => null,
            'type' => 'image',
         ));

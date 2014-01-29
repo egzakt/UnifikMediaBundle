@@ -1,4 +1,4 @@
-Flexy\MediaBundle\Entity\Media:
+Unifik\MediaBundle\Entity\Media:
     properties:
         name:
             - NotBlank: ~

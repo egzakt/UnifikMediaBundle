@@ -1,4 +1,4 @@
-{% extends 'FlexySystemBundle:Backend:layout.html.twig' %}
+{% extends 'UnifikSystemBundle:Backend:layout.html.twig' %}
 
 {% block stylesheets %}
     {{ parent() }}
@@ -7,11 +7,11 @@
 
     {# Use symlink path cause @ target have a known issue with the css rewrite filter #}
     {% stylesheets filter='cssrewrite'
-        'bundles/flexymedia/backend/css/blueimp/jquery.fileupload-ui.css'
-        'bundles/flexymedia/backend/css/media_select.css'
-        'bundles/flexymedia/backend/css/simplePagination.css'
-        'bundles/flexymedia/backend/css/ui.dynatree.css'
-        'bundles/flexymedia/backend/css/jquery.contextMenu.css'
+        'bundles/unifikmedia/backend/css/blueimp/jquery.fileupload-ui.css'
+        'bundles/unifikmedia/backend/css/media_select.css'
+        'bundles/unifikmedia/backend/css/simplePagination.css'
+        'bundles/unifikmedia/backend/css/ui.dynatree.css'
+        'bundles/unifikmedia/backend/css/jquery.contextMenu.css'
     %}
     <link rel="stylesheet" href="{{ asset_url }}" />
     {% endstylesheets %}
@@ -62,23 +62,23 @@
 
     {% javascripts
 
-        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.iframe-transport.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-process.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-image.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-audio.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-video.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-validate.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-ui.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-jquery-ui.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/blueimp/main.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.iframe-transport.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-process.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-image.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-audio.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-video.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-validate.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-ui.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-jquery-ui.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/main.js'
 
-        '@FlexyMediaBundle/Resources/public/backend/js/jquery.simplePagination.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/jquery.cookie.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/jquery.dynatree.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/jquery.ui.position.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/jquery.contextMenu.js'
-        '@FlexyMediaBundle/Resources/public/backend/js/media_select.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/jquery.simplePagination.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/jquery.cookie.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/jquery.dynatree.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/jquery.ui.position.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/jquery.contextMenu.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/media_select.js'
 
     %}
     <script src="{{ asset_url }}"></script>

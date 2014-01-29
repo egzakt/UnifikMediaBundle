@@ -1,6 +1,6 @@
 <?php
 
-namespace Flexy\MediaBundle\DependencyInjection;
+namespace Unifik\MediaBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\Loader;
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  */
-class FlexyMediaExtension extends Extension implements PrependExtensionInterface
+class UnifikMediaExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritDoc}
@@ -26,8 +26,8 @@ class FlexyMediaExtension extends Extension implements PrependExtensionInterface
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
 
-        $container->setParameter('flexy_media.resultPerPage', $config['resultPerPage']);
-        $container->setParameter('flexy_media.media_select.resultPerPage', $config['media_select']['resultPerPage']);
+        $container->setParameter('unifik_media.resultPerPage', $config['resultPerPage']);
+        $container->setParameter('unifik_media.media_select.resultPerPage', $config['media_select']['resultPerPage']);
     }
 
     /**

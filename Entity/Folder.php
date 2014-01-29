@@ -1,16 +1,16 @@
 <?php
 
-namespace Flexy\MediaBundle\Entity;
+namespace Unifik\MediaBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Flexy\DoctrineBehaviorsBundle\Model as FlexyORMBehaviors;
+use Unifik\DoctrineBehaviorsBundle\Model as UnifikORMBehaviors;
 
 /**
  * Folder
  */
 class Folder
 {
-    use FlexyORMBehaviors\Timestampable\Timestampable;
+    use UnifikORMBehaviors\Timestampable\Timestampable;
 
     /**
      * @var integer
@@ -28,7 +28,7 @@ class Folder
     private $children;
 
     /**
-     * @var \Flexy\MediaBundle\Entity\Folder
+     * @var \Unifik\MediaBundle\Entity\Folder
      */
     private $parent;
 
@@ -87,10 +87,10 @@ class Folder
     /**
      * Add children
      *
-     * @param \Flexy\MediaBundle\Entity\Folder $children
+     * @param \Unifik\MediaBundle\Entity\Folder $children
      * @return Folder
      */
-    public function addChildren(\Flexy\MediaBundle\Entity\Folder $children)
+    public function addChildren(\Unifik\MediaBundle\Entity\Folder $children)
     {
         $this->children[] = $children;
     
@@ -100,9 +100,9 @@ class Folder
     /**
      * Remove children
      *
-     * @param \Flexy\MediaBundle\Entity\Folder $children
+     * @param \Unifik\MediaBundle\Entity\Folder $children
      */
-    public function removeChildren(\Flexy\MediaBundle\Entity\Folder $children)
+    public function removeChildren(\Unifik\MediaBundle\Entity\Folder $children)
     {
         $this->children->removeElement($children);
     }
@@ -120,10 +120,10 @@ class Folder
     /**
      * Set parent
      *
-     * @param \Flexy\MediaBundle\Entity\Folder $parent
+     * @param \Unifik\MediaBundle\Entity\Folder $parent
      * @return Folder
      */
-    public function setParent(\Flexy\MediaBundle\Entity\Folder $parent = null)
+    public function setParent(\Unifik\MediaBundle\Entity\Folder $parent = null)
     {
         $this->parent = $parent;
     }
@@ -131,7 +131,7 @@ class Folder
     /**
      * Get parent
      *
-     * @return \Flexy\MediaBundle\Entity\Folder 
+     * @return \Unifik\MediaBundle\Entity\Folder
      */
     public function getParent()
     {
@@ -141,10 +141,10 @@ class Folder
     /**
      * Add medias
      *
-     * @param \Flexy\MediaBundle\Entity\Media $medias
+     * @param \Unifik\MediaBundle\Entity\Media $medias
      * @return Folder
      */
-    public function addMedia(\Flexy\MediaBundle\Entity\Media $medias)
+    public function addMedia(\Unifik\MediaBundle\Entity\Media $medias)
     {
         $this->medias[] = $medias;
     
@@ -154,9 +154,9 @@ class Folder
     /**
      * Remove medias
      *
-     * @param \Flexy\MediaBundle\Entity\Media $medias
+     * @param \Unifik\MediaBundle\Entity\Media $medias
      */
-    public function removeMedia(\Flexy\MediaBundle\Entity\Media $medias)
+    public function removeMedia(\Unifik\MediaBundle\Entity\Media $medias)
     {
         $this->medias->removeElement($medias);
     }

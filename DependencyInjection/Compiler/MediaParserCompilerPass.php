@@ -1,6 +1,6 @@
 <?php
 
-namespace Flexy\MediaBundle\DependencyInjection\Compiler;
+namespace Unifik\MediaBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -13,16 +13,16 @@ class MediaParserCompilerPass implements CompilerPassInterface {
 
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('flexy_media.parser')) {
+        if (!$container->hasDefinition('unifik_media.parser')) {
             return;
         }
 
         $definition = $container->getDefinition(
-            'flexy_media.parser'
+            'unifik_media.parser'
         );
 
         $taggedServices = $container->findTaggedServiceIds(
-            'flexy_media.parser'
+            'unifik_media.parser'
         );
 
         foreach ($taggedServices as $id => $attributes) {

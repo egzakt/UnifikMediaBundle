@@ -1,13 +1,13 @@
-CKEDITOR.plugins.add('flexymediamanager', {
+CKEDITOR.plugins.add('unifikmediamanager', {
     init: function( editor ) {
 
         $(function(){
 
-            if ('undefined' === typeof flexymediaselectscript){
+            if ('undefined' === typeof unifikmediaselectscript){
 
                 var loader = new DynamicLoader();
 
-                loader.addScript('flexymediaselectscript', '/bundles/flexymedia/backend/js/media_select_scripts.js');
+                loader.addScript('unifikmediaselectscript', '/bundles/unifikmedia/backend/js/media_select_scripts.js');
 
                 loader.load();
             }
@@ -16,7 +16,7 @@ CKEDITOR.plugins.add('flexymediamanager', {
         editor.addCommand( 'openmediamanager', new CKEDITOR.command( editor, {
             exec: function( editor ){
 
-                if ('undefined' !== typeof flexymediaselectscript){
+                if ('undefined' !== typeof unifikmediaselectscript){
 
                     mediaManagerLoadCk(editor);
                 }
