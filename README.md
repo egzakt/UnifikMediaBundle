@@ -1,10 +1,10 @@
-FlexyMediaBundle
+UnifikMediaBundle
 =================
 
 Installation
 ----------------
 1. Install it via composer, load it in the kernel and load the routing
-2. Add '@FlexyMediaBundle/Resources/public/backend/js/dynamic_loader.js' in the javascript in the system bundle, since the media manager popup can be required the Dynamic Loader and it can be call everywhere in the backend
+2. Add '@UnifikMediaBundle/Resources/public/backend/js/dynamic_loader.js' in the javascript in the system bundle, since the media manager popup can be required the Dynamic Loader and it can be call everywhere in the backend
 
 Utilisation
 ----------------
@@ -13,8 +13,8 @@ Utilisation
 To activate the media manager with CKEditor once the bundle is loaded, you must register the plugin in the ckeditor config:
 
     external_plugins:
-        flexymediamanager:
-        path: bundles/flexymedia/backend/js/ckeditor/plugin/flexymediamanager
+        unifikmediamanager:
+        path: bundles/unifikmedia/backend/js/ckeditor/plugin/unifikmediamanager
 
 You must also add the `'Insert_media'` button in one toolbar. 
 An example of a complete config is: 
@@ -24,8 +24,8 @@ An example of a complete config is:
       startup_outline_blocks: false
       entities: false
       external_plugins:
-          flexymediamanager:
-              path: bundles/flexymedia/backend/js/ckeditor/plugin/flexymediamanager
+          unifikmediamanager:
+              path: bundles/unifikmedia/backend/js/ckeditor/plugin/unifikmediamanager
       transformers: ['strip_js', 'strip_css', 'strip_comments']
       toolbar: ['document', 'clipboard', 'editing', 'basicstyles', 'paragraph', 'links', 'insert', 'styles', 'tools']
       toolbar_groups:
@@ -85,11 +85,11 @@ It is possible to add a many-to-one relationsheep be some entity an a Media. By 
 
     manyToOne:
       thumbnail:
-        targetEntity: Flexy\MediaBundle\Entity\Media
+        targetEntity: Unifik\MediaBundle\Entity\Media
         
 Then, the only thing to do is to specify the type of the field in the form, and pass the methode used to access the entity:
 
     $builder ->add('thumbnail', 'media_select', array('media_method' => 'thumbnail'));
     
 It is also possible to specify which type of media can be selected, using `'types' => array('image'))` option. For now, the possible values are 'image', 'document', and 'media'. 
-The [news bundle](https://github.com/yanickouellet/FlexyNewsBundle/tree/media-manager) provides a complete example.
+The [news bundle](https://github.com/yanickouellet/UnifikNewsBundle/tree/media-manager) provides a complete example.

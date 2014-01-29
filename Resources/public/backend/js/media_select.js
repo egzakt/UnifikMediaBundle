@@ -120,7 +120,7 @@ var mediaManagerLoad = function (callback) {
     mediaManagerSelectedMediaArray = [];
 
     $.ajax({
-        url: Routing.generate('flexy_media_backend_load'),
+        url: Routing.generate('unifik_media_backend_load'),
         data: {
             folderId: mediaManagerFolderId,
             type: mediaManagerFilters.type,
@@ -234,7 +234,7 @@ var mediaManagerNavigationLoad = function (tree) {
                 }
 
                 $.ajax({
-                    url: Routing.generate('flexy_media_backend_move'),
+                    url: Routing.generate('unifik_media_backend_move'),
                     data: {
                         type: type,
                         sourceIds: sourceIds,
@@ -258,16 +258,16 @@ var mediaManagerEdit = function (submit) {
 
     switch (mediaManagerSelectedMedia.type) {
         case 'image':
-            route = 'flexy_media_backend_image_edit';
+            route = 'unifik_media_backend_image_edit';
             break;
         case 'document':
-            route = 'flexy_media_backend_document_edit';
+            route = 'unifik_media_backend_document_edit';
             break;
         case 'video':
-            route = 'flexy_media_backend_video_edit';
+            route = 'unifik_media_backend_video_edit';
             break;
         case 'embedvideo':
-            route = 'flexy_media_backend_embed_video_edit';
+            route = 'unifik_media_backend_embed_video_edit';
             break
     }
 
@@ -315,7 +315,7 @@ var mediaManagerAssociationsLoad = function () {
     mediaManagerAjaxLoader.show();
 
     $.ajax({
-        url: Routing.generate('flexy_media_backend_associations'),
+        url: Routing.generate('unifik_media_backend_associations'),
         data: {
             mediaId: mediaManagerSelectedMedia.id
         },
@@ -451,7 +451,7 @@ var mediaManagerBind = function () {
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: Routing.generate('flexy_media_backend_media_upload')
+        url: Routing.generate('unifik_media_backend_media_upload')
     });
 
     // EMBED VIDEO ADD SCRIPT
@@ -471,7 +471,7 @@ var mediaManagerBind = function () {
 
         $.ajax({
             method: 'POST',
-            url: Routing.generate('flexy_media_backend_embed_video_create'),
+            url: Routing.generate('unifik_media_backend_embed_video_create'),
             data: {'video_url': $('#video_url').val() },
             dataType: "json",
             success: function(data){
@@ -652,7 +652,7 @@ var mediaManagerBind = function () {
                         if( node ){
 
                             $.ajax({
-                                url: Routing.generate('flexy_media_backend_createFolder'),
+                                url: Routing.generate('unifik_media_backend_createFolder'),
                                 data: {
                                     parentFolderId: node.data.key
                                 },
@@ -681,7 +681,7 @@ var mediaManagerBind = function () {
                                 mediaManagerEditModalShow(node.data.title, function(){
 
                                     $.ajax({
-                                        url: Routing.generate('flexy_media_backend_renameFolder'),
+                                        url: Routing.generate('unifik_media_backend_renameFolder'),
                                         data: {
                                             folderId: node.data.key,
                                             folderTitle: mediaManagerEditValue
@@ -714,7 +714,7 @@ var mediaManagerBind = function () {
                         if( node ){
 
                             $.ajax({
-                                url: Routing.generate('flexy_media_backend_deleteFolder'),
+                                url: Routing.generate('unifik_media_backend_deleteFolder'),
                                 data: {
                                     folderId: node.data.key
                                 },
@@ -835,7 +835,7 @@ var mediaManagerLoadBind = function(){
                             mediaIds = mediaManagerSelectedMediaArray;
 
                             $.ajax({
-                                url: Routing.generate('flexy_media_backend_duplicate'),
+                                url: Routing.generate('unifik_media_backend_duplicate'),
                                 data: {
                                     mediaIds: mediaIds
                                 },
@@ -867,7 +867,7 @@ var mediaManagerLoadBind = function(){
 
 
                         $.ajax({
-                            url: Routing.generate('flexy_media_backend_deleteMedia'),
+                            url: Routing.generate('unifik_media_backend_deleteMedia'),
                             data: {
                                 mediaIds: mediaIds
                             },
@@ -883,7 +883,7 @@ var mediaManagerLoadBind = function(){
                                         mediaManagerAjaxLoader.show();
 
                                         $.ajax({
-                                            url: Routing.generate('flexy_media_backend_deleteMedia'),
+                                            url: Routing.generate('unifik_media_backend_deleteMedia'),
                                             data: {
                                                 mediaIds: mediaIds,
                                                 delete: true
@@ -963,7 +963,7 @@ var mediaManagerAssociationsBind = function (tree){
 
     $('button.unlink').click(function(){
         $.ajax({
-            url: Routing.generate('flexy_media_backend_associations_unlink'),
+            url: Routing.generate('unifik_media_backend_associations_unlink'),
             data: {
                 mediaId: mediaManagerSelectedMedia.id,
                 entities: mediaManagerAssociationSelection
@@ -998,7 +998,7 @@ var mediaManagerInsert = function() {
 };
 
 var mediaManagerInsertCk = function() {
-    CKEDITOR.plugins.get('flexymediamanager').insertMedia(mediaManagerTriggeringElement, mediaManagerSelectedMedia);
+    CKEDITOR.plugins.get('unifikmediamanager').insertMedia(mediaManagerTriggeringElement, mediaManagerSelectedMedia);
 };
 
 // AVIARY

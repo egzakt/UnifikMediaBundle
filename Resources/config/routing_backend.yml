@@ -1,104 +1,104 @@
 # Media
-flexy_media_backend_media:
+unifik_media_backend_media:
     pattern:  /
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:media" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:media" }
 
-flexy_media_backend_load:
+unifik_media_backend_load:
     pattern:  /load
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:load" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:load" }
     options:
         expose: true
 
-flexy_media_backend_move:
+unifik_media_backend_move:
     pattern:  /move
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:move" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:move" }
     options:
         expose: true
 
-flexy_media_backend_createFolder:
+unifik_media_backend_createFolder:
     pattern:  /create-folder
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:createFolder" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:createFolder" }
     options:
         expose: true
 
-flexy_media_backend_deleteFolder:
+unifik_media_backend_deleteFolder:
     pattern:  /delete-folder
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:deleteFolder" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:deleteFolder" }
     options:
         expose: true
 
-flexy_media_backend_renameFolder:
+unifik_media_backend_renameFolder:
     pattern:  /rename-folder
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:renameFolder" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:renameFolder" }
     options:
         expose: true
 
-flexy_media_backend_deleteMedia:
+unifik_media_backend_deleteMedia:
     pattern:  /delete-media
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:deleteMedia" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:deleteMedia" }
     options:
         expose: true
 
-flexy_media_backend_duplicate:
+unifik_media_backend_duplicate:
     pattern:  /duplicate
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:duplicate" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:duplicate" }
     options:
         expose: true
 
-flexy_media_backend_associations:
+unifik_media_backend_associations:
     pattern:  /associations
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:associations" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:associations" }
     options:
         expose: true
 
-flexy_media_backend_associations_unlink:
+unifik_media_backend_associations_unlink:
     pattern:  /associations-unlink
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Media:associationsUnlink" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:associationsUnlink" }
     options:
         expose: true
 
 # Upload
-flexy_media_backend_media_upload:
+unifik_media_backend_media_upload:
     pattern: /upload
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Upload:upload" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Upload:upload" }
     options:
         expose: true
 
 # Image
-flexy_media_backend_image_edit:
+unifik_media_backend_image_edit:
     pattern:  /image-edit
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Image:edit" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Image:edit" }
     options:
         expose: true
 
-flexy_media_backend_image_aviary_edit:
+unifik_media_backend_image_aviary_edit:
     pattern: /image/{id}/update/
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Image:updateImage" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Image:updateImage" }
 
 # Document
-flexy_media_backend_document_edit:
+unifik_media_backend_document_edit:
     pattern:  /document-edit
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Document:edit" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Document:edit" }
     options:
         expose: true
 
 # Video
-flexy_media_backend_video_edit:
+unifik_media_backend_video_edit:
     pattern:  /video-edit
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/Video:edit" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Video:edit" }
     options:
         expose: true
 
 # Embed Video
 
-flexy_media_backend_embed_video_create:
+unifik_media_backend_embed_video_create:
     pattern:  /embedvideo/create
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/EmbedVideo:create", id: 0 }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/EmbedVideo:create", id: 0 }
     options:
         expose: true
 
-flexy_media_backend_embed_video_edit:
+unifik_media_backend_embed_video_edit:
     pattern:  /embedvideo-edit
-    defaults: { _controller: "FlexyMediaBundle:Backend/Media/EmbedVideo:edit" }
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/EmbedVideo:edit" }
     options:
         expose: true

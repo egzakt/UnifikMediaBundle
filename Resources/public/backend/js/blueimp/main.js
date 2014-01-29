@@ -6,7 +6,7 @@ $(function(){
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: Routing.generate('flexy_media_backend_media_upload')
+        url: Routing.generate('unifik_media_backend_media_upload')
     });
 
 });

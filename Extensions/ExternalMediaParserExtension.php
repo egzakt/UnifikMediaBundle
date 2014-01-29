@@ -1,8 +1,8 @@
 <?php
 
-namespace Flexy\MediaBundle\Extensions;
+namespace Unifik\MediaBundle\Extensions;
 
-use Flexy\MediaBundle\Lib\ExternalMediaParser;
+use Unifik\MediaBundle\Lib\ExternalMediaParser;
 
 /**
  * Class ExternalMediaParserExtension

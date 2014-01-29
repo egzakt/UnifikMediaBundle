@@ -1,20 +1,20 @@
 <?php
 
-namespace Flexy\MediaBundle\Controller\Backend\Media;
+namespace Unifik\MediaBundle\Controller\Backend\Media;
 
-use Flexy\MediaBundle\Entity\Media;
-use Flexy\MediaBundle\Form\DocumentType;
+use Unifik\MediaBundle\Entity\Media;
+use Unifik\MediaBundle\Form\DocumentType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use Flexy\SystemBundle\Lib\Backend\BaseController;
+use Unifik\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
  * Class DocumentController
- * @package Flexy\MediaBundle\Controller\Backend\Media
+ * @package Unifik\MediaBundle\Controller\Backend\Media
  */
 class DocumentController extends BaseController
 {
@@ -31,7 +31,7 @@ class DocumentController extends BaseController
 
             $id = ($request->query->has('mediaId')) ? $request->query->get('mediaId') : $request->request->get('mediaId');
 
-            $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
+            $media = $this->getEm()->getRepository('UnifikMediaBundle:Media')->find($id);
 
             if (!$media) {
                 throw $this->createNotFoundException('Unable to find the media');
@@ -67,7 +67,7 @@ class DocumentController extends BaseController
 
 
 
-                    $this->get('flexy_system.router_invalidator')->invalidate();
+                    $this->get('unifik_system.router_invalidator')->invalidate();
 
                 }
             }
@@ -76,7 +76,7 @@ class DocumentController extends BaseController
             $realName = array_pop($explode);
 
             return new JsonResponse(array(
-                'html' => $this->renderView('FlexyMediaBundle:Backend/Media/Document:edit.html.twig', array(
+                'html' => $this->renderView('UnifikMediaBundle:Backend/Media/Document:edit.html.twig', array(
                     'form' => $form->createView(),
                     'media' => $media,
                     'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
@@ -100,13 +100,13 @@ class DocumentController extends BaseController
             case 'application/pdf':
                 return $this->createPdfPreview($file->getPathname());
             case 'application/msword':
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/word-icon.png';
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/unifikmedia/backend/images/word-icon.png';
             case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/word-icon.png';
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/unifikmedia/backend/images/word-icon.png';
             case 'application/vnd.oasis.opendocument.text':
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/writer-icon.jpg';
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/unifikmedia/backend/images/writer-icon.jpg';
             default:
-                return $this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/file-icon.png';
+                return $this->container->get('kernel')->getRootDir().'/../web/bundles/unifikmedia/backend/images/file-icon.png';
         }
     }
 
@@ -126,6 +126,6 @@ class DocumentController extends BaseController
             }
         }
 
-        return $this->container->get('kernel')->getRootDir().'/../web/bundles/flexymedia/backend/images/pdf-icon.png';
+        return $this->container->get('kernel')->getRootDir().'/../web/bundles/unifikmedia/backend/images/pdf-icon.png';
     }
 }

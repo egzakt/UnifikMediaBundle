@@ -1,17 +1,17 @@
 <?php
 
-namespace Flexy\MediaBundle\Controller\Backend\Media;
+namespace Unifik\MediaBundle\Controller\Backend\Media;
 
-use Flexy\MediaBundle\Entity\Media;
-use Flexy\MediaBundle\Form\ImageType;
+use Unifik\MediaBundle\Entity\Media;
+use Unifik\MediaBundle\Form\ImageType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use Flexy\SystemBundle\Lib\Backend\BaseController;
+use Unifik\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Flexy\MediaBundle\Controller\Backend\Media\MediaController;
+use Unifik\MediaBundle\Controller\Backend\Media\MediaController;
 
 /**
  * Image controller
@@ -31,7 +31,7 @@ class ImageController extends BaseController
 
             $id = ($request->query->has('mediaId')) ? $request->query->get('mediaId') : $request->request->get('mediaId');
 
-            $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
+            $media = $this->getEm()->getRepository('UnifikMediaBundle:Media')->find($id);
 
             if (!$media) {
                 throw $this->createNotFoundException('Unable to find the media');
@@ -48,7 +48,7 @@ class ImageController extends BaseController
 
                     $this->getEm()->flush();
 
-                    $this->get('flexy_system.router_invalidator')->invalidate();
+                    $this->get('unifik_system.router_invalidator')->invalidate();
                 }
             }
 
@@ -56,7 +56,7 @@ class ImageController extends BaseController
             $realName = array_pop($explode);
 
             return new JsonResponse(array(
-                'html' => $this->renderView('FlexyMediaBundle:Backend/Media/Image:edit.html.twig', array(
+                'html' => $this->renderView('UnifikMediaBundle:Backend/Media/Image:edit.html.twig', array(
                     'form' => $form->createView(),
                     'media' => $media,
                     'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
@@ -77,7 +77,7 @@ class ImageController extends BaseController
     public function updateImageAction($id, Request $request)
     {
         /** @var Media $image */
-        $image = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
+        $image = $this->getEm()->getRepository('UnifikMediaBundle:Media')->find($id);
 
         if (!$image) {
             throw $this->createNotFoundException('Unable to find the Media Entity');

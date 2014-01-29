@@ -1,12 +1,12 @@
 <?php
 
-namespace Flexy\MediaBundle;
+namespace Unifik\MediaBundle;
 
-use Flexy\MediaBundle\DependencyInjection\Compiler\MediaParserCompilerPass;
+use Unifik\MediaBundle\DependencyInjection\Compiler\MediaParserCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-class FlexyMediaBundle extends Bundle
+class UnifikMediaBundle extends Bundle
 {
 	public function build(ContainerBuilder $container)
 	{

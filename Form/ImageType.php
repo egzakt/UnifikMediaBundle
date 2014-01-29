@@ -1,6 +1,6 @@
 <?php
 
-namespace Flexy\MediaBundle\Form;
+namespace Unifik\MediaBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,12 +17,12 @@ class ImageType extends MediaType
     {
         parent::setDefaultOptions($resolver);
         $resolver->setDefaults(array(
-            'data_class' => 'Flexy\MediaBundle\Entity\Media'
+            'data_class' => 'Unifik\MediaBundle\Entity\Media'
         ));
     }
 
     public function getName()
     {
-        return 'flexy_mediabundle_imagetype';
+        return 'unifik_mediabundle_imagetype';
     }
 }

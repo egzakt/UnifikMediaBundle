@@ -1,8 +1,8 @@
 <?php
 
-namespace Flexy\MediaBundle\Entity;
+namespace Unifik\MediaBundle\Entity;
 
-use Flexy\SystemBundle\Lib\BaseEntityRepository;
+use Unifik\SystemBundle\Lib\BaseEntityRepository;
 
 /**
  * FolderRepository

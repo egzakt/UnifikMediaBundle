@@ -1,19 +1,19 @@
 <?php
 
-namespace Flexy\MediaBundle\Controller\Backend\Media;
+namespace Unifik\MediaBundle\Controller\Backend\Media;
 
-use Flexy\MediaBundle\Form\VideoType;
+use Unifik\MediaBundle\Form\VideoType;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Flexy\SystemBundle\Lib\Backend\BaseController;
+use Unifik\SystemBundle\Lib\Backend\BaseController;
 use Symfony\Component\Routing\Generator\UrlGenerator;
 
 /**
  * Class VideoController
  *
- * @package Flexy\MediaBundle\Controller\Backend\Media
+ * @package Unifik\MediaBundle\Controller\Backend\Media
  */
 class VideoController extends BaseController
 {
@@ -30,7 +30,7 @@ class VideoController extends BaseController
         if ($request->isXmlHttpRequest()) {
             $id = ($request->query->has('mediaId')) ? $request->query->get('mediaId') : $request->request->get('mediaId');
 
-            $media = $this->getEm()->getRepository('FlexyMediaBundle:Media')->find($id);
+            $media = $this->getEm()->getRepository('UnifikMediaBundle:Media')->find($id);
 
             if (!$media) {
                 throw $this->createNotFoundException('Unable to find the media');
@@ -52,7 +52,7 @@ class VideoController extends BaseController
 
                     $this->getEm()->flush();
 
-                    $this->get('flexy_system.router_invalidator')->invalidate();
+                    $this->get('unifik_system.router_invalidator')->invalidate();
                 }
             }
 
@@ -62,7 +62,7 @@ class VideoController extends BaseController
             $associatedContents = MediaController::getAssociatedContents($media, $this->container);
 
             return new JsonResponse(array(
-                'html' => $this->renderView('FlexyMediaBundle:Backend/Media/Video:edit.html.twig', array(
+                'html' => $this->renderView('UnifikMediaBundle:Backend/Media/Video:edit.html.twig', array(
                     'form' => $form->createView(),
                     'media' => $media,
                     'fileExtension' => MediaController::guessExtension($media->getMediaPath()),
