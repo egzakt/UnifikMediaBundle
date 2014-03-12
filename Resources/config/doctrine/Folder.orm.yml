@@ -1,6 +1,6 @@
 Unifik\MediaBundle\Entity\Folder:
     type: entity
-    table: MediaFolder
+    table: media_folder
     repositoryClass: Unifik\MediaBundle\Entity\FolderRepository
     fields:
         id:
