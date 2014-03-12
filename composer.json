@@ -6,10 +6,10 @@
     "homepage": "https://github.com/unifik/symfony-unifik",
     "license": "MIT",
     "authors": [
-				{
-					"name": "Yanick Ouellet",
-					"email": "yanickouellet555@gmail.com"
-				},
+        {
+            "name": "Yanick Ouellet",
+            "email": "yanickouellet555@gmail.com"
+        },
         {
             "name": "Hubert Perron",
             "email": "hubert.perron@gmail.com"
@@ -28,7 +28,8 @@
         }
     ],
     "require": {
-        "symfony/symfony": "2.3.*"
+        "symfony/symfony": "~2.3",
+        "unifik/doctrine-behaviors-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "Unifik\\MediaBundle": "" }
