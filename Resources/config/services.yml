@@ -4,7 +4,6 @@ parameters:
     unifik_media.vimeo_parser.class: Unifik\MediaBundle\Lib\VimeoVideoParser
     unifik_media.parser_extension.class: Unifik\MediaBundle\Extensions\ExternalMediaParserExtension
     unifik_media.form.type.media_select.class: Unifik\MediaBundle\Form\MediaSelectType
-    unifik_media.listener.media_change.class: Unifik\MediaBundle\Listener\MediaChangeListener
     unifik_media.listener.folder_deletable.class: Unifik\MediaBundle\Listener\FolderDeletableListener
 
 
