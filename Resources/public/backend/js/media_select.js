@@ -14,6 +14,7 @@ var mediaManagerFilters = {
 };
 var mediaManagerAjaxLoader;
 var mediaManagerEditValue;
+var mediaManagerSearchValue;
 var mediaManagerModal;
 var mediaManagerIsLibrary = false;
 var mediaManagerAssociationSelection = [];
@@ -22,10 +23,16 @@ var mediaManagerAssociationSelection = [];
 
 $('body').append($('<div id="media_select_modal_container"><div id="media_select_modal" title="Medias"></div></div>'));
 mediaManagerModal = $('#media_select_modal');
+
 $('body').append($('<div id="media_notice_modal_container"><div id="media_notice_modal"></div></div>'));
 var mediaManagerNoticeModal = $('#media_notice_modal');
+
 $('body').append($('<div id="media_edit_modal_container"><div id="media_edit_modal"><input id="media_edit_value" type=text></div></div>'));
 var mediaManagerEditModal = $('#media_edit_modal');
+
+$('body').append($('<div id="media_search_modal_container"><div id="media_search_modal"><input id="media_search_value" type=text></div></div>'));
+var mediaManagerSearchModal = $('#media_search_modal');
+
 $('body').append($('<div id="media_delete_modal_container"><div id="media_delete_modal"></div></div>'));
 var mediaManagerDeleteModal = $('#media_delete_modal');
 
@@ -963,7 +970,7 @@ var mediaManagerAssociationsBind = function (tree){
 
     $('button.unlink').click(function(){
         $.ajax({
-            url: Routing.generate('unifik_media_backend_associations_unlink'),
+            url: Routing.generate('unifik_media_backend_associations_replace'),
             data: {
                 mediaId: mediaManagerSelectedMedia.id,
                 entities: mediaManagerAssociationSelection
@@ -981,6 +988,31 @@ var mediaManagerAssociationsBind = function (tree){
                 }
             }
         });
+    });
+
+    $('button.replace').click(function(){
+
+        var selectedNodes = associationTree.dynatree('getTree').getSelectedNodes();
+
+        if (selectedNodes.length > 0) {
+
+            mediaManagerSearchModalShow(null, function(selection){
+
+                $.ajax({
+                    url: Routing.generate('unifik_media_backend_associations_replace'),
+                    data: {
+                        mediaId: mediaManagerSelectedMedia.id,
+                        entities: mediaManagerAssociationSelection,
+                        mediaReplacementId: selection.id
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        mediaManagerAssociationsLoad();
+                    }
+                });
+            });
+        }
+
     });
 };
 
@@ -1072,6 +1104,54 @@ var mediaManagerEditModalShow = function (value, callback) {
                 $( this ).dialog( 'close' );
 
                 callback();
+            },
+            Cancel: function() {
+                $( this ).dialog( 'close' );
+            }
+        }
+    });
+};
+
+var mediaManagerSearchModalShow = function (value, callback) {
+
+    var input = $('#media_search_value');
+    input.val(value);
+    var selection;
+
+    $('#media_search_value').select2({
+        width: 475,
+        minimumInputLength: 2,
+        allowClear: true,
+        placeholder: "Select a media",
+        ajax: {
+            url: Routing.generate('unifik_media_backend_modal_search'),
+            dataType: 'json',
+            data: function (term) {
+                return {
+                    search: term,
+                    mediaId: mediaManagerSelectedMedia.id
+                };
+            },
+            results: function (data) {
+                return { results: data };
+            }
+        }
+    }).on('select2-selecting', function(e){
+        selection = e.object;
+    });
+
+    mediaManagerSearchModal.dialog({
+        modal: true,
+        width: 500,
+        dialogClass: 'media_edit',
+        buttons: {
+            Save: function() {
+
+                mediaManagerSearchValue = input.val();
+                input.val('');
+                $( this ).dialog( 'close' );
+
+                callback(selection);
             },
             Cancel: function() {
                 $( this ).dialog( 'close' );

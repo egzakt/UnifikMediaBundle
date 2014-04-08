@@ -331,10 +331,13 @@ class MediaController extends BackendController
 
                             $targetEntity2str = (method_exists($targetEntity, '__toString'));
                             $targetEntityRoute = (method_exists($targetEntity, 'getRouteBackend'))
-                                ? $this->generateUrl($targetEntity->getRouteBackend(), $targetEntity->getRouteBackendParams()) : false;
+                                ? $this->generateUrl($targetEntity->getRouteBackend(), $targetEntity->getRouteBackendParams(
+                                    array('sectionId' => $this->guessSection($targetEntity)))
+                                )
+                                : false;
 
                             $contentNode = array(
-                                'title' => ($targetEntity2str) ?  $targetEntity->__toString() : ' ( '. $entity . ' ) ',
+                                'title' => ($targetEntity2str) ?  substr(strip_tags($targetEntity->__toString()), 0, 100) . '...' : ' ( '. $entity . ' ) ',
                                 'href' => ($targetEntityRoute) ?: null,
                                 'class' => get_class($content),
                                 'field' => $field,
@@ -365,12 +368,12 @@ class MediaController extends BackendController
     }
 
     /**
-     * Unlink media associations
+     * Replace media associations
      *
      * @param Request $request
      * @return JsonResponse
      */
-    public function associationsUnlinkAction(Request $request)
+    public function associationsReplaceAction(Request $request)
     {
         if ($request->isXmlHttpRequest()
             && $request->query->has('entities')
@@ -379,8 +382,9 @@ class MediaController extends BackendController
             $metadataFactory = $this->getEm()->getMetadataFactory();
 
             $media = $this->mediaRepository->find($request->query->get('mediaId'));
+            $replacement = $this->mediaRepository->find($request->query->get('mediaReplacementId', null));
 
-            if ($media) {
+            if ($media && $replacement) {
 
                 foreach ($request->query->get('entities') as $entityString) {
 
@@ -395,9 +399,9 @@ class MediaController extends BackendController
                         $fieldType = $metadata->getTypeOfField($explode[1]);
 
                         if ($fieldType == 'text') {
-                            $this->removeMediaFromTexts($media, array(array($explode[1] => array($entity))));
+                            $this->replaceMediaFromTexts($media, array(array($explode[1] => array($entity))), $replacement);
                         } else {
-                            $this->removeMediaRelation(array(array($explode[1] => array($entity))));
+                            $this->replaceMediaRelation(array(array($explode[1] => array($entity))), $replacement);
                         }
                     }
                 }
@@ -430,10 +434,10 @@ class MediaController extends BackendController
                     if ($request->query->has('delete')) {
 
                         // Unlink content in case 'onDelete set null' hasn't been set
-                        $this->removeMediaRelation($associatedContents['field']);
+                        $this->replaceMediaRelation($associatedContents['field']);
 
                         // Remove the file from all texts where it is used
-                        $this->removeMediaFromTexts($media, $associatedContents['text']);
+                        $this->replaceMediaFromTexts($media, $associatedContents['text']);
 
                         if ('image' != $media->getType()) {
                             $thumbnail = $media->getThumbnail();
@@ -620,17 +624,18 @@ class MediaController extends BackendController
     }
 
     /**
-     * Replace related relations with NULL value
+     * Replace related relations with $replacement
      *
      * @param array $associatedField
+     * @param $replacement Media
      */
-    private function removeMediaRelation(array $associatedField) {
+    private function replaceMediaRelation(array $associatedField, Media $replacement = null) {
         if (count($associatedField)) {
             foreach ($associatedField as $methodGroup) {
                 foreach ($methodGroup as $methodName => $entities) {
                     foreach ($entities as $entity) {
                         $method = 'set' . ucfirst($methodName);
-                        $entity->$method(null);
+                        $entity->$method($replacement);
                     }
                 }
             }
@@ -640,12 +645,13 @@ class MediaController extends BackendController
     }
 
     /**
-     * Remove $media from any text containing it
+     * Replace $media from any text containing it with $replacement
      *
      * @param Media $media
+     * @param Media $replacement
      * @param array $associatedText
      */
-    private function removeMediaFromTexts(Media $media, array $associatedText) {
+    private function replaceMediaFromTexts(Media $media, array $associatedText, Media $replacement = null) {
 
         foreach ($associatedText as $entityGroup) {
             foreach ($entityGroup as $fieldName => $entities) {
@@ -655,12 +661,79 @@ class MediaController extends BackendController
 
                 foreach ($entities as $entity) {
 
-                    $entity->$setMethod(preg_replace($media->getReplaceRegex(), '', $entity->$getMethod()));
+                    $entity->$setMethod(preg_replace($media->getReplaceRegex(), (($replacement) ? $replacement->getHtmlTag() : ''), $entity->$getMethod()));
 
                 }
             }
         }
 
         $this->getEm()->flush();
+    }
+
+    /**
+     * modalSearch
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function modalSearchAction(Request $request)
+    {
+        $response = new JsonResponse();
+
+        if ($request->isXmlHttpRequest()
+            && $request->query->has('search')
+            && $request->query->has('mediaId')) {
+
+            $media = $this->getRepository('UnifikMediaBundle:Media')->find($request->query->get('mediaId'));
+
+            $medias = $this->getRepository('UnifikMediaBundle:Media')
+                ->createQueryBuilder('m')
+                ->where('m.name LIKE :search')
+                ->andWhere('m.type = :type')
+                ->setParameter('search', '%' . $request->query->get('search') . '%')
+                ->setParameter('type', $media->getType())
+                ->getQuery()->getResult()
+            ;
+
+            $mediaGroup = array();
+
+            /** @var $media Media */
+            foreach ($medias as $media) {
+                $mediaGroup[$media->getType()][] = array(
+                    'id' => $media->getId(),
+                    'text' => $media->getName()
+                );
+            }
+
+            $formattedResult = array();
+
+            foreach ($mediaGroup as $groupName => $medias) {
+                $formattedResult[] = array(
+                    'text' => ucfirst($groupName) . ((count($medias) > 1) ? 's' : ''),
+                    'children' => $medias
+                );
+            }
+
+            $response->setContent(json_encode($formattedResult));
+        }
+
+        return $response;
+    }
+
+    /**
+     * Guess Section
+     *
+     * @param $entity
+     * @return int
+     */
+    private function guessSection($entity)
+    {
+        if (method_exists($entity, 'getSection')) {
+            if ($entity->getSection()) {
+                return $entity->getSection()->getId();
+            }
+        }
+
+        return 0;
     }
 }

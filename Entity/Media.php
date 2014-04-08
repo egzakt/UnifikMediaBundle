@@ -92,13 +92,6 @@ class Media extends BaseEntity
     private $folder;
 
     /**
-     * Non mapped field
-     *
-     * @var boolean
-     */
-    protected $needUpdate = false;
-
-    /**
      * @var bool
      */
     private $hidden = false;
@@ -182,11 +175,6 @@ class Media extends BaseEntity
         if ($absolute) {
             return $this->container->get('kernel')->getRootDir().'/../web' . $this->getWebPath('media');
         }
-
-//        $testweb = $this->getWebPath('media');
-//        $testabsolute = $this->getAbsolutePath('media');
-//        $testupload = $this->getUploadPath('media');
-//        $testroot = $this->getUploadRootDir('media');
 
         switch ($this->type) {
             case 'embedvideo':
@@ -528,16 +516,6 @@ class Media extends BaseEntity
     }
 
     /**
-     * getReplaceUrl
-     *
-     * @return string
-     */
-    public function getReplaceUrl()
-    {
-        return $this->getMediaPath();
-    }
-
-    /**
      * Get Replacement Regex
      *
      * @return string
@@ -553,6 +531,25 @@ class Media extends BaseEntity
                 return sprintf('/(<iframe [^>]*data-mediaid="%d"[^>]*src=")[^>]+("[^>]*><\/iframe>)/', $this->getId());
             default:
                 return sprintf('/(<a [^>]*data-mediaid="%d"[^>]*href=")[^>]+("[^>]*>)[^<]+(<\/a>)/', $this->getId());
+        }
+    }
+
+    /**
+     * Get media html tag
+     *
+     * @return string
+     */
+    public function getHtmlTag()
+    {
+        switch ($this->type) {
+            case 'image':
+                return '<img data-mediaid="' . $this->id . '" src="' . $this->getMediaPath() . '">';
+            case 'video':
+                return '<iframe data-mediaid="' . $this->id . '" width="560" height="315" frameborder="0"  allowfullscreen src="' . $this->getMediaPath() . '"></iframe>';
+            case 'embedvideo':
+                return '<iframe data-mediaid="' . $this->id . '" width="560" height="315" frameborder="0"  allowfullscreen src="' . $this->getMediaPath() . '"></iframe>';
+            default:
+                return '<a data-mediaid="' . $this->id . '" href="' . $this->getMediaPath() . '">' . $this->name . '</a>';
         }
     }
 

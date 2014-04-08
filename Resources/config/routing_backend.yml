@@ -51,9 +51,15 @@ unifik_media_backend_associations:
     options:
         expose: true
 
-unifik_media_backend_associations_unlink:
-    pattern:  /associations-unlink
-    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:associationsUnlink" }
+unifik_media_backend_associations_replace:
+    pattern:  /associations-replace
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:associationsReplace" }
+    options:
+        expose: true
+
+unifik_media_backend_modal_search:
+    pattern:  /modal-search
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:modalSearch" }
     options:
         expose: true
 
@@ -102,3 +108,8 @@ unifik_media_backend_embed_video_edit:
     defaults: { _controller: "UnifikMediaBundle:Backend/Media/EmbedVideo:edit" }
     options:
         expose: true
+
+# Imagine
+_imagine:
+    resource: .
+    type:     imagine

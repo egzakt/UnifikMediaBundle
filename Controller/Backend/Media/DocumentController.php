@@ -46,29 +46,9 @@ class DocumentController extends BaseController
                 if ($form->isValid()) {
                     $this->getEm()->persist($media);
 
-                    // Update link in text field
-                    //$media->setNeedUpdate(true);
-
-                    //Update the file only if a new one has been uploaded or if the name have change
-//                    if ($media->getMedia()) {
-//
-//                        $this->getEm()->remove($media->getThumbnail());
-//
-//                        //Generate the thumbnail
-//                        $image = new Media();
-//                        $image->setName("Preview - ".$media->getMedia()->getClientOriginalName());
-//                        $image->setParentMedia($media);
-//
-//                        $this->getEm()->persist($image);
-//                        $media->setThumbnail($image);
-//                    }
-
                     $this->getEm()->flush();
 
-
-
                     $this->get('unifik_system.router_invalidator')->invalidate();
-
                 }
             }
 

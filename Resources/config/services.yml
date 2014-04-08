@@ -38,11 +38,6 @@ services:
         tags:
           - { name: form.type, alias: media_select }
 
-    unifik_media.media_change_listener:
-        class: %unifik_media.listener.media_change.class%
-        tags:
-          - { name: doctrine.event_subscriber, connection: default }
-
     mynamespacebundle.entitylistener:
         class: %unifik_media.listener.folder_deletable.class%
         arguments: [ @translator ]

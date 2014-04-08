@@ -3,7 +3,8 @@
 #media_select_modal_container,
 #media_notice_modal_container,
 #media_edit_modal_container,
-#media_delete_modal_container {
+#media_delete_modal_container,
+#media_search_modal_container {
     display: none;
 }
 
@@ -40,6 +41,10 @@
     height: 20px;
     width: 250px;
     padding: 2px;
+}
+
+#media_search_modal {
+    padding-top: 20px;
 }
 
 #media_delete_modal {
@@ -226,8 +231,8 @@ a:focus {
     vertical-align: top;
     padding: 5px 10px;
     background-color: #FFFFFF;
-
     border-bottom: 1px dotted #D7D7D7;
+    word-break: break-all;
 }
 
 .media td.image {
@@ -257,6 +262,7 @@ a:focus {
 
 .media td.date {
     text-align: right;
+    width: 75px;
 }
 
 .media td.date p {
@@ -281,7 +287,7 @@ a:focus {
 
 #media_list #association_nav {
     overflow-y: scroll;
-    height: 370px;
+    height: 348px;
 }
 
 #media_list #association_nav ul.dynatree-container {
@@ -299,6 +305,7 @@ a:focus {
 
 #media_list h2.association {
     margin: 10px;
+    word-break: break-all;
 }
 
 span.dynatree-title {
@@ -331,6 +338,10 @@ span.dynatree-title {
     padding: 0px 40px;
     overflow-y: scroll;
     height: 450px;
+}
+
+#media_details_inner h3 {
+    word-break: break-all;
 }
 
 #media_details img {

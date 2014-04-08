@@ -8,6 +8,7 @@ if ('undefined' === typeof unifikmediascript){
     loader1.addStyle('simplepaginationstyle', '/bundles/unifikmedia/backend/css/simplePagination.css');
     loader1.addStyle('dynatreestyle', '/bundles/unifikmedia/backend/css/ui.dynatree.css');
     loader1.addStyle('jquerycontextmenustyle', '/bundles/unifikmedia/backend/css/jquery.contextMenu.css');
+    loader1.addStyle('select2style', '/bundles/unifikmedia/backend/css/select2/select2.css');
 
 
     loader1.addScript('blueimptmpl', 'http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js');
@@ -22,6 +23,7 @@ if ('undefined' === typeof unifikmediascript){
     loader1.addScript('aviaryscript', 'http://feather.aviary.com/js/feather.js');
     loader1.addScript('jqueryuipositionscript', '/bundles/unifikmedia/backend/js/jquery.ui.position.js');
     loader1.addScript('jquerycontextmenuscript', '/bundles/unifikmedia/backend/js/jquery.contextMenu.js');
+    loader1.addScript('select2script', '/bundles/unifikmedia/backend/js/select2/select2.min.js');
 
     loader1.load(function(){
 
