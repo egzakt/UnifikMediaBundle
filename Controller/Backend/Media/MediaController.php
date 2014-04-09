@@ -382,9 +382,9 @@ class MediaController extends BackendController
             $metadataFactory = $this->getEm()->getMetadataFactory();
 
             $media = $this->mediaRepository->find($request->query->get('mediaId'));
-            $replacement = $this->mediaRepository->find($request->query->get('mediaReplacementId', null));
+            $replacement = $this->mediaRepository->find($request->query->get('mediaReplacementId', 0));
 
-            if ($media && $replacement) {
+            if ($media) {
 
                 foreach ($request->query->get('entities') as $entityString) {
 
