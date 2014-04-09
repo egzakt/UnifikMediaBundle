@@ -8,7 +8,7 @@
                         data-media-name="{{ media.name }}"
                         data-media-type="{{ media.type }}"
                         data-media-preview="{{ media.thumbnail.mediaPath }}"
-                        data-media-thumbnail="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb_large', true) ~ '?' ~ random(9999) }}"
+                        data-media-thumbnail="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb_large') ~ '?' ~ random(9999) }}"
                         data-media-url="{{ media.mediaPath }}"
                         data-media-size="{{ media.size }}"
                         data-media-caption="{{ media.caption }}"
@@ -17,7 +17,7 @@
                         {% endif %}>
 
                         <td class="image">
-                            <img src="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb', true) ~ '?' ~ random(9999)}}" title="{{ media.name }}">
+                            <img src="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb') ~ '?' ~ random(9999)}}" title="{{ media.name }}">
                         </td>
                         <td class="detail">
                             <h3>{{ media.name }}</h3>
