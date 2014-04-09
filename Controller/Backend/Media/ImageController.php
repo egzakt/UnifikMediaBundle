@@ -99,7 +99,7 @@ class ImageController extends BaseController
         $cacheManager = $this->container->get('liip_imagine.cache.manager');
 
         foreach ($this->container->getParameter('liip_imagine.filter_sets') as $filter => $value ) {
-            $cacheManager->remove($image->getMediaPath(), $filter);
+            $cacheManager->remove(substr($image->getMediaPath(), 1), $filter);
         }
 
         return new JsonResponse(array());

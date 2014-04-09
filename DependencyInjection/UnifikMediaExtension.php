@@ -41,7 +41,7 @@ class UnifikMediaExtension extends Extension implements PrependExtensionInterfac
                     'quality' => 100,
                     'filters' => array(
                         'thumbnail' => array(
-                            'size' => array(80, 80),
+                            'size' => array(120, 120),
                             'mode' => 'outbound'
                         )
                     )
