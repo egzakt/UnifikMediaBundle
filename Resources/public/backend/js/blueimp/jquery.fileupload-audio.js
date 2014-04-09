@@ -9,8 +9,8 @@
  * http://www.opensource.org/licenses/MIT
  */
 
-/*jslint nomen: true, unparam: true, regexp: true */
-/*global define, window, document */
+/* jshint nomen:false */
+/* global define, window, document */
 
 (function (factory) {
     'use strict';
@@ -19,7 +19,7 @@
         define([
             'jquery',
             'load-image',
-            './jquery.fileupload-process'
+            './jquery.fileupload-process.js'
         ], factory);
     } else {
         // Browser globals:
