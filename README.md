@@ -60,3 +60,20 @@ Bundle requirements
 * unifik/doctrine-behaviors-bundle
 * liip/imagine-bundle
 * friendsofsymfony/jsrouting-bundle
+
+Add Media field
+----------------
+To link media with entity, add the manyToOne relation as follow:
+
+    manyToOne:
+      myMedia:
+        targetEntity: Unifik\MediaBundle\Entity\Media
+
+To generate de media field, add this in your form type:
+
+    ->add('image2', 'media_select')
+    
+You can also force a media type:
+(available types are: image, video, embedvideo and document)
+
+    ->add('image2', 'media_select', array('type' => 'image))
