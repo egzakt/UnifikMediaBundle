@@ -45,11 +45,6 @@ class VideoController extends BaseController
                 if ($form->isValid()) {
                     $this->getEm()->persist($media);
 
-                    //Update the file only if a new one has been uploaded
-//                    if ($media->getMedia()) {
-//                        $media->setNeedUpdate(true);
-//                    }
-
                     $this->getEm()->flush();
 
                     $this->get('unifik_system.router_invalidator')->invalidate();

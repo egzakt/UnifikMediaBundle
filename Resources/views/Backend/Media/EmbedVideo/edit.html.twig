@@ -23,23 +23,22 @@
 
                     {{ form_rest(form) }}
 
-                    {% if media.id %}
-                        <tr>
-                            <th>
-                                {% trans %}Last update {% endtrans %} :
-                            </th>
-                            <td style="vertical-align:bottom">
-                                {{ media.updatedAt|date }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {% trans %}Uploaded on {% endtrans %} :
-                            </th>
-                            <td style="vertical-align:bottom">
-                                {{ media.createdAt|date }}
-                            </td>
-                        </tr>
+                    <tr>
+                        <th>
+                            {% trans %}Last update {% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ media.updatedAt|date }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {% trans %}Uploaded on {% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ media.createdAt|date }}
+                        </td>
+                    </tr>
                 </table>
             </div>
 

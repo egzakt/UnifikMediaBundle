@@ -21,47 +21,46 @@
 
                     {{ form_rest(form) }}
 
-                    {% if media.id %}
-                        <tr>
-                            <th>
-                                {% trans %}Last update {% endtrans %} :
-                            </th>
-                            <td style="vertical-align:bottom">
-                                {{ media.updatedAt|date }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {% trans %}Uploaded on {% endtrans %} :
-                            </th>
-                            <td style="vertical-align:bottom">
-                                {{ media.createdAt|date }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {% trans %}File extension{% endtrans %} :
-                            </th>
-                            <td style="vertical-align:bottom">
-                                {{ fileExtension }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {% trans %}Real file name{% endtrans %} :
-                            </th>
-                            <td style="vertical-align:bottom">
-                                {{ realName }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                {% trans %}Size{% endtrans %} :
-                            </th>
-                            <td style="vertical-align:bottom">
-                                {{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}
-                            </td>
-                        </tr>
+                    <tr>
+                        <th>
+                            {% trans %}Last update {% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ media.updatedAt|date }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {% trans %}Uploaded on {% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ media.createdAt|date }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {% trans %}File extension{% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ fileExtension }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {% trans %}Real file name{% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ realName }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {% trans %}Size{% endtrans %} :
+                        </th>
+                        <td style="vertical-align:bottom">
+                            {{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}
+                        </td>
+                    </tr>
                 </table>
             </div>
 
