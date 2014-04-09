@@ -69,11 +69,11 @@ To link media with entity, add the manyToOne relation as follow:
       myMedia:
         targetEntity: Unifik\MediaBundle\Entity\Media
 
-To generate de media field, add this in your form type:
+To generate de media field, add this in your form type: (default type is image)
 
     ->add('image2', 'media_select')
     
-You can also force a media type:
+To choose an other media type:
 (available types are: image, video, embedvideo and document)
 
     ->add('image2', 'media_select', array('type' => 'image))
