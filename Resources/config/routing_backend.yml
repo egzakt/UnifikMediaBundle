@@ -108,7 +108,3 @@ unifik_media_backend_embed_video_edit:
     defaults: { _controller: "UnifikMediaBundle:Backend/Media/EmbedVideo:edit" }
     options:
         expose: true
-
-# Imagine
-_liip_imagine:
-    resource: "@LiipImagineBundle/Resources/config/routing.xml"
