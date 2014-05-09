@@ -110,6 +110,5 @@ unifik_media_backend_embed_video_edit:
         expose: true
 
 # Imagine
-_imagine:
-    resource: .
-    type:     imagine
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"
