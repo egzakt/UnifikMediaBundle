@@ -21,7 +21,7 @@
                         </td>
                         <td class="detail">
                             <h3>{{ media.name }}</h3>
-                            <p>{% if media.type == 'embedvideo' %}{% trans %}Embed Video{% endtrans %}{% else %}{{ media.type }}{% endif %}</p>
+                            <p>{% if media.type == 'embedvideo' %}{% trans %}Embedded Video{% endtrans %}{% else %}{{ media.type }}{% endif %}</p>
                             {% if media.type == 'image' %}
                                 <p class="format">{{ media.width }} X {{ media.height }}</p>
                             {% endif %}

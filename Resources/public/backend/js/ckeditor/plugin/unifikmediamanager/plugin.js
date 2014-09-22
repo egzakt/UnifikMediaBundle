@@ -26,7 +26,7 @@ CKEDITOR.plugins.add('unifikmediamanager', {
 
         if ( editor.ui.addButton ) {
             editor.ui.addButton( 'Insert_media', {
-                label: 'Insert media',
+                label: (editor.config.language == 'fr' ? 'Insérer un média' : 'Insert Media'),
                 command: 'openmediamanager',
                 toolbar: 'link',
                 icon: this.path + 'insert_media.png'

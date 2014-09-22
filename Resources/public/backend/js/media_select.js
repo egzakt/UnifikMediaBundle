@@ -20,8 +20,7 @@ var mediaManagerIsLibrary = false;
 var mediaManagerAssociationSelection = [];
 
 // Create the media select container
-
-$('body').append($('<div id="media_select_modal_container"><div id="media_select_modal" title="Medias"></div></div>'));
+$('body').append($('<div id="media_select_modal_container"><div id="media_select_modal" title="' + (session_locale == 'fr' ? 'Médias' : 'Medias') + '"></div></div>'));
 mediaManagerModal = $('#media_select_modal');
 
 $('body').append($('<div id="media_notice_modal_container"><div id="media_notice_modal"></div></div>'));
@@ -366,7 +365,7 @@ var mediaManagerShow = function () {
             of: window
         },
         buttons: {
-            Close: function() {
+            Fermer: function() {
                 $( this ).dialog( 'close' );
             }
         }

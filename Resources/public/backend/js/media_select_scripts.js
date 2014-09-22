@@ -2,7 +2,7 @@ if ('undefined' === typeof unifikmediascript){
 
     var loader1 = new DynamicLoader();
 
-    loader1.addStyle('blueimpgallery', 'http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css');
+    loader1.addStyle('blueimpgallery', '/bundles/unifikmedia/backend/css/blueimp/blueimp-gallery.min.css');
     loader1.addStyle('blueimpuploader', '/bundles/unifikmedia/backend/css/blueimp/jquery.fileupload-ui.css');
     loader1.addStyle('unifikmediastyle', '/bundles/unifikmedia/backend/css/media_select.css');
     loader1.addStyle('simplepaginationstyle', '/bundles/unifikmedia/backend/css/simplePagination.css');
@@ -11,16 +11,16 @@ if ('undefined' === typeof unifikmediascript){
     loader1.addStyle('select2style', '/bundles/unifikmedia/backend/css/select2/select2.css');
 
 
-    loader1.addScript('blueimptmpl', 'http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js');
-    loader1.addScript('blueimploadimage', 'http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js');
-    loader1.addScript('blueimpcanvastoblob', 'http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js');
-    loader1.addScript('blueimpgallery', 'http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js');
+    loader1.addScript('blueimptmpl', '/bundles/unifikmedia/backend/js/tmpl.min.js');
+    loader1.addScript('blueimploadimage', '/bundles/unifikmedia/backend/js/blueimp/load-image.all.min.js');
+    loader1.addScript('blueimpcanvastoblob', '/bundles/unifikmedia/backend/js/blueimp/canvas-to-blob.min.js');
+    loader1.addScript('blueimpgallery', '/bundles/unifikmedia/backend/js/blueimp/jquery.blueimp-gallery.min.js');
     loader1.addScript('blueimptransport', '/bundles/unifikmedia/backend/js/blueimp/jquery.iframe-transport.js');
     loader1.addScript('blueimpfileupload', '/bundles/unifikmedia/backend/js/blueimp/jquery.fileupload.js');
     loader1.addScript('simplepagination', '/bundles/unifikmedia/backend/js/jquery.simplePagination.js');
     loader1.addScript('jquerycookiescript', '/bundles/unifikmedia/backend/js/jquery.cookie.js');
     loader1.addScript('dynatreescript', '/bundles/unifikmedia/backend/js/jquery.dynatree.js');
-    loader1.addScript('aviaryscript', 'http://feather.aviary.com/js/feather.js');
+    loader1.addScript('aviaryscript', '/bundles/unifikmedia/backend/js/feather.js');
     loader1.addScript('jqueryuipositionscript', '/bundles/unifikmedia/backend/js/jquery.ui.position.js');
     loader1.addScript('jquerycontextmenuscript', '/bundles/unifikmedia/backend/js/jquery.contextMenu.js');
     loader1.addScript('select2script', '/bundles/unifikmedia/backend/js/select2/select2.min.js');

@@ -3,10 +3,9 @@
 {% block stylesheets %}
     {{ parent() }}
 
-    <link rel="stylesheet" href="http://blueimp.github.io/Gallery/css/blueimp-gallery.min.css">
-
     {# Use symlink path cause @ target have a known issue with the css rewrite filter #}
     {% stylesheets filter='cssrewrite'
+        'bundles/unifikmedia/backend/css/blueimp/blueimp-gallery.min.css'
         'bundles/unifikmedia/backend/css/blueimp/jquery.fileupload-ui.css'
         'bundles/unifikmedia/backend/css/media_select.css'
         'bundles/unifikmedia/backend/css/simplePagination.css'

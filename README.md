@@ -53,6 +53,14 @@ So you need to include the following js files:
     {% endjavascripts %}
     
 And run this command: `app/console fos:js-routing:dump`
+
+Include the `dynamic_loader.js` file required to add the Media Bundle CKEditor Plugin:
+
+    {% javascripts
+        '@UnifikMediaBundle/Resources/public/backend/js/dynamic_loader.js'
+    %}
+    <script src="{{ asset_url }}"></script>
+    {% endjavascripts %}
     
 Bundle requirements
 ----------------
