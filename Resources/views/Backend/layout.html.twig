@@ -49,19 +49,12 @@
 {% block javascripts %}
     {{ parent() }}
 
-    <script src="http://feather.aviary.com/js/feather.js"></script>
-
-    <!-- The Templates plugin is included to render the upload/download listings -->
-    <script src="http://blueimp.github.io/JavaScript-Templates/js/tmpl.min.js"></script>
-    <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-    <script src="http://blueimp.github.io/JavaScript-Load-Image/js/load-image.min.js"></script>
-    <!-- The Canvas to Blob plugin is included for image resizing functionality -->
-    <script src="http://blueimp.github.io/JavaScript-Canvas-to-Blob/js/canvas-to-blob.min.js"></script>
-
-    <script src="http://blueimp.github.io/Gallery/js/jquery.blueimp-gallery.min.js"></script>
-
     {% javascripts
-
+        '@UnifikMediaBundle/Resources/public/backend/js/feather.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/tmpl.min.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/load-image.all.min.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/canvas-to-blob.min.js'
+        '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.blueimp-gallery.min.js'
         '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.iframe-transport.js'
         '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload.js'
         '@UnifikMediaBundle/Resources/public/backend/js/blueimp/jquery.fileupload-process.js'
@@ -80,7 +73,6 @@
         '@UnifikMediaBundle/Resources/public/backend/js/jquery.contextMenu.js'
         '@UnifikMediaBundle/Resources/public/backend/js/media_select.js'
         '@UnifikMediaBundle/Resources/public/backend/js/select2/select2.min.js'
-
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}

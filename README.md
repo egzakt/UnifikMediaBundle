@@ -61,6 +61,11 @@ Include the `dynamic_loader.js` file required to add the Media Bundle CKEditor P
     %}
     <script src="{{ asset_url }}"></script>
     {% endjavascripts %}
+
+Include the `liip imagine routing` in your `config.yml` file:
+
+    _liip_imagine:
+        resource: "@LiipImagineBundle/Resources/config/routing.xml"
     
 Bundle requirements
 ----------------
