@@ -45,7 +45,7 @@ var mediaManagerLoadLibrary = function(){
     mediaManagerInit = false;
     mediaManagerAjaxLoader = $('#media_ajax_loader');
 
-    mediaManagerAjaxLoader.hide();
+    mediaManagerAjaxLoader.fadeOut();
 };
 
 $('.select_media').click(function(){
@@ -163,7 +163,7 @@ var mediaManagerLoad = function (callback) {
                     divMediaList.html($(data.html));
                 }
 
-                mediaManagerAjaxLoader.hide();
+                mediaManagerAjaxLoader.fadeOut();
                 mediaManagerInitialize();
                 mediaManagerLoadBind();
             }
@@ -297,7 +297,7 @@ var mediaManagerEdit = function (submit) {
             divMediaList.html($(data.html));
             divMediaList.show();
 
-            mediaManagerAjaxLoader.hide();
+            mediaManagerAjaxLoader.fadeOut();
 
             $('#edit_form').on('submit', function() {
 
@@ -334,7 +334,7 @@ var mediaManagerAssociationsLoad = function () {
 
             mediaManagerAssociationsBind(data.tree);
 
-            mediaManagerAjaxLoader.hide();
+            mediaManagerAjaxLoader.fadeOut();
 
         },
         error: function () {
@@ -373,7 +373,7 @@ var mediaManagerShow = function () {
 
     mediaManagerAjaxLoader = $('#media_ajax_loader');
 
-    mediaManagerAjaxLoader.hide();
+    mediaManagerAjaxLoader.fadeOut();
 
 };
 
@@ -392,6 +392,9 @@ var mediaManagerBind = function () {
 
         mediaManagerLoad();
 
+        $('#media_views').find('a').removeClass('selected');
+
+        $(this).addClass('selected');
     });
 
 
@@ -405,6 +408,9 @@ var mediaManagerBind = function () {
         $('#media_filters').hide();
         $('#uploader_wrapper').show();
 
+        $('#media_views').find('a').removeClass('selected');
+
+        $(this).addClass('selected');
     });
 
     // FILTERS BUTTONS
@@ -519,6 +525,8 @@ var mediaManagerBind = function () {
         var div = $(this).parent();
         var divDetails = $('#media_details_inner');
 
+        $('#aviary_ajax_loader').show();
+
         if (e.metaKey || e.metaKey) {
             if (div.hasClass('media_selected')) {
                 div.removeClass('media_selected');
@@ -552,7 +560,9 @@ var mediaManagerBind = function () {
                 mediaManagerSelectedMedia.aviary = div.data('media-aviary');
             }
 
-            divDetails.find('h3').html(mediaManagerSelectedMedia.name);
+
+
+            divDetails.find('h2.name').html(mediaManagerSelectedMedia.name);
             divDetails.find('#aviary_image').attr('src', mediaManagerSelectedMedia.preview + '?' + new Date().getTime());
 
             divDetails.find('a#edit_media_link').on('click', function(e){
@@ -602,7 +612,7 @@ var mediaManagerBind = function () {
             $('#welcome_message').hide();
             $('#selection_count').hide();
             divDetails.show();
-
+            $('#aviary_ajax_loader').fadeOut();
         } else {
             divDetails.hide();
 
@@ -613,9 +623,11 @@ var mediaManagerBind = function () {
                 welcomeDiv.hide();
                 selectionCountDiv.find('span').html(mediaManagerSelectedMediaArray.length);
                 selectionCountDiv.show();
+                $('#aviary_ajax_loader').fadeOut();
             } else {
                 selectionCountDiv.hide();
                 welcomeDiv.show();
+                $('#aviary_ajax_loader').fadeOut();
             }
         }
 
@@ -880,7 +892,7 @@ var mediaManagerLoadBind = function(){
                             dataType: 'json',
                             success: function (data) {
 
-                                mediaManagerAjaxLoader.hide();
+                                mediaManagerAjaxLoader.fadeOut();
 
                                 if (undefined != data.message) {
 
@@ -903,7 +915,7 @@ var mediaManagerLoadBind = function(){
 
                                                 mediaManagerInitialize();
 
-                                                mediaManagerAjaxLoader.hide();
+                                                mediaManagerAjaxLoader.fadeOut();
 
                                             }
                                         });
@@ -1049,7 +1061,7 @@ var featherEditor = new Aviary.Feather({
         }, function(data){
             img.fadeOut();
             img.attr('src', img.attr('src') + '?' + new Date().getTime());
-            $('#aviary_ajax_loader').hide();
+            $('#aviary_ajax_loader').fadeOut();
             img.fadeIn();
         });
     },
