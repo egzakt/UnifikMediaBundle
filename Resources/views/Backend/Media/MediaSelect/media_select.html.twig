@@ -1,71 +1,76 @@
 {% spaceless %}
 
-    <ul id="media_views">
-        <li><a class="library">{% trans %}Library{% endtrans %}</a></li>
-        <li><a class="upload">+ {% trans %}Upload a new file{% endtrans %}</a></li>
-    </ul>
+    <div id="media_views">
+        <a class="library selected">{% trans %}Library{% endtrans %}</a>&nbsp;
+        <a class="upload">{% trans %}Upload a new file{% endtrans %}</a>
+    </div>
 
     <div id="media_filters">
         <div class="filter1">
-            <input id="media_text_search" type="text" placeholder="{% trans %}Media name filter{% endtrans %}">
+            <div class="filter"><input id="media_text_search" type="text" placeholder="{% trans %}Media name filter{% endtrans %}"></div>
         </div>
         <div class="filter2">
-
             <div id="media_type_filters">
-                <input class="type_radio" type="radio" id="radio1" value="any" name="typeradio" checked="checked"{% if type not in ['any'] %} disabled{% endif %}/><label for="radio1">{% trans %}Any{% endtrans %}</label>
-                <input class="type_radio" type="radio" id="radio2" value="image" name="typeradio"{% if type not in ['any', 'image'] %} disabled{% endif %}/><label for="radio2">{% trans %}Images{% endtrans %}</label>
-                <input class="type_radio" type="radio" id="radio3" value="document" name="typeradio"{% if type not in ['any', 'document'] %} disabled{% endif %}/><label for="radio3">{% trans %}Documents{% endtrans %}</label>
-                <input class="type_radio" type="radio" id="radio4" value="video" name="typeradio"{% if type not in ['any', 'video'] %} disabled{% endif %}/><label for="radio4">{% trans %}Videos{% endtrans %}</label>
-                <input class="type_radio" type="radio" id="radio5" value="embedvideo" name="typeradio"{% if type not in ['any', 'embedvideo'] %} disabled{% endif %}/><label for="radio5">{% trans %}Embedded Videos{% endtrans %}</label>
+                <div class="filter"><input class="type_radio" type="radio" id="radio1" value="any" name="typeradio" checked="checked"{% if type not in ['any'] %} disabled{% endif %}/><label for="radio1">{% trans %}Any{% endtrans %}</label></div>
+                <div class="filter"><input class="type_radio" type="radio" id="radio2" value="image" name="typeradio"{% if type not in ['any', 'image'] %} disabled{% endif %}/><label for="radio2">{% trans %}Images{% endtrans %}</label></div>
+                <div class="filter"><input class="type_radio" type="radio" id="radio3" value="document" name="typeradio"{% if type not in ['any', 'document'] %} disabled{% endif %}/><label for="radio3">{% trans %}Documents{% endtrans %}</label></div>
+                <div class="filter"><input class="type_radio" type="radio" id="radio4" value="video" name="typeradio"{% if type not in ['any', 'video'] %} disabled{% endif %}/><label for="radio4">{% trans %}Videos{% endtrans %}</label></div>
+                <div class="filter"><input class="type_radio" type="radio" id="radio5" value="embedvideo" name="typeradio"{% if type not in ['any', 'embedvideo'] %} disabled{% endif %}/><label for="radio5">{% trans %}Embedded Videos{% endtrans %}</label></div>
             </div>
-
             <div id="media_date_filters">
-                <input class="date_radio" type="radio" id="radio6" value="newer" name="dateradio" checked="checked" /><label for="radio6">{% trans %}Newer{% endtrans %}</label>
-                <input class="date_radio" type="radio" id="radio7" value="older" name="dateradio" /><label for="radio7">{% trans %}Older{% endtrans %}</label>
+                <div class="filter"><input class="date_radio" type="radio" id="radio6" value="newer" name="dateradio" checked="checked" /><label for="radio6">{% trans %}Newer{% endtrans %}</label></div>
+                <div class="filter"><input class="date_radio" type="radio" id="radio7" value="older" name="dateradio" /><label for="radio7">{% trans %}Older{% endtrans %}</label></div>
             </div>
         </div>
     </div>
 
     <div id="media_wrapper">
-
         <div id="media_container">
-
-            <div id="folder_nav">
-                <img id="media_ajax_loader" src="{{ asset('bundles/unifikmedia/backend/images/icons/ajax-loader.gif') }}" />
-                <div id="folder_tree"></div>
-            </div>
-
-            <div id="media_list">
-
-                {% include 'UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig' %}
-
-            </div>
-
-            <div id="media_details">
-
-                <h2 id="welcome_message">{% trans %}Please select a file...{% endtrans %}</h2>
-                <h2 id="selection_count"><span>0</span> {% trans %}medias selected{% endtrans %}</h2>
-                <div id="media_details_inner">
-                    <input type="hidden" name="selected-id">
-                    <h3></h3>
-                    <div id="media_details_image">
-                        {% include 'UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_aviary.html.twig' %}
+            <div id="media_left_col" class="col">
+                <div class="indent">
+                    <div id="folder_nav" class="bg">
+                        <div id="folder_tree"></div>
                     </div>
-                    <div id="media_details_iframe">
-                        <iframe width="340" height="220" frameborder="0"  allowfullscreen></iframe>
-                    </div>
-                    <div>
-                        <a id="edit_media_link"><span class="media_button blue">{% trans %}Edit{% endtrans %}</span></a>
-                    </div>
-                    <a id="insert_media"><span class="media_button green">{% trans %}Insert{% endtrans %}</span></a>
-
-                    <p id="file_caption"><strong>{% trans %}Caption{% endtrans %}: </strong><br><span></span></p>
-
                 </div>
             </div>
 
-        </div>
+            <div id="media_mid_col" class="col">
+                <div class="indent">
+                    <div class="bg">
+                        <div id="media_ajax_loader">
+                            <img src="{{ asset('bundles/unifikmedia/backend/images/icons/ajax-loader.gif') }}" alt="" />
+                        </div>
+                        <div id="media_list">
+                            {% include 'UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig' %}
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div id="media_right_col" class="col">
+                <div class="indent">
+                    <div id="media_details" class="bg">
+                        <h2 id="welcome_message">{% trans %}Please select a file...{% endtrans %}</h2>
+                        <h2 id="selection_count"><span>0</span> {% trans %}medias selected{% endtrans %}</h2>
+                        <div id="media_details_inner">
+                            <input type="hidden" name="selected-id">
+                            <h2 class="name"></h2>
+                            <div id="media_details_image">
+                                {% include 'UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_aviary.html.twig' %}
+                            </div>
+                            <div id="media_details_iframe">
+                                <iframe width="340" height="220" frameborder="0"  allowfullscreen></iframe>
+                            </div>
+                            <p id="file_caption"><strong>{% trans %}Caption{% endtrans %}: </strong><br><span></span></p>
+                            <div class="fixed-btn">
+                                <a id="edit_media_link"><span class="media_button blue">{% trans %}Edit{% endtrans %}</span></a>
+                                <a id="insert_media"><span class="media_button green">{% trans %}Insert{% endtrans %}</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="uploader_wrapper">
