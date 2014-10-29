@@ -36,33 +36,40 @@
 
             <div id="media_mid_col" class="col">
                 <div class="indent">
-                    <div class="bg">
-                        <div id="media_ajax_loader">
-                            <img src="{{ asset('bundles/unifikmedia/backend/images/icons/ajax-loader.gif') }}" alt="" />
-                        </div>
-                        <div id="media_list">
-                            {% include 'UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig' %}
-                        </div>
+                    <div id="media_ajax_loader">
+                        <img src="{{ asset('bundles/unifikmedia/backend/images/icons/ajax-loader.gif') }}" alt="" />
+                    </div>
+                    <div id="media_list">
+                        {% include 'UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_content.html.twig' %}
                     </div>
                 </div>
             </div>
 
             <div id="media_right_col" class="col">
                 <div class="indent">
-                    <div id="media_details" class="bg">
-                        <h2 id="welcome_message">{% trans %}Please select a file...{% endtrans %}</h2>
-                        <h2 id="selection_count"><span>0</span> {% trans %}medias selected{% endtrans %}</h2>
+                    <div id="media_details">
+                        <div class="bg">
+                            <h2 id="welcome_message">{% trans %}Please select a file...{% endtrans %}</h2>
+                        </div>
+                        <div class="bg">
+                            <h2 id="selection_count"><span>0</span> {% trans %}medias selected{% endtrans %}</h2>
+                        </div>
                         <div id="media_details_inner">
-                            <input type="hidden" name="selected-id">
-                            <h2 class="name"></h2>
-                            <div id="media_details_image">
-                                {% include 'UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_aviary.html.twig' %}
+                            <div class="bg">
+                                <div id="aviary_ajax_loader">
+                                    <img src="{{ asset('bundles/unifikmedia/backend/images/icons/ajax-loader.gif') }}">
+                                </div>
+                                <input type="hidden" name="selected-id">
+                                <h2 class="name"></h2>
+                                <div id="media_details_image">
+                                    {% include 'UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_aviary.html.twig' %}
+                                </div>
+                                <div id="media_details_iframe">
+                                    <iframe width="340" height="220" frameborder="0"  allowfullscreen></iframe>
+                                </div>
+                                <p id="file_caption"><strong>{% trans %}Caption{% endtrans %}: </strong><br><span></span></p>
                             </div>
-                            <div id="media_details_iframe">
-                                <iframe width="340" height="220" frameborder="0"  allowfullscreen></iframe>
-                            </div>
-                            <p id="file_caption"><strong>{% trans %}Caption{% endtrans %}: </strong><br><span></span></p>
-                            <div class="fixed-btn">
+                            <div class="form_actions_bar">
                                 <a id="edit_media_link"><span class="media_button blue">{% trans %}Edit{% endtrans %}</span></a>
                                 <a id="insert_media"><span class="media_button green">{% trans %}Insert{% endtrans %}</span></a>
                             </div>
