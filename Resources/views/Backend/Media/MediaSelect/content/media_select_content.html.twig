@@ -1,101 +1,104 @@
 {% spaceless %}
     <div class="item_wrapper{% if pagesTotal == 1 %} full{% endif %}">
-        {% if medias|length > 0 %}
-            <table>
-                {% for media in medias %}
-                    <tr id="media_item_{{ media.id }}" class="media media_{{ media.type }}"
-                        data-media-id="{{ media.id }}"
-                        data-media-name="{{ media.name }}"
-                        data-media-type="{{ media.type }}"
-                        data-media-preview="{{ media.thumbnail.mediaPath }}"
-                        data-media-thumbnail="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb_large') ~ '?' ~ random(9999) }}"
-                        data-media-url="{{ media.mediaPath }}"
-                        data-media-size="{{ media.size }}"
-                        data-media-caption="{{ media.caption }}"
-                        {% if 'image' == media.type %}
-                            data-media-aviary="{{ path(media.getRouteBackend('aviary_edit'), media.getRouteBackendParams()) }}"
-                        {% endif %}>
+        <div class="bg">
+            <div class="scroll">
+                {% if medias|length > 0 %}
+                    <table>
+                        {% for media in medias %}
+                            <tr id="media_item_{{ media.id }}" class="media media_{{ media.type }}"
+                                data-media-id="{{ media.id }}"
+                                data-media-name="{{ media.name }}"
+                                data-media-type="{{ media.type }}"
+                                data-media-preview="{{ media.thumbnail.mediaPath }}"
+                                data-media-thumbnail="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb_large') ~ '?' ~ random(9999) }}"
+                                data-media-url="{{ media.mediaPath }}"
+                                data-media-size="{{ media.size }}"
+                                data-media-caption="{{ media.caption }}"
+                                {% if 'image' == media.type %}
+                                    data-media-aviary="{{ path(media.getRouteBackend('aviary_edit'), media.getRouteBackendParams()) }}"
+                                {% endif %}>
 
-                        <td class="image">
-                            <img src="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb') ~ '?' ~ random(9999)}}" title="{{ media.name }}">
-                        </td>
-                        <td class="detail">
-                            <h3>{{ media.name }}</h3>
-                            <p>{% if media.type == 'embedvideo' %}{% trans %}Embedded Video{% endtrans %}{% else %}{{ media.type }}{% endif %}</p>
-                            {% if media.type == 'image' %}
-                                <p class="format">{{ media.width }} X {{ media.height }}</p>
-                            {% endif %}
-                        </td>
-                        <td class="date">
-                            <p>
-                                <strong>{{ media.createdAt|date('Y-m-d') }}</strong>
-                                <br>
-                                <strong>{{ media.createdAt|date('H:i') }}</strong>
-                            </p>
-                            <p class="size">{{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}</p>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
-            <div class="total">
-                <span class="sub-total"></span>
-                5 résultats
-            </div>
-        {% else %}
-            <h1 class="empty_folder">{% trans %}No result{% endtrans %}</h1>
-        {% endif %}
-    </div>
+                                <td class="image">
+                                    <img src="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb') ~ '?' ~ random(9999)}}" title="{{ media.name }}">
+                                </td>
+                                <td class="detail">
+                                    <h3>{{ media.name }}</h3>
+                                    <p>{% if media.type == 'embedvideo' %}{% trans %}Embedded Video{% endtrans %}{% else %}{{ media.type }}{% endif %}</p>
+                                    {% if media.type == 'image' %}
+                                        <p class="format">{{ media.width }} X {{ media.height }}</p>
+                                    {% endif %}
+                                </td>
+                                <td class="date">
+                                    <p>
+                                        <strong>{{ media.createdAt|date('Y-m-d') }}</strong>
+                                        <br>
+                                        <strong>{{ media.createdAt|date('H:i') }}</strong>
+                                    </p>
+                                    <p class="size">{{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}</p>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+                <div class="total">
+                    <span class="sub-total"></span>
+                    5 résultats
+                </div>
+            {% else %}
+                <h1 class="empty_folder">{% trans %}No result{% endtrans %}</h1>
+            {% endif %}
 
-    {% if pagesTotal > 1 %}
-        <div id="pager_wrapper">
-            <div id="media_pager">
-            </div>
-        </div>
+            {% if pagesTotal > 1 %}
+                <div id="pager_wrapper">
+                    <div id="media_pager">
+                    </div>
+                </div>
 
-        <script type="text/javascript">
-            $('#media_pager').pagination({
-                pages: {{ pagesTotal }},
-                currentPage: {{ page }},
-                cssStyle: 'light-theme',
-                onPageClick: function(pageNumber, event){
+                <script type="text/javascript">
+                    $('#media_pager').pagination({
+                        pages: {{ pagesTotal }},
+                        currentPage: {{ page }},
+                        cssStyle: 'light-theme',
+                        onPageClick: function(pageNumber, event){
 
-                    event.preventDefault();
+                            event.preventDefault();
 
-                    mediaManagerAjaxLoader.show();
+                            mediaManagerAjaxLoader.show();
 
-                    $.ajax({
-                        url: Routing.generate('unifik_media_backend_load'),
-                        data: {
-                            folderId: '{{ folderId }}',
-                            type: '{{ type }}',
-                            text: '{{ text }}',
-                            date: '{{ date }}',
-                            page: pageNumber,
-                            view: (mediaManagerIsCk) ? 'ckeditor' : 'mediafield',
-                            init: false
-                        },
-                        dataType: 'json',
-                        success: function (data) {
+                            $.ajax({
+                                url: Routing.generate('unifik_media_backend_load'),
+                                data: {
+                                    folderId: '{{ folderId }}',
+                                    type: '{{ type }}',
+                                    text: '{{ text }}',
+                                    date: '{{ date }}',
+                                    page: pageNumber,
+                                    view: (mediaManagerIsCk) ? 'ckeditor' : 'mediafield',
+                                    init: false
+                                },
+                                dataType: 'json',
+                                success: function (data) {
 
-                            // Append html content
-                            $('#media_list').html($(data.html));
-                            mediaManagerAjaxLoader.hide();
-                            mediaManagerInitialize();
-                            mediaManagerFilters.page = pageNumber;
-                            mediaManagerLoadBind();
+                                    // Append html content
+                                    $('#media_list').html($(data.html));
+                                    mediaManagerAjaxLoader.hide();
+                                    mediaManagerInitialize();
+                                    mediaManagerFilters.page = pageNumber;
+                                    mediaManagerLoadBind();
 
-                        },
-                        error: function () {
+                                },
+                                error: function () {
 
-                            // Append html content
-                            mediaManagerModal.html($('<h2>Internal Server Error</h2>'));
+                                    // Append html content
+                                    mediaManagerModal.html($('<h2>Internal Server Error</h2>'));
 
+                                }
+                            });
                         }
                     });
-                }
-            });
-        </script>
-    {% endif %}
-
+                </script>
+            {% endif %}
+        </div>
+    </div>
 {% endspaceless %}
 

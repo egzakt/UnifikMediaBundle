@@ -93,8 +93,8 @@ var mediaManagerInitialize = function(){
     mediaManagerFilters.resetPage = true;
 
     $('#media_details_inner').hide();
-    $('#selection_count').hide();
-    $('#welcome_message').show();
+    $('#selection_count').parent().hide();
+    $('#welcome_message').parent().show();
 
 };
 
@@ -284,6 +284,8 @@ var mediaManagerEdit = function (submit) {
     if (submit) {
         data = $('#edit_form').serialize() + '&mediaId=' + mediaManagerSelectedMedia.id;
     }
+
+    mediaManagerAjaxLoader.show();
 
     $.ajax({
         method: (submit) ? 'POST' : 'GET',
@@ -479,7 +481,7 @@ var mediaManagerBind = function () {
 
     $('#add_embed_link').on('click', function(e){
 
-        $('#embed_ajax_loader').show();
+        embedAjaxLoader.show();
 
         $.ajax({
             method: 'POST',
@@ -492,7 +494,7 @@ var mediaManagerBind = function () {
                 } else {
                     validEmbedMessage.fadeIn(500).delay(3000).fadeOut();
                 }
-                $('#embed_ajax_loader').hide();
+                embedAjaxLoader.fadeOut();
             }
         });
 
@@ -560,8 +562,6 @@ var mediaManagerBind = function () {
                 mediaManagerSelectedMedia.aviary = div.data('media-aviary');
             }
 
-
-
             divDetails.find('h2.name').html(mediaManagerSelectedMedia.name);
             divDetails.find('#aviary_image').attr('src', mediaManagerSelectedMedia.preview + '?' + new Date().getTime());
 
@@ -609,15 +609,15 @@ var mediaManagerBind = function () {
                 $('#file_caption').hide();
             }
 
-            $('#welcome_message').hide();
-            $('#selection_count').hide();
+            $('#welcome_message').parent().hide();
+            $('#selection_count').parent().hide();
             divDetails.show();
             $('#aviary_ajax_loader').fadeOut();
         } else {
             divDetails.hide();
 
-            var welcomeDiv = $('#welcome_message');
-            var selectionCountDiv = $('#selection_count');
+            var welcomeDiv = $('#welcome_message').parent();
+            var selectionCountDiv = $('#selection_count').parent();
 
             if (mediaManagerSelectedMediaArray.length) {
                 welcomeDiv.hide();
@@ -806,11 +806,11 @@ var mediaManagerLoadBind = function(){
                                 mediaManagerSelectedMediaArray.push(media.data('media-id'));
 
 
-                                var selectionCountDiv = $('#selection_count');
+                                var selectionCountDiv = $('#selection_count').parent();
                                 selectionCountDiv.find('span').html(mediaManagerSelectedMediaArray.length);
 
                                 $('#media_details_inner').hide();
-                                $('#welcome_message').hide();
+                                $('#welcome_message').parent().hide();
                                 selectionCountDiv.show();
 
                             });
