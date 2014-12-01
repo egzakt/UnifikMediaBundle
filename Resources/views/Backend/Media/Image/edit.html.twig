@@ -1,14 +1,10 @@
 {% spaceless %}
-    <div class="edit_wrapper">
-        {% form_theme form 'UnifikSystemBundle:Backend/Core:edit_fields.html.twig' %}
-
-        <form id="edit_form" novalidate="novalidate" method="post" {{ form_enctype(form) }}>
-
-            <input class="save" type="submit" value="{% trans %}Save{% endtrans %}" name="save" />
-
-            <h1>{{ media }}</h1>
+    <form id="edit_form" novalidate="novalidate" method="post" {{ form_enctype(form) }}>
+        <div class="edit_wrapper bg">
+            {% form_theme form 'UnifikSystemBundle:Backend/Core:edit_fields.html.twig' %}
 
             <div id="fields_box">
+                <h2> {{ media.name }}</h2>
                 <table class="fields" cellspacing="0">
 
                     {{ form_errors(form) }}
@@ -73,7 +69,12 @@
                     </tr>
                 </table>
             </div>
-
-        </form>
-    </div>
+        </div>
+        <div class="form_actions_bar">
+            <ul>
+                <li><a href="#" class="library">{% trans %}Cancel{% endtrans %}</a></li>
+            </ul>
+            <input class="save" type="submit" value="{% trans %}Save{% endtrans %}" name="save" />
+        </div>
+    </form>
 {% endspaceless %}
