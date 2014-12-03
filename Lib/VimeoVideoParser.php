@@ -19,7 +19,7 @@ class VimeoVideoParser extends MediaParser implements MediaParserInterface {
         if ($this->getId()) {
             $data = file_get_contents('http://vimeo.com/api/v2/video/' . $this->getId() . '.json');
             $data = json_decode($data);
-            return $data[0]->thumbnail_medium;
+            return $data[0]->thumbnail_large;
         }
 
         return null;
