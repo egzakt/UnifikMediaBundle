@@ -39,14 +39,14 @@
                             </tr>
                         {% endfor %}
                     </table>
+                {% else %}
+                    <h1 class="empty_folder">{% trans %}No result{% endtrans %}</h1>
+                {% endif %}
                 </div>
-                <div class="total">
-                    <span class="sub-total"></span>
-                    5 résultats
-                </div>
-            {% else %}
-                <h1 class="empty_folder">{% trans %}No result{% endtrans %}</h1>
-            {% endif %}
+                {#<div class="total">#}
+                    {#<span class="sub-total"></span>#}
+                    {#{% trans %}No result{% endtrans %}#}
+                {#</div>#}
 
             {% if pagesTotal > 1 %}
                 <div id="pager_wrapper">
