@@ -30,7 +30,7 @@
     "require": {
         "symfony/symfony": "~2.3",
         "unifik/doctrine-behaviors-bundle": "dev-master",
-        "liip/imagine-bundle": "dev-master",
+        "liip/imagine-bundle": "~1.0",
         "friendsofsymfony/jsrouting-bundle": "dev-master"
     },
     "autoload": {
