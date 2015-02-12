@@ -46,10 +46,14 @@ class YoutubeVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function getId()
     {
-        if (preg_match('/youtube.com/i', $this->getMediaUrl())) {
-            return preg_replace('#^(http://)?(www\.)?youtube.com/embed/([^/]+)#i', '$3', $this->getMediaUrl());
-        } elseif (preg_match('/youtu.be/i', $this->getMediaUrl())) {
-            return preg_replace('#^(http://)?(www\.)?youtu.be/([^/]+)#i', '$3', $this->getMediaUrl());
+        $ret = '';
+        if(strlen($this->getMediaUrl()) == 11){
+            return $this->getMediaUrl();
+        }
+
+        $ret = preg_replace('^.*youtu(?:be\.com|\.be)\/(?:watch\?v=(.{11})|embed\/(.{11})|(.{11})$)', '$1$2$3', $this->getMediaUrl());
+        if (strlen($ret) == 11){
+           return $ret;
         }
 
         return null;
