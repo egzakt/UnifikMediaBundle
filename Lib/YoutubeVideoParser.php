@@ -50,10 +50,10 @@ class YoutubeVideoParser extends MediaParser implements MediaParserInterface {
         if(strlen($this->getMediaUrl()) == 11){
             return $this->getMediaUrl();
         }
-
-        $ret = preg_replace('^.*youtu(?:be\.com|\.be)\/(?:watch\?v=(.{11})|embed\/(.{11})|(.{11})$)', '$1$2$3', $this->getMediaUrl());
+        $re = "/^.*youtu(?:be\\.com|\\.be)\\/(?:watch\\?v=(.{11})|embed\\/(.{11})|(.{11})$)/";
+        $ret = preg_replace($re, '$1$2$3', $this->getMediaUrl());
         if (strlen($ret) == 11){
-           return $ret;
+            return $ret;
         }
 
         return null;
@@ -70,7 +70,8 @@ class YoutubeVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function supports($mediaUrl)
     {
-        return (strlen($mediaUrl) == 11 || preg_match('^.*youtu(?:be\.com|\.be)\/(?:watch\?v|embed|.{11})', $mediaUrl));
+        $re = '/^.*youtu(?:be\\.com|\\.be)\\/(?:watch\\?v|embed|.{11})/';
+        return (strlen($mediaUrl) == 11 || preg_match($re, $mediaUrl));
     }
 
 }
