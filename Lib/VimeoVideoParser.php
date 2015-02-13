@@ -68,7 +68,9 @@ class VimeoVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function supports($mediaUrl)
     {
-        return (preg_match('#vimeo.com/[\d]+$#i', $mediaUrl) || preg_match('#player.vimeo.com/video/[\d]+$#i', $mediaUrl));
+        preg_replace('.*([\d]{9}).*', '$1', $mediaUrl);
+        return strpos(@get_headers('http://player.vimeo.com/video/' . $mediaUrl), '200') !== false;
+        //return (preg_match('#vimeo.com/[\d]+$#i', $mediaUrl) || preg_match('#player.vimeo.com/video/[\d]+$#i', $mediaUrl));
     }
 
 }
