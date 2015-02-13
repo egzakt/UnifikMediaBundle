@@ -35,9 +35,8 @@ class EmbedVideoController extends BaseController
         if ("POST" !== $request->getMethod()) {
             throw new Exception('The request method must be post.');
         }
-
         $mediaParser = $this->get('unifik_media.parser');
-        if (!$mediaParser = $mediaParser->getParser($request->get('video_url'))) {
+        if (!$mediaParser = $mediaParser->getParser(str_replace(['<', '>'], ['', ''],$request->get('video_url')))) {
             return new JsonResponse(array(
                 'error' => true
             ));
@@ -45,8 +44,8 @@ class EmbedVideoController extends BaseController
 
         $video = new Media();
         $video->setType('embedvideo');
-        $video->setUrl($request->get('video_url'));
-        $video->setName($request->get('video_url'));
+        $video->setUrl(str_replace(['<', '>'], ['', ''],$request->get('video_url')));
+        $video->setName(str_replace(['<', '>'], ['', ''],$request->get('video_url')));
         $video->setMimeType('EmbedVideo');
         $video->setSize(0);
         $video->setMediaPath($mediaParser->getEmbedUrl());
@@ -118,10 +117,10 @@ class EmbedVideoController extends BaseController
 
             return new JsonResponse(array(
                 'html' => $this->renderView('UnifikMediaBundle:Backend/Media/EmbedVideo:edit.html.twig', array(
-                    'form' => $form->createView(),
-                    'media' => $media,
-                    'video_url' => $media->getMediaPath()
-                ))
+                        'form' => $form->createView(),
+                        'media' => $media,
+                        'video_url' => $media->getMediaPath()
+                    ))
             ));
         }
 

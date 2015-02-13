@@ -564,4 +564,13 @@ class Media extends BaseEntity
             'media' => 'medias'
         ];
     }
+
+    public function getYoutubeId()
+    {
+        if($this->type == 'embedvideo'){
+            return substr($this->getMediaPath(), -11);
+        }
+
+        return null;
+    }
 }
