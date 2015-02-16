@@ -46,10 +46,14 @@ class YoutubeVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function getId()
     {
-        if (preg_match('/youtube.com/i', $this->getMediaUrl())) {
-            return preg_replace('#^(http://)?(www\.)?youtube.com/embed/([^/]+)#i', '$3', $this->getMediaUrl());
-        } elseif (preg_match('/youtu.be/i', $this->getMediaUrl())) {
-            return preg_replace('#^(http://)?(www\.)?youtu.be/([^/]+)#i', '$3', $this->getMediaUrl());
+        $ret = '';
+        if(strlen($this->getMediaUrl()) == 11){
+            return $this->getMediaUrl();
+        }
+        $re = "/^.*youtu(?:be\\.com|\\.be)\\/(?:watch\\?v=(.{11})|embed\\/(.{11})|(.{11})).*$/";
+        $ret = preg_replace($re, '$1$2$3', $this->getMediaUrl());
+        if (strlen($ret) == 11){
+            return $ret;
         }
 
         return null;
@@ -66,7 +70,8 @@ class YoutubeVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function supports($mediaUrl)
     {
-        return (preg_match('#youtube.com/embed/[^/]+$#i', $mediaUrl) || preg_match('#youtu.be/[^/]+$#i', $mediaUrl));
+        $re = '/^.*youtu(?:be\\.com|\\.be)\\/(?:watch\\?v|embed|.{11})/';
+        return (strlen($mediaUrl) == 11 || preg_match($re, $mediaUrl));
     }
 
 }
