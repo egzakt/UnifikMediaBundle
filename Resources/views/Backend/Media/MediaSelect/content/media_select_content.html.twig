@@ -15,7 +15,7 @@
                                 data-media-size="{{ media.size }}"
                                 data-media-caption="{{ media.caption }}"
                                 {% if 'image' == media.type %}
-                                    data-media-aviary="{{ path(media.getRouteBackend('aviary_edit'), media.getRouteBackendParams()) }}"
+                                data-media-aviary="{{ path(media.getRouteBackend('aviary_edit'), media.getRouteBackendParams()) }}"
                                 {% endif %}>
 
                                 <td class="image">
@@ -42,11 +42,11 @@
                 {% else %}
                     <h1 class="empty_folder">{% trans %}No result{% endtrans %}</h1>
                 {% endif %}
-                </div>
-                {#<div class="total">#}
-                    {#<span class="sub-total"></span>#}
-                    {#{% trans %}No result{% endtrans %}#}
-                {#</div>#}
+            </div>
+            {#<div class="total">#}
+            {#<span class="sub-total"></span>#}
+            {#{% trans %}No result{% endtrans %}#}
+            {#</div>#}
 
             {% if pagesTotal > 1 %}
                 <div id="pager_wrapper">
@@ -101,4 +101,3 @@
         </div>
     </div>
 {% endspaceless %}
-
