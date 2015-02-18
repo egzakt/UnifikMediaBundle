@@ -48,13 +48,8 @@ class VimeoVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function getId()
     {
-        if (preg_match('/player.vimeo.com/i', $this->getMediaUrl())) {
-            return preg_replace('#^(http://)?(www\.|//)?player.vimeo.com/video/([\d]+)#i', '$3', $this->getMediaUrl());
-        } elseif (preg_match('/vimeo.com/i', $this->getMediaUrl())) {
-            return preg_replace('#^(http://)?(www\.)?vimeo.com/([\d]+)#i', '$3', $this->getMediaUrl());
-        }
-
-        return null;
+        $re = "/.*([\\d]{9}).*/";
+        return preg_replace($re, '$1', $this->getMediaUrl());
     }
 
     /**
@@ -68,7 +63,13 @@ class VimeoVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function supports($mediaUrl)
     {
-        return (preg_match('#vimeo.com/[\d]+$#i', $mediaUrl) || preg_match('#player.vimeo.com/video/[\d]+$#i', $mediaUrl));
+        $re = "/.*([\\d]{9}).*/";
+        preg_replace($re, '$1', $mediaUrl);
+        if(strpos(@get_headers('http://player.vimeo.com/video/' . $mediaUrl)[0], '200')){
+            return false;
+        };
+        return true;
+        //return (preg_match('#vimeo.com/[\d]+$#i', $mediaUrl) || preg_match('#player.vimeo.com/video/[\d]+$#i', $mediaUrl));
     }
 
 }

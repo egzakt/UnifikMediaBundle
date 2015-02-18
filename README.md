@@ -89,4 +89,4 @@ To generate de media field, add this in your form type: (default type is image)
 To choose an other media type:
 (available types are: image, video, embedvideo and document)
 
-    ->add('image2', 'media_select', array('type' => 'image))
+    ->add('image2', 'media_select', array('type' => 'image'))
