@@ -136,3 +136,7 @@
 	box-shadow:none;
 	outline:none;
 }
+
+.ui-front {
+  z-index: 1000 !important;
+}
