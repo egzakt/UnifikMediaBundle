@@ -1051,7 +1051,7 @@ var featherEditor = new Aviary.Feather({
     apiVersion: 2,
     maxSize: 800, // Output image size (default 800x800 px)
     displayImageSize: true,
-    tools: 'draw,text,enhance,frames,effects,stickers,crop,resize,warmth,orientation,brightness,focus,warmth,contrast,saturation,sharpness,splash,whiten,redeye,blemish',
+    tools: 'crop,resize,orientation',
     appendTo: '',
     onSave: function(imageID, newURL) {
         $('#aviary_ajax_loader').show();
