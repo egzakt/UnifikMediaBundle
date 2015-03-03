@@ -36,7 +36,7 @@ class EmbedVideoController extends BaseController
             throw new Exception('The request method must be post.');
         }
         $mediaParser = $this->get('unifik_media.parser');
-        if (!$mediaParser = $mediaParser->getParser(str_replace(['<', '>'], ['', ''],$request->get('video_url')))) {
+        if ((!$mediaParser = $mediaParser->getParser(str_replace(['<', '>'], ['', ''],$request->get('video_url')))) || strlen($request->get('video_url')) < 1) {
             return new JsonResponse(array(
                 'error' => true
             ));
