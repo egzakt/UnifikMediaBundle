@@ -24,7 +24,7 @@ $(function(){
     }).bind('fileuploadfail', function(e, data) {
         fileCount++;
         fails++;
-        console.log('fileuploadfail');
+        //console.log('fileuploadfail');
         if (fileCount === data.getNumberOfFiles()) {
             //console.log('all done, successes: ' + successes + ', fails: ' + fails);
 
