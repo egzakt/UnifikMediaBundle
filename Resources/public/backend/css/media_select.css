@@ -562,7 +562,13 @@ span.dynatree-title {
 #media_details img.aviary {
     display: none;
     position: absolute;
-    max-height: 100%;
+    top: 0;
+    left: 0;
+    width: auto;
+    height: auto;
+    max-width: none;
+    max-height: none;
+    margin: 0;
 }
 
 .media_button.green {

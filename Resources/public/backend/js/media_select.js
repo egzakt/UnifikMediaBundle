@@ -1049,7 +1049,7 @@ var mediaManagerInsertCk = function() {
 var featherEditor = new Aviary.Feather({
     apiKey: 'i3kui99ayvje8cix',
     apiVersion: 2,
-    maxSize: 800, // Output image size (default 800x800 px)
+    maxSize: 2000, // Output image size (default 800x800 px)
     displayImageSize: true,
     tools: 'crop,resize,orientation',
     appendTo: '',
