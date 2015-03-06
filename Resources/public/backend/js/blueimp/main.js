@@ -19,6 +19,7 @@ $(function(){
             successes = 0;
             fails = 0;
 
+            clearQueue();
             $('a.library').click();
         }
     }).bind('fileuploadfail', function(e, data) {
@@ -32,6 +33,7 @@ $(function(){
             successes = 0;
             fails = 0;
 
+            clearQueue();
             $('a.library').click();
         }
     });

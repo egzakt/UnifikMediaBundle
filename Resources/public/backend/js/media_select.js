@@ -35,6 +35,10 @@ var mediaManagerSearchModal = $('#media_search_modal');
 $('body').append($('<div id="media_delete_modal_container"><div id="media_delete_modal"></div></div>'));
 var mediaManagerDeleteModal = $('#media_delete_modal');
 
+function clearQueue() {
+    $("table tbody.files").empty();
+}
+
 var mediaManagerLoadLibrary = function(){
 
     mediaManagerModal = $('#mediaManager');
@@ -481,6 +485,7 @@ var mediaManagerBind = function () {
             successes = 0;
             fails = 0;
 
+            clearQueue();
             $('a.library').click();
         }
     }).bind('fileuploadfail', function(e, data) {
@@ -494,6 +499,7 @@ var mediaManagerBind = function () {
             successes = 0;
             fails = 0;
 
+            clearQueue();
             $('a.library').click();
         }
     });
