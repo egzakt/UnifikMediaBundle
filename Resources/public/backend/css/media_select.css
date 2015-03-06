@@ -11,6 +11,7 @@
 .ui-dialog.media_select {
     margin: 40px;
     min-width: 80%;
+    background: #e5e5e5;
 }
 
 .ui-dialog.media_select .ui-widget-header {
