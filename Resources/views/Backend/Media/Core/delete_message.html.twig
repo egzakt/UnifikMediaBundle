@@ -9,7 +9,7 @@
         <ul>
             {% for entityName,methodGroup in media.associatedContents %}
                 {% for methodName,entities in methodGroup %}
-                    <li>{{ entities|length }} {{ entityName }} {% trans %}with this file as{% endtrans %} {{ methodName }}</li>
+                    <li>{{ entities|length }} {{ entityName|trans }} {% trans %}with this file as{% endtrans %} {{ methodName }}</li>
                 {% endfor %}
             {% endfor %}
         </ul>

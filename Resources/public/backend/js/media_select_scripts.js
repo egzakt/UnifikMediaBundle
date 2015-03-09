@@ -42,7 +42,7 @@ if ('undefined' === typeof unifikmediascript){
             loader3.addScript('blueimpvalidate', '/bundles/unifikmedia/backend/js/blueimp/jquery.fileupload-validate.js');
             loader3.addScript('blueimpui', '/bundles/unifikmedia/backend/js/blueimp/jquery.fileupload-ui.js');
             loader3.addScript('blueimpjqueryui', '/bundles/unifikmedia/backend/js/blueimp/jquery.fileupload-jquery-ui.js');
-            loader3.addScript('unifikmediascript', '/bundles/unifikmedia/backend/js/media_select.js');
+            loader3.addScript('unifikmediascript', '/admin/media/main.js');
 
             loader3.load();
         });

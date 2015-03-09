@@ -3,6 +3,12 @@ unifik_media_backend_media:
     pattern:  /
     defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:media" }
 
+unifik_media_backend_js:
+    pattern:  /main.js
+    defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:js" }
+    options:
+        expose: true
+
 unifik_media_backend_load:
     pattern:  /load
     defaults: { _controller: "UnifikMediaBundle:Backend/Media/Media:load" }

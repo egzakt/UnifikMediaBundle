@@ -106,7 +106,7 @@
             <a href="{%=file.url%}" title="{%=file.name%}">{%=file.name%}</a>
         </p>
         {% if (file.error) { %}
-            <div><span class="error">Error</span> {%=file.error%}</div>
+            <div><span class="error">'|raw }}{% trans %}Error{% endtrans %}{{ '</span> {%=file.error%}</div>
             {% } %}
             </td>
             <td>

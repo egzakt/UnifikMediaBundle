@@ -1,3 +1,4 @@
+//<script>
 var mediaManagerInit = true;
 var mediaManagerSelectedMediaArray = [];
 var mediaManagerSelectedMedia = {};
@@ -20,7 +21,7 @@ var mediaManagerIsLibrary = false;
 var mediaManagerAssociationSelection = [];
 
 // Create the media select container
-$('body').append($('<div id="media_select_modal_container"><div id="media_select_modal" title="' + (session_locale == 'fr' ? 'Médias' : 'Medias') + '"></div></div>'));
+$('body').append($('<div id="media_select_modal_container"><div id="media_select_modal" title="{% trans %}Medias{% endtrans %}"></div></div>'));
 mediaManagerModal = $('#media_select_modal');
 
 $('body').append($('<div id="media_notice_modal_container"><div id="media_notice_modal"></div></div>'));
@@ -176,7 +177,7 @@ var mediaManagerLoad = function (callback) {
         error: function () {
 
             // Append html content
-            mediaManagerModal.html($('<h2>Internal Server Error</h2>'));
+            mediaManagerModal.html($('<h2>{% trans %}Internal Server Error{% endtrans %}</h2>'));
 
         }
     });
@@ -316,7 +317,7 @@ var mediaManagerEdit = function (submit) {
         error: function () {
 
             // Append html content
-            mediaManagerModal.html($('<h2>Internal Server Error</h2>'));
+            mediaManagerModal.html($('<h2>{% trans %}Internal Server Error{% endtrans %}</h2>'));
 
         }
     });
@@ -346,7 +347,7 @@ var mediaManagerAssociationsLoad = function () {
         error: function () {
 
             // Append html content
-            mediaManagerModal.html($('<h2>Internal Server Error</h2>'));
+            mediaManagerModal.html($('<h2>{% trans %}Internal Server Error{% endtrans %}</h2>'));
 
         }
     });
@@ -371,7 +372,7 @@ var mediaManagerShow = function () {
             of: window
         },
         buttons: {
-            Fermer: function() {
+            {% trans %}Close{% endtrans %}: function() {
                 $( this ).dialog( 'close' );
             }
         }
@@ -700,7 +701,7 @@ var mediaManagerBind = function () {
         build: function($trigger, e){
             return {
                 items: {
-                    create: {name: 'Create', icon: 'add', callback: function(){
+                    create: {name: '{% trans %}Create{% endtrans %}', icon: 'add', callback: function(){
 
                         var node = $('#' + $trigger.parent().attr('id')).prop('dtnode');
                         if( node ){
@@ -725,7 +726,7 @@ var mediaManagerBind = function () {
                             });
                         }
                     }},
-                    edit: {name: 'Edit', icon: 'edit', callback: function(){
+                    edit: {name: '{% trans %}Edit{% endtrans %}', icon: 'edit', callback: function(){
 
                         var node = $('#' + $trigger.parent().attr('id')).prop('dtnode');
                         if( node ){
@@ -762,7 +763,7 @@ var mediaManagerBind = function () {
                         }
                     }},
                     separator1: '---------',
-                    delete: {name: 'Delete', icon: 'delete', callback: function(){
+                    delete: {name: '{% trans %}Delete{% endtrans %}', icon: 'delete', callback: function(){
 
                         var node = $('#' + $trigger.parent().attr('id')).prop('dtnode');
                         if( node ){
@@ -821,7 +822,7 @@ var mediaManagerLoadBind = function(){
             return {
                 items: {
                     insert: (mediaManagerIsLibrary) ? {disabled: true} : {
-                        name: 'Insert',
+                        name: '{% trans %}Insert{% endtrans %}',
                         icon: 'add',
                         disabled: (mediaManagerSelectedMediaArray.length > 1),
                         callback: function(){
@@ -829,7 +830,7 @@ var mediaManagerLoadBind = function(){
                         }
                     },
                     selectall: {
-                        name: 'Select All',
+                        name: '{% trans %}Select All{% endtrans %}',
                         callback: function(){
 
                             mediaManagerSelectedMediaArray = [];
@@ -854,7 +855,7 @@ var mediaManagerLoadBind = function(){
                     },
                     separator1: '---------',
                     edit: {
-                        name: 'Edit',
+                        name: '{% trans %}Edit{% endtrans %}',
                         icon: 'edit',
                         disabled: (mediaManagerSelectedMediaArray.length > 1),
                         callback: function(){
@@ -869,7 +870,7 @@ var mediaManagerLoadBind = function(){
                         }
                     },
                     editimage: (mediaManagerSelectedMedia.type != 'image') ? false : {
-                        name: 'Edit Image',
+                        name: '{% trans %}Edit Image{% endtrans %}',
                         icon: 'edit',
                         disabled: (mediaManagerSelectedMediaArray.length > 1),
                         callback: function(){
@@ -877,7 +878,7 @@ var mediaManagerLoadBind = function(){
                         }
                     },
                     duplicate: {
-                        name: 'Duplicate',
+                        name: '{% trans %}Duplicate{% endtrans %}',
                         icon: 'copy',
                         disabled: (mediaManagerSelectedMediaArray.length > 1),
                         callback: function(){
@@ -902,7 +903,7 @@ var mediaManagerLoadBind = function(){
                         }
                     },
                     associations: {
-                        name: 'Associations',
+                        name: '{% trans %}Associations{% endtrans %}',
                         icon: false,
                         disabled: (mediaManagerSelectedMediaArray.length > 1),
                         callback: function(){
@@ -911,7 +912,7 @@ var mediaManagerLoadBind = function(){
                         }
                     },
                     separator2: '---------',
-                    delete: {name: 'Delete', icon: 'delete', callback: function(){
+                    delete: {name: '{% trans %}Delete{% endtrans %}', icon: 'delete', callback: function(){
 
                         mediaManagerAjaxLoader.show();
 
@@ -1128,7 +1129,7 @@ var mediaManagerNoticeModalShow = function (message) {
         modal: true,
         dialogClass: 'media_notice',
         buttons: {
-            Ok: function() {
+            {% trans %}Ok{% endtrans %}: function() {
                 $( this ).dialog( 'close' );
             }
         }
@@ -1144,7 +1145,7 @@ var mediaManagerEditModalShow = function (value, callback) {
         modal: true,
         dialogClass: 'media_edit',
         buttons: {
-            Save: function() {
+            {% trans %}Save{% endtrans %}: function() {
 
                 mediaManagerEditValue = input.val();
                 input.val('');
@@ -1152,7 +1153,7 @@ var mediaManagerEditModalShow = function (value, callback) {
 
                 callback();
             },
-            Cancel: function() {
+            {% trans %}Cancel{% endtrans %}: function() {
                 $( this ).dialog( 'close' );
             }
         }
@@ -1192,7 +1193,7 @@ var mediaManagerSearchModalShow = function (value, callback) {
         width: 500,
         dialogClass: 'media_edit',
         buttons: {
-            Save: function() {
+            {% trans %}Save{% endtrans %}: function() {
 
                 mediaManagerSearchValue = input.val();
                 input.val('');
@@ -1200,7 +1201,7 @@ var mediaManagerSearchModalShow = function (value, callback) {
 
                 callback(selection);
             },
-            Cancel: function() {
+            {% trans %}Cancel{% endtrans %}: function() {
                 $( this ).dialog( 'close' );
             }
         }
@@ -1218,13 +1219,13 @@ var mediaManagerDeleteModalShow = function (message, callback) {
         maxHeight: 500,
         dialogClass: 'media_delete',
         buttons: {
-            Delete: function() {
+            {% trans %}Delete{% endtrans %}: function() {
 
                 $( this ).dialog( 'close' );
 
                 callback();
             },
-            Cancel: function() {
+            {% trans %}Cancel{% endtrans %}: function() {
                 $( this ).dialog( 'close' );
             }
         }
@@ -1234,10 +1235,10 @@ var mediaManagerDeleteModalShow = function (message, callback) {
 jQuery.fn.clearable = function() {
 
     $(this).css({'border-width': '0px', 'outline': 'none'})
-        .wrap('<div id="media_text_search_container" class="divclearable"></div>')
-        .parent()
-        .attr('class', $(this).attr('class') + ' divclearable')
-        .append('<a class="clearlink" href="javascript:"></a>');
+            .wrap('<div id="media_text_search_container" class="divclearable"></div>')
+            .parent()
+            .attr('class', $(this).attr('class') + ' divclearable')
+            .append('<a class="clearlink" href="javascript:"></a>');
 
     $('.clearlink').click(function() {
 
@@ -1250,3 +1251,4 @@ jQuery.fn.clearable = function() {
 
     });
 }
+//</script>

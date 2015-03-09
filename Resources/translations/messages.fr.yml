@@ -3,7 +3,7 @@ Remove file: Supprimer le fichier
 
 Medias: Médias
 Last Update: Dernière mise-à-jour
-Uploaded the: Téléversé le
+Uploaded on: Téléversé le
 File Extension: Extension
 Real Filename: Nom réel du fichier
 Size: Taille
@@ -29,6 +29,7 @@ Replace: Remplacer
 Unlink: Dissocier
 Embedded Video: Vidéo «embeddé»
 No result: Aucun résultat
+Internal Server Error: Erreur interne du serveur
 
 Paste video embed URL below: Coller l'URL du vidéo à «embedder» ci-dessous
 Add: Ajouter
@@ -39,13 +40,29 @@ Start upload: Démarrer le téléversement
 Cancel upload: Annuler le téléversement
 Start: Démarrer
 Remove: Retirer
+Error: Erreur
 
 Medias Library: Librairie de médias
 
 Save: Enregistrer
+Cancel: Annuler
+
 
 You are about to delete: Vous êtes sur le point de supprimer
 media: média
 If you continue the following contents will be affected: Si vous continuez, les contenus suivants seront affectés
 with this file as: avec ce fichier en tant que
 Do you really want to continue: Voulez-vous vraiment continuer
+
+Create: Créer
+Edit: Modifier
+Delete: Supprimer
+Insert: Insérer
+Select All: Sélectionner Tous
+Edit Image: Modifier l\'image
+Duplicate: Dupliquer
+Associations: Associations
+Ok: Ok
+
+This folder cannot be renamed.: Ce dossier ne peut pas être renommé.
+You must enter a name.: Vous devez entrer un nom.

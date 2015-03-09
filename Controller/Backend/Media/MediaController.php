@@ -53,6 +53,20 @@ class MediaController extends BackendController
     }
 
     /**
+     * Javascripts
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function jsAction(Request $request)
+    {
+        $content = $this->renderView('UnifikMediaBundle:Backend/Media/Javascripts:main.js.twig');
+        $response = new Response($content);
+        $response->headers->set('Content-Type', 'text/javascript');
+        return $response;
+    }
+
+    /**
      * Load Media
      *
      * @param Request $request
