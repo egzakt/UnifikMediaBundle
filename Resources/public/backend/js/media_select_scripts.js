@@ -17,7 +17,6 @@ if ('undefined' === typeof unifikmediascript){
     loader1.addScript('blueimpgallery', '/bundles/unifikmedia/backend/js/blueimp/jquery.blueimp-gallery.min.js');
     loader1.addScript('blueimptransport', '/bundles/unifikmedia/backend/js/blueimp/jquery.iframe-transport.js');
     loader1.addScript('blueimpfileupload', '/bundles/unifikmedia/backend/js/blueimp/jquery.fileupload.js');
-    loader1.addScript('simplepagination', '/bundles/unifikmedia/backend/js/jquery.simplePagination.js');
     loader1.addScript('jquerycookiescript', '/bundles/unifikmedia/backend/js/jquery.cookie.js');
     loader1.addScript('dynatreescript', '/bundles/unifikmedia/backend/js/jquery.dynatree.js');
     loader1.addScript('aviaryscript', '/bundles/unifikmedia/backend/js/feather.js');
