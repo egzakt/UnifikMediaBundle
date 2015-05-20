@@ -61,20 +61,7 @@ Unifik\MediaBundle\Entity\Media:
                 name: thumbnail_id
                 referencedColumnName: id
                 onDelete: CASCADE
-
-#    oneToMany:
-#        thumbnail:
-#            targetEntity: Unifik\MediaBundle\Entity\Media
-#            mappedBy: parentMedia
-#            onDelete: cascade
     manyToOne:
-#        parentMedia:
-#            targetEntity: Unifik\MediaBundle\Entity\Media
-#            inversedBy: thumbnail
-#            joinColumn:
-#                name: parentMedia
-#                referencedColumnName: id
-#                onDelete: cascade
         folder:
             targetEntity: Unifik\MediaBundle\Entity\Folder
             inversedBy: medias

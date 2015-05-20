@@ -457,12 +457,14 @@ class MediaController extends BackendController
                             $thumbnail = $media->getThumbnail();
 
                             if ($this->checkDeletable($thumbnail)->isSuccess()) {
+                                $this->deleteMediaCache($thumbnail);
                                 $this->getEm()->remove($thumbnail);
                                 $this->getEm()->flush();
                             }
                         }
 
                         if ($this->checkDeletable($media)->isSuccess()) {
+                            $this->deleteMediaCache($media);
                             $this->getEm()->remove($media);
                             $this->getEm()->flush();
                         }
@@ -494,6 +496,20 @@ class MediaController extends BackendController
         }
 
         return new JsonResponse();
+    }
+
+    /**
+     * Delete Media Cache
+     *
+     * Delete all Media cache files
+     *
+     * @param $media
+     */
+    protected function deleteMediaCache($media)
+    {
+        if ($cacheManager = $this->container->get('liip_imagine.cache.manager', ContainerInterface::NULL_ON_INVALID_REFERENCE)) {
+            $cacheManager->remove($media->getMediaPath());
+        }
     }
 
     /**
