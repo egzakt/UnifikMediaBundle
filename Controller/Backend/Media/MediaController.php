@@ -37,6 +37,9 @@ class MediaController extends BackendController
     public function init()
     {
         parent::init();
+
+        $this->createAndPushNavigationElement('Medias', 'unifik_media_backend_media', array());
+
         $this->mediaRepository = $this->getEm()->getRepository('UnifikMediaBundle:Media');
         $this->folderRepository = $this->getEm()->getRepository('UnifikMediaBundle:Folder');
     }

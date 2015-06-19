@@ -7,7 +7,6 @@
     {% stylesheets filter='cssrewrite'
         'bundles/unifikmedia/backend/css/blueimp/blueimp-gallery.min.css'
         'bundles/unifikmedia/backend/css/blueimp/jquery.fileupload-ui.css'
-        'bundles/unifikmedia/backend/css/media_select.css'
         'bundles/unifikmedia/backend/css/simplePagination.css'
         'bundles/unifikmedia/backend/css/ui.dynatree.css'
         'bundles/unifikmedia/backend/css/jquery.contextMenu.css'
@@ -18,31 +17,23 @@
 
 {% endblock %}
 
-{% block content %}
+{% block section_title %}
+    <h2><i class="fa fa-picture-o"></i> {% trans %}Medias{% endtrans %}</h2>
+{% endblock %}
 
-    {% block content_header %}<h1>{% trans %}Medias{% endtrans %}</h1>{% endblock %}
+{% block content_wrapper %}
 
-    {% block flash_message %}
+    {% block content %}
 
-        {% if app.session.flashbag.has('success') %}
-            <div class="flash-success">
-                {% for flashMessage in app.session.flashbag.get('success') %}
-                    <p>{{ flashMessage|trans }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
+        {% block flash_message %}
+            {% include 'UnifikSystemBundle:Backend/Core:flash_message.html.twig' %}
+        {% endblock %}
 
-        {% if app.session.flashbag.has('error') %}
-            <div class="flash-error">
-                {% for flashMessage in app.session.flashbag.get('error') %}
-                    <p>{{ flashMessage|trans }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
+        {% block content_header '' %}
+
+        {% block content_main '' %}
 
     {% endblock %}
-
-    {% block content_main '' %}
 
 {% endblock %}
 
