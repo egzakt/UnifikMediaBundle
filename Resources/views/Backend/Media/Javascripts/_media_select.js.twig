@@ -436,16 +436,20 @@ var mediaManagerBind = function () {
         }
     });
 
-    $('.type_radio').on('click', function(e){
+    $('.filter-document-type').on('click', function(e){
+        if ($(this).not('.disabled')) {
+            $('.filter-document-type').removeClass('selected');
+            $(this).addClass('selected');
+            mediaManagerFilters.type = $(this).val();
 
-        mediaManagerFilters.type = $(this).val();
-
-        mediaManagerAjaxLoader.show();
-        mediaManagerLoad();
-
+            mediaManagerAjaxLoader.show();
+            mediaManagerLoad();
+        }
     });
 
-    $('.date_radio').on('click', function(e){
+    $('.filter-date').on('click', function(e){
+        $('.filter-date').removeClass('selected');
+        $(this).addClass('selected');
 
         mediaManagerFilters.date = $(this).val();
 
@@ -1226,8 +1230,8 @@ var mediaManagerDeleteModalShow = function (message, callback) {
 
 jQuery.fn.clearable = function() {
 
-    $(this).css({'border-width': '0px', 'outline': 'none'})
-            .wrap('<div id="media_text_search_container" class="divclearable"></div>')
+    $(this).css({'outline': 'none'})
+            .wrap('<div id="media_text_search_container"></div>')
             .parent()
             .attr('class', $(this).attr('class') + ' divclearable')
             .append('<a class="clearlink" href="javascript:"></a>');

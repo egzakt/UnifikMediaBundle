@@ -1,23 +1,28 @@
 {% spaceless %}
 
     <ul class="filemanager-options">
-        <li>
-            <a class="library selected"><i class="fa fa-file-text-o"></i> {% trans %}Library{% endtrans %}</a>
+        <li class="main">
+            <a href="#" class="library selected"><i class="fa fa-file-text-o"></i> {% trans %}Library{% endtrans %}</a>
         </li>
-        <li>
-            <a class="upload">{% trans %}Upload a new file{% endtrans %}</a>
+        <li class="main">
+            <a href="#" class="upload"><i class="fa fa-plus"></i> {% trans %}Upload a new file{% endtrans %}</a>
         </li>
         <li class="filter-type">
-            Show:
+            {% trans %}Search{% endtrans %} :
             <input id="media_text_search" type="text" placeholder="{% trans %}Media name filter{% endtrans %}">
-            <input class="type_radio" type="radio" id="radio1" value="any" name="typeradio" checked="checked"{% if type not in ['any'] %} disabled{% endif %}/><label for="radio1">{% trans %}Any{% endtrans %}</label>
-            <input class="type_radio" type="radio" id="radio2" value="image" name="typeradio"{% if type not in ['any', 'image'] %} disabled{% endif %}/><label for="radio2">{% trans %}Images{% endtrans %}</label>
-            <input class="type_radio" type="radio" id="radio3" value="document" name="typeradio"{% if type not in ['any', 'document'] %} disabled{% endif %}/><label for="radio3">{% trans %}Documents{% endtrans %}</label>
-            <input class="type_radio" type="radio" id="radio4" value="video" name="typeradio"{% if type not in ['any', 'video'] %} disabled{% endif %}/><label for="radio4">{% trans %}Videos{% endtrans %}</label>
-            <input class="type_radio" type="radio" id="radio5" value="embedvideo" name="typeradio"{% if type not in ['any', 'embedvideo'] %} disabled{% endif %}/><label for="radio5">{% trans %}Embedded Videos{% endtrans %}</label>
-
-            <input class="date_radio" type="radio" id="radio6" value="newer" name="dateradio" checked="checked" /><label for="radio6">{% trans %}Newer{% endtrans %}</label>
-            <input class="date_radio" type="radio" id="radio7" value="older" name="dateradio" /><label for="radio7">{% trans %}Older{% endtrans %}</label>
+        </li>
+        <li class="filter-type">
+            {% trans %}Sort{% endtrans %} :
+            <a href="#" data-type="newer" class="filter-date selected">{% trans %}Newer{% endtrans %}</a>
+            <a href="#" class="filter-date" data-type="older">{% trans %}Older{% endtrans %}</a>
+        </li>
+        <li class="filter-type">
+            {% trans %}Filter{% endtrans %} :
+            <a href="#" data-type="any" class="filter-document-type selected{% if type not in ['any'] %} disabled{% endif %}">{% trans %}Any{% endtrans %}</a>
+            <a href="#" data-type="image" class="filter-document-type{% if type not in ['any', 'image'] %} disabled{% endif %}">{% trans %}Images{% endtrans %}</a>
+            <a href="#" data-type="document" class="filter-document-type{% if type not in ['any', 'document'] %} disabled{% endif %}">{% trans %}Documents{% endtrans %}</a>
+            <a href="#" data-type="video" class="filter-document-type{% if type not in ['any', 'video'] %} disabled{% endif %}">{% trans %}Videos{% endtrans %}</a>
+            <a href="#" data-type="embedvideo" class="filter-document-type{% if type not in ['any', 'embedvideo'] %} disabled{% endif %}">{% trans %}Embedded Videos{% endtrans %}</a>
         </li>
     </ul>
 
