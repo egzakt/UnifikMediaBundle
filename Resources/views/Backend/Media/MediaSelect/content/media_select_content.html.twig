@@ -2,8 +2,9 @@
     <div class="item_wrapper{% if pagesTotal == 1 %} full{% endif %}">
         <div class="bg">
             <div class="scroll">
+                <h4 class="subtitle">{% trans %}Media list{% endtrans %}</h4>
                 {% if medias|length > 0 %}
-                    <table>
+                    <table class="table">
                         {% for media in medias %}
                             <tr id="media_item_{{ media.id }}" class="media media_{{ media.type }}"
                                 data-media-id="{{ media.id }}"
@@ -22,25 +23,22 @@
                                     <img src="{{ media.thumbnail.mediaPath|imagine_filter('media_thumb') ~ '?' ~ random(9999)}}" title="{{ media.name }}">
                                 </td>
                                 <td class="detail">
-                                    <h3>{{ media.name }}</h3>
-                                    <p>{% if media.type == 'embedvideo' %}{% trans %}Embedded Video{% endtrans %}{% else %}{{ media.type }}{% endif %}</p>
+                                    <h5 class="fm-title">{{ media.name }}</h5>
+                                    <p class="text-muted">{% if media.type == 'embedvideo' %}{% trans %}Embedded Video{% endtrans %}{% else %}{{ media.type }}{% endif %}</p>
                                     {% if media.type == 'image' %}
-                                        <p class="format">{{ media.width }} X {{ media.height }}</p>
+                                        <p class="text-muted"><strong>{{ media.width }} X {{ media.height }}</strong></p>
                                     {% endif %}
                                 </td>
                                 <td class="date">
-                                    <p>
-                                        <strong>{{ media.createdAt|date('Y-m-d') }}</strong>
-                                        <br>
-                                        <strong>{{ media.createdAt|date('H:i') }}</strong>
-                                    </p>
-                                    <p class="size">{{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}</p>
+                                    <h5 class="fm-title">{{ media.createdAt|date('Y-m-d') }}</h5>
+                                    <h5 class="fm-title">{{ media.createdAt|date('H:i') }}</h5>
+                                    <p class="text-muted">{{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}</p>
                                 </td>
                             </tr>
                         {% endfor %}
                     </table>
                 {% else %}
-                    <h1 class="empty_folder">{% trans %}No result{% endtrans %}</h1>
+                    <h5 class="subtitle">{% trans %}No result{% endtrans %}</h5>
                 {% endif %}
             </div>
             {#<div class="total">#}

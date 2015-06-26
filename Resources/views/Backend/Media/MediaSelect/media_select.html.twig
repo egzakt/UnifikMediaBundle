@@ -1,5 +1,5 @@
 {% spaceless %}
-
+<div class="filemanager">
     <ul class="filemanager-options">
         <li class="main">
             <a href="#" class="library selected"><i class="fa fa-file-text-o"></i> {% trans %}Library{% endtrans %}</a>
@@ -27,16 +27,9 @@
     </ul>
 
     <div id="media_wrapper">
-        <div id="media_container">
-            <div id="media_left_col" class="col">
-                <div class="indent">
-                    <div id="folder_nav" class="bg">
-                        <div id="folder_tree"></div>
-                    </div>
-                </div>
-            </div>
+        <div id="media_container" class="row">
 
-            <div id="media_mid_col" class="col">
+            <div id="media_mid_col" class="col-sm-6">
                 <div class="indent">
                     <div id="media_ajax_loader">
                         <img src="{{ asset('bundles/unifikmedia/backend/images/icons/ajax-loader.gif') }}" alt="" />
@@ -47,14 +40,24 @@
                 </div>
             </div>
 
-            <div id="media_right_col" class="col">
+            <div id="media_left_col" class="col-sm-3">
+                <h4 class="subtitle">{% trans %}Folders{% endtrans %}</h4>
                 <div class="indent">
-                    <div id="media_details">
+                    <div id="folder_nav" class="bg">
+                        <div id="folder_tree"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="media_right_col" class="col-sm-3">
+                <div class="indent">
+                    <h4 class="subtitle">{% trans %}Preview{% endtrans %}</h4>
+                    <div id="media_details" class="panel panel-default">
                         <div class="bg">
-                            <h2 id="welcome_message">{% trans %}Please select a file...{% endtrans %}</h2>
+                            <h5 class="subtitle" id="welcome_message">{% trans %}Please select a file...{% endtrans %}</h5>
                         </div>
                         <div class="bg">
-                            <h2 id="selection_count"><span>0</span> {% trans %}medias selected{% endtrans %}</h2>
+                            <h5 id="selection_count" class="fm-title"><span>0</span> {% trans %}medias selected{% endtrans %}</h5>
                         </div>
                         <div id="media_details_inner">
                             <div class="bg">
@@ -62,7 +65,7 @@
                                     <img src="{{ asset('bundles/unifikmedia/backend/images/icons/ajax-loader.gif') }}">
                                 </div>
                                 <input type="hidden" name="selected-id">
-                                <h2 class="name"></h2>
+                                <h5 class="name fm-title"></h5>
                                 <div id="media_details_image">
                                     {% include 'UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_aviary.html.twig' %}
                                 </div>
@@ -71,19 +74,21 @@
                                 </div>
                                 <p id="file_caption"><strong>{% trans %}Caption{% endtrans %}: </strong><br><span></span></p>
                             </div>
-                            <div class="form_actions_bar">
-                                <a id="edit_media_link"><span class="media_button blue">{% trans %}Edit{% endtrans %}</span></a>
-                                <a id="insert_media"><span class="media_button green">{% trans %}Insert{% endtrans %}</span></a>
+                            <div class="form_actions_bar clearfix">
+                                <a id="edit_media_link" class="btn btn-primary btn-xs pull-right reply">{% trans %}Edit{% endtrans %}</a>
+                                <a id="insert_media" class="btn btn-primary btn-xs pull-right reply">{% trans %}Insert{% endtrans %}</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
+
     </div>
 
     <div id="uploader_wrapper">
         {% include 'UnifikMediaBundle:Backend/Media/MediaSelect/content:media_select_upload.html.twig' %}
     </div>
-
+</div>
 {% endspaceless %}

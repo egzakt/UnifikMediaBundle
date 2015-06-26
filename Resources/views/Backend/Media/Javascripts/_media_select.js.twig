@@ -440,7 +440,7 @@ var mediaManagerBind = function () {
         if ($(this).not('.disabled')) {
             $('.filter-document-type').removeClass('selected');
             $(this).addClass('selected');
-            mediaManagerFilters.type = $(this).val();
+            mediaManagerFilters.type = $(this).data('type');
 
             mediaManagerAjaxLoader.show();
             mediaManagerLoad();
@@ -451,7 +451,7 @@ var mediaManagerBind = function () {
         $('.filter-date').removeClass('selected');
         $(this).addClass('selected');
 
-        mediaManagerFilters.date = $(this).val();
+        mediaManagerFilters.date = $(this).data('type');
 
         mediaManagerAjaxLoader.show();
 
@@ -595,7 +595,7 @@ var mediaManagerBind = function () {
                 mediaManagerSelectedMedia.aviary = div.data('media-aviary');
             }
 
-            divDetails.find('h2.name').html(mediaManagerSelectedMedia.name);
+            divDetails.find('h5.name').html(mediaManagerSelectedMedia.name);
             divDetails.find('#aviary_image').attr('src', mediaManagerSelectedMedia.preview + '?' + new Date().getTime());
 
             divDetails.find('a#edit_media_link').on('click', function(e){
