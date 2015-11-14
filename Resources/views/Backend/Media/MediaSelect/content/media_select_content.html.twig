@@ -1,9 +1,9 @@
 {% spaceless %}
     <div class="item_wrapper{% if pagesTotal == 1 %} full{% endif %}">
         <div class="bg">
-            <div class="scroll">
-                <h4 class="subtitle">{% trans %}Media list{% endtrans %}</h4>
-                {% if medias|length > 0 %}
+            <h4 class="subtitle">{% trans %}Media list{% endtrans %}</h4>
+            {% if medias|length > 0 %}
+                <div class="scroll">
                     <table class="table">
                         {% for media in medias %}
                             <tr id="media_item_{{ media.id }}" class="media media_{{ media.type }}"
@@ -37,17 +37,15 @@
                             </tr>
                         {% endfor %}
                     </table>
-                {% else %}
+                </div>
+            {% else %}
+                <div class="panel panel-default">
                     <h5 class="subtitle">{% trans %}No result{% endtrans %}</h5>
-                {% endif %}
-            </div>
-            {#<div class="total">#}
-            {#<span class="sub-total"></span>#}
-            {#{% trans %}No result{% endtrans %}#}
-            {#</div>#}
+                </div>
+            {% endif %}
 
             {% if pagesTotal > 1 %}
-                <div id="pager_wrapper">
+                <div class="media_pager_wrapper panel panel-default">
                     <div id="media_pager">
                     </div>
                 </div>

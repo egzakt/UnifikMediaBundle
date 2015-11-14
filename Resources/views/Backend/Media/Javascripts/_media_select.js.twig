@@ -131,7 +131,7 @@ var mediaManagerLoad = function (callback) {
     mediaManagerSelectedMediaArray = [];
 
     $.ajax({
-        url: '/app_dev.php' + Routing.generate('unifik_media_backend_load'),
+        url: Routing.generate('unifik_media_backend_load'),
         data: {
             folderId: mediaManagerFolderId,
             type: mediaManagerFilters.type,
@@ -306,11 +306,10 @@ var mediaManagerEdit = function (submit) {
 
             mediaManagerAjaxLoader.fadeOut();
 
-            $('#edit_form').on('submit', function() {
-
+            $('#edit_form').on('submit', function(e) {
+                e.preventDefault();
                 mediaManagerEdit(true);
-
-                return false; // j'empêche le navigateur de soumettre lui-même le formulaire
+                $(this).find('a.library').trigger('click');
             });
 
         },
@@ -401,7 +400,7 @@ var mediaManagerBind = function () {
 
         $('a.library, a.upload').removeClass('selected');
 
-        $(this).addClass('selected');
+        $('.filemanager-options a.library').addClass('selected');
     });
 
 
