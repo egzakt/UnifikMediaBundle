@@ -416,7 +416,7 @@ var mediaManagerBind = function () {
 
         $('a.library, a.upload').removeClass('selected');
 
-        $(this).addClass('selected');
+        $('.filemanager-options a.upload').addClass('selected');
     });
 
     // FILTERS BUTTONS
@@ -459,47 +459,6 @@ var mediaManagerBind = function () {
 
     });
 
-    // JQUERY UPLOADER
-
-    // Initialize the jQuery File Upload widget:
-    var fileCount = 0;
-    var successes = 0;
-    var fails = 0;
-
-    // Initialize the jQuery File Upload widget:
-    $('#fileupload').fileupload({
-        autoUpload: true,
-        url: Routing.generate('unifik_media_backend_media_upload')
-    }).bind('fileuploaddone', function(e, data) {
-        fileCount++;
-        successes++;
-        //console.log('fileuploaddone');
-        if (fileCount === data.getNumberOfFiles()) {
-            //console.log('all done, successes: ' + successes + ', fails: ' + fails);
-
-            fileCount = 0;
-            successes = 0;
-            fails = 0;
-
-            clearQueue();
-            $('a.library').click();
-        }
-    }).bind('fileuploadfail', function(e, data) {
-        fileCount++;
-        fails++;
-        //console.log('fileuploadfail');
-        if (fileCount === data.getNumberOfFiles()) {
-            //console.log('all done, successes: ' + successes + ', fails: ' + fails);
-
-            fileCount = 0;
-            successes = 0;
-            fails = 0;
-
-            clearQueue();
-            $('a.library').click();
-        }
-    });
-
     // EMBED VIDEO ADD SCRIPT
 
     var validEmbedMessage = $('#valid_embed_url');
@@ -512,6 +471,7 @@ var mediaManagerBind = function () {
 
 
     $('#add_embed_link').on('click', function(e){
+        e.preventDefault();
 
         embedAjaxLoader.show();
 
@@ -521,16 +481,15 @@ var mediaManagerBind = function () {
             data: {'video_url': $('#video_url').val() },
             dataType: "json",
             success: function(data){
+                $('#video_url').val('');
                 if (data.error != undefined) {
-                    invalidEmbedMessage.fadeIn(500).delay(3000).fadeOut();
+                    invalidEmbedMessage.fadeIn(500).delay(2000).fadeOut();
                 } else {
-                    validEmbedMessage.fadeIn(500).delay(3000).fadeOut();
+                    validEmbedMessage.fadeIn(500).delay(2000).fadeOut();
                 }
                 embedAjaxLoader.fadeOut();
             }
         });
-
-        e.preventDefault();
     });
 
     // MEDIA SELECTION SCRIPT

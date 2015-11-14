@@ -1,12 +1,14 @@
 // JQUERY UPLOADER
 $(function(){
+    console.log('jquery uploader init');
+
     var fileCount = 0;
     var successes = 0;
     var fails = 0;
 
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
-        autoUpload: true,
+        autoUpload: false,
         url: Routing.generate('unifik_media_backend_media_upload')
     }).bind('fileuploaddone', function(e, data) {
         fileCount++;
@@ -20,7 +22,7 @@ $(function(){
             fails = 0;
 
             clearQueue();
-            $('a.library').click();
+            $('a.library').trigger('click');
         }
     }).bind('fileuploadfail', function(e, data) {
         fileCount++;
@@ -34,7 +36,7 @@ $(function(){
             fails = 0;
 
             clearQueue();
-            $('a.library').click();
+            $('a.library').trigger('click');
         }
     });
 });
