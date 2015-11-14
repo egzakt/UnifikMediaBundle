@@ -15,7 +15,7 @@ Folders: Dossiers
 Preview: Aperçu
 
 Library: Librairie
-Upload a new file: Téléverser un nouveau fichier
+Upload new files: Téléverser de nouveaux fichiers
 Media name filter: Filtrer sur le nom
 Any: Tous
 Videos: Vidéos
@@ -76,3 +76,8 @@ Close: Fermer
 
 This folder cannot be renamed.: Ce dossier ne peut pas être renommé.
 You must enter a name.: Vous devez entrer un nom.
+
+Upload Files: Téléverser des fichiers
+Youtube and Vimeo videos are supported: Les vidéos Youtube et Vimeo sont supportés
+Drop files here or click the button below: Glissez des fichiers ici ou cliquez sur le bouton ci-dessous
+Uplaod Progress: Progrès du téléversement

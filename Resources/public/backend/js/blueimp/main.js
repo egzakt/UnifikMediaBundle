@@ -1,6 +1,6 @@
 // JQUERY UPLOADER
 $(function(){
-    console.log('jquery uploader init');
+    //console.log('jquery uploader init');
 
     var fileCount = 0;
     var successes = 0;
@@ -8,8 +8,9 @@ $(function(){
 
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
-        autoUpload: false,
-        url: Routing.generate('unifik_media_backend_media_upload')
+        autoUpload: true,
+        url: Routing.generate('unifik_media_backend_media_upload'),
+        dropZone: $('#dropzone')
     }).bind('fileuploaddone', function(e, data) {
         fileCount++;
         successes++;
