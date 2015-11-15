@@ -42,8 +42,6 @@ function clearQueue() {
 
 var mediaManagerLoadLibrary = function(){
 
-    mediaManagerModal = $('#mediaManager');
-
     mediaManagerIsLibrary = true;
     mediaManagerIsCk = true;
     mediaManagerLoad(mediaManagerInitialize);
@@ -361,8 +359,8 @@ var mediaManagerShow = function () {
     mediaManagerModal.dialog({
         modal: true,
         dialogClass: 'media_select',
-        width: '90%',
-        height: 630,
+        width: '97%',
+        height: 580,
         minHeight: 0,
         minWidth: 400,
         position: {
@@ -385,9 +383,51 @@ var mediaManagerShow = function () {
 
 var mediaManagerBind = function () {
 
+    // JQUERY UPLOADER
+    //console.log('jquery uploader init');
+
+    var fileCount = 0;
+    var successes = 0;
+    var fails = 0;
+
+    // Initialize the jQuery File Upload widget:
+    $('#fileupload').fileupload({
+        autoUpload: true,
+        url: Routing.generate('unifik_media_backend_media_upload'),
+        dropZone: $('#dropzone')
+    }).bind('fileuploaddone', function(e, data) {
+        fileCount++;
+        successes++;
+        //console.log('fileuploaddone');
+        if (fileCount === data.getNumberOfFiles()) {
+            //console.log('all done, successes: ' + successes + ', fails: ' + fails);
+
+            fileCount = 0;
+            successes = 0;
+            fails = 0;
+
+            clearQueue();
+            $('a.library').trigger('click');
+        }
+    }).bind('fileuploadfail', function(e, data) {
+        fileCount++;
+        fails++;
+        //console.log('fileuploadfail');
+        if (fileCount === data.getNumberOfFiles()) {
+            //console.log('all done, successes: ' + successes + ', fails: ' + fails);
+
+            fileCount = 0;
+            successes = 0;
+            fails = 0;
+
+            clearQueue();
+            $('a.library').trigger('click');
+        }
+    });
+
     // VIEW SELECTION SCRIPT
 
-    $('#mediaManager').on('click', 'a.library', function(e){
+    $('.filemanager').on('click', 'a.library', function(e){
 
         e.preventDefault();
         mediaManagerAjaxLoader.show();
@@ -406,7 +446,7 @@ var mediaManagerBind = function () {
 
     // UPLOADER BUTTON
 
-    $('#mediaManager').on('click', '.upload', function(e){
+    $('.filemanager').on('click', '.upload', function(e){
 
         e.preventDefault();
 
@@ -436,6 +476,8 @@ var mediaManagerBind = function () {
     });
 
     $('.filter-document-type').on('click', function(e){
+        e.preventDefault();
+
         if ($(this).not('.disabled')) {
             $('.filter-document-type').removeClass('selected');
             $(this).addClass('selected');
@@ -447,6 +489,8 @@ var mediaManagerBind = function () {
     });
 
     $('.filter-date').on('click', function(e){
+        e.preventDefault();
+
         $('.filter-date').removeClass('selected');
         $(this).addClass('selected');
 

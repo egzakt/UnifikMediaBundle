@@ -1,9 +1,9 @@
-<h3>{% trans %}You are about to delete{% endtrans %} <strong>{{ medias|length }} {% trans %}media{% endtrans %}{% if medias|length > 1 %}s{% endif %}</strong></h3>
+<h4 class="subtitle">{% trans %}You are about to delete{% endtrans %} <strong>{{ medias|length }} {% trans %}media{% endtrans %}{% if medias|length > 1 %}s{% endif %}</strong></h4>
 {% trans %}If you continue the following contents will be affected{% endtrans %}:<br>
 
 {% for media in medias %}
 
-    <h4>{{ media.name }}{% if media.associatedContents|length > 0 %} :{% endif %}</h4>
+    <h5>{{ media.name }}{% if media.associatedContents|length > 0 %} :{% endif %}</h5>
 
     {% if media.associatedContents|length > 0 %}
         <ul>
