@@ -356,6 +356,8 @@ var mediaManagerShow = function () {
 
     mediaManagerInitialize();
 
+    $('body').addClass('media-bundle');
+
     mediaManagerModal.dialog({
         modal: true,
         dialogClass: 'media_select',
@@ -373,6 +375,10 @@ var mediaManagerShow = function () {
                 $( this ).dialog( 'close' );
             }
         }
+    });
+
+    mediaManagerModal.on('dialogclose', function(event){
+        $('body').removeClass('media-bundle');
     });
 
     mediaManagerAjaxLoader = $('#media_ajax_loader');

@@ -1,5 +1,9 @@
 {% extends 'UnifikSystemBundle:Backend:layout.html.twig' %}
 
+{% block body_attr -%}
+    class="media-bundle"
+{%- endblock %}
+
 {% block stylesheets %}
     {{ parent() }}
 
