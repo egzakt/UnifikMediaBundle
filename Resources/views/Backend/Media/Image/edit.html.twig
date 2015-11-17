@@ -1,80 +1,74 @@
+{% form_theme form 'UnifikMediaBundle:Backend/Media/Image:image_form_theme.html.twig' %}
+
 {% spaceless %}
-    <form id="edit_form" novalidate="novalidate" method="post" {{ form_enctype(form) }}>
-        <div class="edit_wrapper bg">
-            {% form_theme form 'UnifikSystemBundle:Backend/Core:edit_fields.html.twig' %}
+    <div class="row">
+        <form id="edit_form" novalidate="novalidate" method="post" {{ form_enctype(form) }}>
+            <div class="col-md-12">
+                <div class="panel panel-dark">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ media.name }}</h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ form_errors(form) }}
 
-            <div id="fields_box">
-                <h2> {{ media.name }}</h2>
-                <table class="fields" cellspacing="0">
+                        {{ form_row(form.name) }}
 
-                    {{ form_errors(form) }}
+                        {{ form_row(form.description) }}
 
-                    {{ form_row(form.name) }}
+                        {{ form_row(form.caption) }}
 
-                    {{ form_row(form.description) }}
+                        {{ form_rest(form) }}
 
-                    {{ form_row(form.caption) }}
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{% trans %}Last Update{% endtrans %}</label>
+                            <div class="col-sm-8">
+                                {{ media.updatedAt|localizeddate('medium') }}
+                            </div>
+                        </div>
 
-                    {{ form_rest(form) }}
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{% trans %}Uploaded on{% endtrans %}</label>
+                            <div class="col-sm-8">
+                                {{ media.createdAt|localizeddate('medium') }}
+                            </div>
+                        </div>
 
-                    <tr>
-                        <th>
-                            {% trans %}Last Update{% endtrans %} :
-                        </th>
-                        <td style="vertical-align:bottom">
-                            {{ media.updatedAt|date }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {% trans %}Uploaded on{% endtrans %} :
-                        </th>
-                        <td style="vertical-align:bottom">
-                            {{ media.createdAt|date }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {% trans %}File Extension{% endtrans %} :
-                        </th>
-                        <td style="vertical-align:bottom">
-                            {{ fileExtension }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {% trans %}Real Filename{% endtrans %} :
-                        </th>
-                        <td style="vertical-align:bottom">
-                            {{ realName }}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {% trans %}Format{% endtrans %} :
-                        </th>
-                        <td style="vertical-align:bottom">
-                            {% if media.width is not empty and media.height is not empty %}
-                                {{ media.width ~ ' X ' ~ media.height }} (px)
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>
-                            {% trans %}Size{% endtrans %} :
-                        </th>
-                        <td style="vertical-align:bottom">
-                            {{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}
-                        </td>
-                    </tr>
-                </table>
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{% trans %}File Extension{% endtrans %}</label>
+                            <div class="col-sm-8">
+                                {{ fileExtension }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{% trans %}Real Filename{% endtrans %}</label>
+                            <div class="col-sm-8">
+                                {{ realName }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{% trans %}Format{% endtrans %}</label>
+                            <div class="col-sm-8">
+                                {% if media.width is not empty and media.height is not empty %}
+                                    {{ media.width ~ ' X ' ~ media.height }} (px)
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label">{% trans %}Size{% endtrans %}</label>
+                            <div class="col-sm-8">
+                                {{ (media.size / 1024)|number_format(2, '.', ' ') }} {% trans %}kb{% endtrans %}
+                            </div>
+                        </div>
+                    </div><!-- panel-body -->
+                    <div class="panel-footer text-right">
+                        <a href="#" class="btn btn-default pull-left library">{% trans %}Cancel{% endtrans %}</a>
+                        <button type="submit" class="btn btn-darkblue" name="save">{% trans %}Save{% endtrans %}</button>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="form_actions_bar">
-            <ul>
-                <li><a href="#" class="library">{% trans %}Cancel{% endtrans %}</a></li>
-            </ul>
-            <input class="save" type="submit" value="{% trans %}Save{% endtrans %}" name="save" />
-        </div>
-    </form>
+        </form>
+    </div>
 {% endspaceless %}

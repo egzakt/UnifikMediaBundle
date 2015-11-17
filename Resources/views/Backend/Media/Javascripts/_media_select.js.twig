@@ -42,8 +42,6 @@ function clearQueue() {
 
 var mediaManagerLoadLibrary = function(){
 
-    mediaManagerModal = $('#mediaManager');
-
     mediaManagerIsLibrary = true;
     mediaManagerIsCk = true;
     mediaManagerLoad(mediaManagerInitialize);
@@ -306,11 +304,10 @@ var mediaManagerEdit = function (submit) {
 
             mediaManagerAjaxLoader.fadeOut();
 
-            $('#edit_form').on('submit', function() {
-
+            $('#edit_form').on('submit', function(e) {
+                e.preventDefault();
                 mediaManagerEdit(true);
-
-                return false; // j'empêche le navigateur de soumettre lui-même le formulaire
+                $(this).find('a.library').trigger('click');
             });
 
         },
@@ -359,11 +356,13 @@ var mediaManagerShow = function () {
 
     mediaManagerInitialize();
 
+    $('body').addClass('media-bundle');
+
     mediaManagerModal.dialog({
         modal: true,
         dialogClass: 'media_select',
-        width: '90%',
-        height: 630,
+        width: '97%',
+        height: 580,
         minHeight: 0,
         minWidth: 400,
         position: {
@@ -378,6 +377,10 @@ var mediaManagerShow = function () {
         }
     });
 
+    mediaManagerModal.on('dialogclose', function(event){
+        $('body').removeClass('media-bundle');
+    });
+
     mediaManagerAjaxLoader = $('#media_ajax_loader');
 
     mediaManagerAjaxLoader.fadeOut();
@@ -386,38 +389,80 @@ var mediaManagerShow = function () {
 
 var mediaManagerBind = function () {
 
+    // JQUERY UPLOADER
+    //console.log('jquery uploader init');
+
+    var fileCount = 0;
+    var successes = 0;
+    var fails = 0;
+
+    // Initialize the jQuery File Upload widget:
+    $('#fileupload').fileupload({
+        autoUpload: true,
+        url: Routing.generate('unifik_media_backend_media_upload'),
+        dropZone: $('#dropzone')
+    }).bind('fileuploaddone', function(e, data) {
+        fileCount++;
+        successes++;
+        //console.log('fileuploaddone');
+        if (fileCount === data.getNumberOfFiles()) {
+            //console.log('all done, successes: ' + successes + ', fails: ' + fails);
+
+            fileCount = 0;
+            successes = 0;
+            fails = 0;
+
+            clearQueue();
+            $('a.library').trigger('click');
+        }
+    }).bind('fileuploadfail', function(e, data) {
+        fileCount++;
+        fails++;
+        //console.log('fileuploadfail');
+        if (fileCount === data.getNumberOfFiles()) {
+            //console.log('all done, successes: ' + successes + ', fails: ' + fails);
+
+            fileCount = 0;
+            successes = 0;
+            fails = 0;
+
+            clearQueue();
+            $('a.library').trigger('click');
+        }
+    });
+
     // VIEW SELECTION SCRIPT
 
-    $('#media_views').on('click', '.library', function(e){
+    $('.filemanager').on('click', 'a.library', function(e){
 
         e.preventDefault();
         mediaManagerAjaxLoader.show();
 
         $('#uploader_wrapper').hide();
-        $('#media_filters').show();
+        $('.filemanager-options .filter-type').show();
         $('#media_wrapper').show();
 
         mediaManagerLoad();
 
-        $('#media_views').find('a').removeClass('selected');
+        $('a.library, a.upload').removeClass('selected');
 
-        $(this).addClass('selected');
+        $('.filemanager-options a.library').addClass('selected');
     });
 
 
     // UPLOADER BUTTON
 
-    $('#media_views').on('click', '.upload', function(e){
+    $('.filemanager').on('click', '.upload', function(e){
 
         e.preventDefault();
 
         $('#media_wrapper').hide();
-        $('#media_filters').hide();
+        $('.filemanager-options .filter-type').hide();
         $('#uploader_wrapper').show();
 
-        $('#media_views').find('a').removeClass('selected');
+        $('a.library, a.upload').removeClass('selected');
 
-        $(this).addClass('selected');
+        $('.filemanager-options a.upload').addClass('selected');
     });
 
     // FILTERS BUTTONS
@@ -436,73 +481,32 @@ var mediaManagerBind = function () {
         }
     });
 
-    $(function() {
-        $( "#media_type_filters" ).buttonset();
+    $('.filter-document-type').on('click', function(e){
+        e.preventDefault();
+
+        if ($(this).not('.disabled')) {
+            $('.filter-document-type').removeClass('selected');
+            $(this).addClass('selected');
+            mediaManagerFilters.type = $(this).data('type');
+
+            mediaManagerAjaxLoader.show();
+            mediaManagerLoad();
+        }
     });
 
-    $('.type_radio').on('click', function(e){
+    $('.filter-date').on('click', function(e){
+        e.preventDefault();
 
-        mediaManagerFilters.type = $(this).val();
+        $('.filter-date').removeClass('selected');
+        $(this).addClass('selected');
 
-        mediaManagerAjaxLoader.show();
-        mediaManagerLoad();
-
-    });
-
-    $(function() {
-        $( "#media_date_filters" ).buttonset();
-    });
-
-    $('.date_radio').on('click', function(e){
-
-        mediaManagerFilters.date = $(this).val();
+        mediaManagerFilters.date = $(this).data('type');
 
         mediaManagerAjaxLoader.show();
 
         mediaManagerFilters.resetPage = false;
         mediaManagerLoad();
 
-    });
-
-    // JQUERY UPLOADER
-
-    // Initialize the jQuery File Upload widget:
-    var fileCount = 0;
-    var successes = 0;
-    var fails = 0;
-
-    // Initialize the jQuery File Upload widget:
-    $('#fileupload').fileupload({
-        autoUpload: true,
-        url: Routing.generate('unifik_media_backend_media_upload')
-    }).bind('fileuploaddone', function(e, data) {
-        fileCount++;
-        successes++;
-        //console.log('fileuploaddone');
-        if (fileCount === data.getNumberOfFiles()) {
-            //console.log('all done, successes: ' + successes + ', fails: ' + fails);
-
-            fileCount = 0;
-            successes = 0;
-            fails = 0;
-
-            clearQueue();
-            $('a.library').click();
-        }
-    }).bind('fileuploadfail', function(e, data) {
-        fileCount++;
-        fails++;
-        //console.log('fileuploadfail');
-        if (fileCount === data.getNumberOfFiles()) {
-            //console.log('all done, successes: ' + successes + ', fails: ' + fails);
-
-            fileCount = 0;
-            successes = 0;
-            fails = 0;
-
-            clearQueue();
-            $('a.library').click();
-        }
     });
 
     // EMBED VIDEO ADD SCRIPT
@@ -517,6 +521,7 @@ var mediaManagerBind = function () {
 
 
     $('#add_embed_link').on('click', function(e){
+        e.preventDefault();
 
         embedAjaxLoader.show();
 
@@ -526,16 +531,15 @@ var mediaManagerBind = function () {
             data: {'video_url': $('#video_url').val() },
             dataType: "json",
             success: function(data){
+                $('#video_url').val('');
                 if (data.error != undefined) {
-                    invalidEmbedMessage.fadeIn(500).delay(3000).fadeOut();
+                    invalidEmbedMessage.fadeIn(500).delay(2000).fadeOut();
                 } else {
-                    validEmbedMessage.fadeIn(500).delay(3000).fadeOut();
+                    validEmbedMessage.fadeIn(500).delay(2000).fadeOut();
                 }
                 embedAjaxLoader.fadeOut();
             }
         });
-
-        e.preventDefault();
     });
 
     // MEDIA SELECTION SCRIPT
@@ -599,7 +603,7 @@ var mediaManagerBind = function () {
                 mediaManagerSelectedMedia.aviary = div.data('media-aviary');
             }
 
-            divDetails.find('h2.name').html(mediaManagerSelectedMedia.name);
+            divDetails.find('h5.name').html(mediaManagerSelectedMedia.name);
             divDetails.find('#aviary_image').attr('src', mediaManagerSelectedMedia.preview + '?' + new Date().getTime());
 
             divDetails.find('a#edit_media_link').on('click', function(e){
@@ -1234,8 +1238,8 @@ var mediaManagerDeleteModalShow = function (message, callback) {
 
 jQuery.fn.clearable = function() {
 
-    $(this).css({'border-width': '0px', 'outline': 'none'})
-            .wrap('<div id="media_text_search_container" class="divclearable"></div>')
+    $(this).css({'outline': 'none'})
+            .wrap('<div id="media_text_search_container"></div>')
             .parent()
             .attr('class', $(this).attr('class') + ' divclearable')
             .append('<a class="clearlink" href="javascript:"></a>');

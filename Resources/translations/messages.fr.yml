@@ -8,8 +8,14 @@ File Extension: Extension
 Real Filename: Nom réel du fichier
 Size: Taille
 
+Filter: Filtrer
+Sort: Trier
+Media list: Liste des médias
+Folders: Dossiers
+Preview: Aperçu
+
 Library: Librairie
-Upload a new file: Téléverser un nouveau fichier
+Upload new files: Téléverser de nouveaux fichiers
 Media name filter: Filtrer sur le nom
 Any: Tous
 Videos: Vidéos
@@ -31,7 +37,8 @@ Embedded Video: Vidéo «embeddé»
 No result: Aucun résultat
 Internal Server Error: Erreur interne du serveur
 
-Paste video embed URL below: Coller l'URL du vidéo à «embedder» ci-dessous
+Embed Video: Vidéo à «embedder»
+Paste URL here: Collez l'URL ici
 Add: Ajouter
 Video embed added: «Embed» de vidéo ajouté
 Invalid URL: URL invalide
@@ -69,3 +76,8 @@ Close: Fermer
 
 This folder cannot be renamed.: Ce dossier ne peut pas être renommé.
 You must enter a name.: Vous devez entrer un nom.
+
+Upload Files: Téléverser des fichiers
+Youtube and Vimeo videos are supported: Les vidéos Youtube et Vimeo sont supportés
+Drop files here or click the button below: Glissez des fichiers ici ou cliquez sur le bouton ci-dessous
+Uplaod Progress: Progrès du téléversement

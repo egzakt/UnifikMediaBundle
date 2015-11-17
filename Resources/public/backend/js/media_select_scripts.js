@@ -4,7 +4,6 @@ if ('undefined' === typeof unifikmediascript){
 
     loader1.addStyle('blueimpgallery', '/bundles/unifikmedia/backend/css/blueimp/blueimp-gallery.min.css');
     loader1.addStyle('blueimpuploader', '/bundles/unifikmedia/backend/css/blueimp/jquery.fileupload-ui.css');
-    loader1.addStyle('unifikmediastyle', '/bundles/unifikmedia/backend/css/media_select.css');
     loader1.addStyle('simplepaginationstyle', '/bundles/unifikmedia/backend/css/simplePagination.css');
     loader1.addStyle('dynatreestyle', '/bundles/unifikmedia/backend/css/ui.dynatree.css');
     loader1.addStyle('jquerycontextmenustyle', '/bundles/unifikmedia/backend/css/jquery.contextMenu.css');
