@@ -1,5 +1,5 @@
 <div>
-    <div><span class="media_button red remove" {% if not media %}style="display: none;"{% endif %}>{% trans %}Remove file{% endtrans %}</span></div>
+    <div><span class="media_button remove btn btn-danger btn-xs mb10"{% if not media %} style="display: none;"{% endif %}><i class="glyphicon glyphicon-remove mr5"></i> {% trans %}Remove file{% endtrans %}</span></div>
     <input class="input_media" type="hidden" {{ widget_attributes|raw }} {% if media %}value="{{ media.id }}"{% endif %} />
     <img class="image_media select_media" data-media-type="{{ type }}" data-media-placeholder-trans="{% trans %}Choose+a+file{% endtrans %}" src="{% if media %}{{ media.thumbnailUrl|imagine_filter('media_thumb_large') }}{% else %}http://placehold.it/200x150&text={% trans %}Choose+a+file{% endtrans %}{% endif %}">
 </div>
