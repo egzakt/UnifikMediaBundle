@@ -35,7 +35,7 @@ class VimeoVideoParser extends MediaParser implements MediaParserInterface {
     public function getEmbedUrl()
     {
         if ($this->getId()) {
-            return 'http://player.vimeo.com/video/' . $this->getId();
+            return 'https://player.vimeo.com/video/' . $this->getId();
         }
     }
 
@@ -48,7 +48,7 @@ class VimeoVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function getId()
     {
-        $re = '#.*\/([\d]{6,}).*#i';
+        $re = "/.*([\\d]{9}).*/";
         return preg_replace($re, '$1', $this->getMediaUrl());
     }
 
@@ -63,12 +63,13 @@ class VimeoVideoParser extends MediaParser implements MediaParserInterface {
      */
     public function supports($mediaUrl)
     {
-        $re = '#.*\/([\d]{6,}).*#i';
-        $id = preg_replace($re, '$1', $mediaUrl);
-        if(strpos(@get_headers('http://player.vimeo.com/video/' . $id)[0], '200')){
+        $re = "/.*([\\d]{9}).*/";
+        preg_replace($re, '$1', $mediaUrl);
+        if(strpos(@get_headers('http://player.vimeo.com/video/' . $mediaUrl)[0], '200')){
             return false;
         };
         return true;
+        //return (preg_match('#vimeo.com/[\d]+$#i', $mediaUrl) || preg_match('#player.vimeo.com/video/[\d]+$#i', $mediaUrl));
     }
 
 }

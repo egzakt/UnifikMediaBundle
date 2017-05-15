@@ -17,7 +17,7 @@ class YoutubeVideoParser extends MediaParser implements MediaParserInterface {
     public function getThumbnailUrl()
     {
         if ($this->getId()) {
-            return 'http://img.youtube.com/vi/' . $this->getId() . '/0.jpg';
+            return 'https://img.youtube.com/vi/' . $this->getId() . '/0.jpg';
         }
 
         return null;
@@ -33,7 +33,7 @@ class YoutubeVideoParser extends MediaParser implements MediaParserInterface {
     public function getEmbedUrl()
     {
         if ($this->getId()) {
-            return 'http://www.youtube.com/embed/' . $this->getId();
+            return 'https://www.youtube.com/embed/' . $this->getId();
         }
     }
 
