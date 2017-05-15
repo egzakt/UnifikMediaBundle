@@ -35,7 +35,7 @@ class VimeoVideoParser extends MediaParser implements MediaParserInterface {
     public function getEmbedUrl()
     {
         if ($this->getId()) {
-            return 'http://player.vimeo.com/video/' . $this->getId();
+            return 'https://player.vimeo.com/video/' . $this->getId();
         }
     }
 
